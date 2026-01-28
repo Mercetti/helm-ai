@@ -1,0 +1,8 @@
+{
+  "eventType": "player_behavior",
+  "data": {
+    "playerId": "player_123",
+    "action": "fold",
+    "timestamp": "2026-01-28T09:00:00Z"
+  }
+}
