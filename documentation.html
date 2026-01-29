@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helm AI Documentation - Technical Guides & API Reference</title>
+    <meta name="description" content="Comprehensive documentation for Helm AI products. Get started with our AI Anti-Cheat System and AI Governance Platform with detailed guides and API references.">
+    <meta property="og:title" content="Helm AI Documentation">
+    <meta property="og:description" content="Technical guides and API documentation">
+    <meta property="og:image" content="helm-ai-logo.png">
+    <meta property="og:logo" content="helm-ai-logo.png">
+    <link rel="icon" type="image/png" href="helm-ai-logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #ffffff;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+        
+        .docs-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .docs-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .docs-hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Documentation Layout */
+        .docs-section {
+            padding: 80px 0;
+            background: #ffffff;
+        }
+        
+        .docs-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .docs-sidebar {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .docs-sidebar h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+        
+        .docs-nav {
+            list-style: none;
+        }
+        
+        .docs-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .docs-nav a {
+            color: #64748b;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .docs-nav a:hover,
+        .docs-nav a.active {
+            background: #1e3a8a;
+            color: #ffffff;
+        }
+        
+        .docs-content {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+        }
+        
+        .docs-content h2 {
+            color: #1e3a8a;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .docs-content h3 {
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .docs-content p {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .code-block {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .api-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 80px 0;
+        }
+        
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .api-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .api-card h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .api-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .api-link {
+            background: #ffffff;
+            color: #1e3a8a;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .api-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Quick Start Section */
+        .quickstart-section {
+            padding: 80px 0;
+            background: #f8fafc;
+        }
+        
+        .quickstart-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .step-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 0 auto 1rem;
+        }
+        
+        .step-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+        
+        .step-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-section a:hover {
+            opacity: 1;
+        }
+        
+        .footer-logo {
+            width: 100px;
+            height: 100px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .docs-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .docs-sidebar {
+                position: static;
+            }
+            
+            .docs-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"></div>
+                Helm AI
+            </a>
+            <ul class="nav-links">
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="docs-hero">
+            <div class="container">
+                <h1>Documentation</h1>
+                <p>Comprehensive guides, API references, and technical documentation to help you integrate and make the most of Helm AI's security solutions.</p>
+            </div>
+        </section>
+
+        <section class="quickstart-section">
+            <div class="container">
+                <h2 style="text-align: center; color: #1e3a8a; margin-bottom: 1rem;">Quick Start Guide</h2>
+                <p style="text-align: center; color: #64748b; margin-bottom: 3rem;">Get up and running in minutes</p>
+                
+                <div class="quickstart-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Sign Up</h3>
+                        <p>Create your Helm AI account and choose your plan. Get instant access to our security dashboard.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Integrate SDK</h3>
+                        <p>Download our SDK and integrate it into your application using our simple API.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Configure</h3>
+                        <p>Set up your security rules and monitoring preferences through our intuitive dashboard.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>Go Live</h3>
+                        <p>Deploy your application with Helm AI protection and start monitoring security events.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <div class="container">
+                <div class="docs-layout">
+                    <aside class="docs-sidebar">
+                        <h3>Navigation</h3>
+                        <ul class="docs-nav">
+                            <li><a href="#getting-started" class="active">Getting Started</a></li>
+                            <li><a href="#anti-cheat">AI Anti-Cheat</a></li>
+                            <li><a href="#governance">AI Governance</a></li>
+                            <li><a href="#api-reference">API Reference</a></li>
+                            <li><a href="#sdk">SDK Documentation</a></li>
+                            <li><a href="#examples">Code Examples</a></li>
+                            <li><a href="#troubleshooting">Troubleshooting</a></li>
+                        </ul>
+                    </aside>
+                    
+                    <div class="docs-content">
+                        <h2 id="getting-started">Getting Started</h2>
+                        <p>Welcome to Helm AI documentation! This guide will help you integrate our AI security solutions into your applications quickly and efficiently.</p>
+                        
+                        <h3>Prerequisites</h3>
+                        <p>Before you begin, make sure you have:</p>
+                        <ul style="margin-left: 2rem; color: #64748b;">
+                            <li>A Helm AI account</li>
+                            <li>Your API key from the dashboard</li>
+                            <li>Node.js 14+ or Python 3.8+ (for SDK)</li>
+                            <li>Basic understanding of REST APIs</li>
+                        </ul>
+                        
+                        <h3>Installation</h3>
+                        <p>Install our SDK using your preferred package manager:</p>
+                        
+                        <div class="code-block">
+# Node.js
+npm install @helm-ai/sdk
+
+# Python
+pip install helm-ai-sdk
+                        </div>
+                        
+                        <h3>Basic Configuration</h3>
+                        <p>Initialize the SDK with your API key:</p>
+                        
+                        <div class="code-block">
+// JavaScript
+const HelmAI = require('@helm-ai/sdk');
+const client = new HelmAI('your-api-key-here');
+
+// Python
+from helm_ai import HelmAI
+client = HelmAI(api_key='your-api-key-here')
+                        </div>
+                        
+                        <h2 id="anti-cheat">AI Anti-Cheat System</h2>
+                        <p>Our AI Anti-Cheat System provides real-time detection and prevention of cheating in gaming applications.</p>
+                        
+                        <h3>Core Features</h3>
+                        <ul style="margin-left: 2rem; color: #64748b;">
+                            <li>Real-time behavior analysis</li>
+                            <li>Multi-modal detection (video, audio, network)</li>
+                            <li>Customizable detection rules</li>
+                            <li>Instant response system</li>
+                        </ul>
+                        
+                        <h3>Integration Example</h3>
+                        <div class="code-block">
+// Initialize anti-cheat monitoring
+const antiCheat = client.antiCheat();
+
+// Start monitoring a player session
+antiCheat.startSession({
+    playerId: 'player-123',
+    gameId: 'game-456',
+    detectionLevel: 'high'
+});
+
+// Handle detection events
+antiCheat.on('cheating_detected', (event) => {
+    console.log('Cheating detected:', event);
+    // Take appropriate action
+});
+                        </div>
+                        
+                        <h2 id="governance">AI Governance Platform</h2>
+                        <p>Ensure responsible AI deployment with our comprehensive governance platform.</p>
+                        
+                        <h3>Key Capabilities</h3>
+                        <ul style="margin-left: 2rem; color: #64748b;">
+                            <li>Ethical AI compliance monitoring</li>
+                            <li>Automated risk assessment</li>
+                            <li>Regulatory compliance tracking</li>
+                            <li>AI performance analytics</li>
+                        </ul>
+                        
+                        <h2 id="api-reference">API Reference</h2>
+                        <p>Complete API documentation for all endpoints and methods.</p>
+                        
+                        <h3>Authentication</h3>
+                        <p>All API requests require authentication using your API key:</p>
+                        
+                        <div class="code-block">
+curl -X POST https://api.helm-ai.com/v1/analyze \
+  -H "Authorization: Bearer your-api-key-here" \
+  -H "Content-Type: application/json"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="api-section">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 1rem;">API Documentation</h2>
+                <p style="text-align: center; opacity: 0.9; margin-bottom: 3rem;">Comprehensive API references for developers</p>
+                
+                <div class="api-grid">
+                    <div class="api-card">
+                        <h3>📚 REST API</h3>
+                        <p>Complete REST API documentation with all endpoints, parameters, and response formats for seamless integration.</p>
+                        <a href="#" class="api-link">View API Docs</a>
+                    </div>
+                    
+                    <div class="api-card">
+                        <h3>🔧 SDK Reference</h3>
+                        <p>Detailed SDK documentation for Node.js, Python, Java, and other supported languages with code examples.</p>
+                        <a href="#" class="api-link">View SDK Docs</a>
+                    </div>
+                    
+                    <div class="api-card">
+                        <h3>📖 Developer Guides</h3>
+                        <p>Step-by-step guides for common use cases, best practices, and advanced implementation patterns.</p>
+                        <a href="#" class="api-link">View Guides</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"></div>
+                    <p>Advanced AI security and governance solutions for the digital age.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="products.html#anti-cheat">AI Anti-Cheat System</a></li>
+                        <li><a href="products.html#governance">AI Governance Platform</a></li>
+                        <li><a href="products.html#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="support.html">Support Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="compliance.html">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Helm AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

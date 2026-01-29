@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helm AI Products - AI Anti-Cheat & Governance Platform</title>
+    <meta name="description" content="Explore Helm AI's advanced products: AI Anti-Cheat System for gaming security and AI Governance Platform for enterprise AI management.">
+    <meta property="og:title" content="Helm AI Products">
+    <meta property="og:description" content="Advanced AI Anti-Cheat System and AI Governance Platform">
+    <meta property="og:image" content="helm-ai-logo.png">
+    <meta property="og:logo" content="helm-ai-logo.png">
+    <link rel="icon" type="image/png" href="helm-ai-logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #ffffff;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+        
+        .products-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .products-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .products-hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Product Sections */
+        .product-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+        }
+        
+        .product-section:nth-child(even) {
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        
+        .product-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .product-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: inherit;
+        }
+        
+        .product-info p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .product-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .product-features li {
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .product-features li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .product-section:nth-child(even) .product-features li:before {
+            color: #1e3a8a;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #1e3a8a;
+        }
+        
+        .product-section:nth-child(even) .product-price {
+            color: #0f172a;
+        }
+        
+        .product-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .product-section:nth-child(even) .product-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+        }
+        
+        .product-visual {
+            text-align: center;
+        }
+        
+        .product-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #ffffff;
+            margin: 0 auto 2rem;
+        }
+        
+        .product-section:nth-child(even) .product-icon {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+        }
+        
+        /* Pricing Section */
+        .pricing-section {
+            padding: 80px 0;
+            background: #f8fafc;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .pricing-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .pricing-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .pricing-card .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-card ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-card li {
+            padding: 0.5rem 0;
+            color: #64748b;
+        }
+        
+        .pricing-card li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-section a:hover {
+            opacity: 1;
+        }
+        
+        .footer-logo {
+            width: 100px;
+            height: 100px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .product-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .products-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"></div>
+                Helm AI
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="products-hero">
+            <div class="container">
+                <h1>Our Products</h1>
+                <p>Advanced AI solutions for gaming security and enterprise AI governance</p>
+            </div>
+        </section>
+
+        <section id="anti-cheat" class="product-section">
+            <div class="container">
+                <div class="product-content">
+                    <div class="product-info">
+                        <h2>AI Anti-Cheat System</h2>
+                        <p>Revolutionary multi-modal AI technology that detects and prevents cheating in real-time across all gaming platforms. Our system analyzes player behavior, network patterns, and visual data to ensure fair play.</p>
+                        <ul class="product-features">
+                            <li>Real-time cheating detection</li>
+                            <li>Multi-modal analysis (video, audio, network)</li>
+                            <li>99.9% accuracy rate</li>
+                            <li>Instant response system</li>
+                            <li>Customizable detection rules</li>
+                        </ul>
+                        <div class="product-price">Starting at $5,000/month</div>
+                        <a href="contact.html" class="product-button">Request Demo</a>
+                    </div>
+                    <div class="product-visual">
+                        <div class="product-icon">🎮</div>
+                        <p style="color: #ffffff; opacity: 0.9;">Protect your gaming ecosystem with advanced AI security</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="governance" class="product-section">
+            <div class="container">
+                <div class="product-content">
+                    <div class="product-visual">
+                        <div class="product-icon">🤖</div>
+                        <p style="color: #1a1a1a; opacity: 0.9;">Ensure responsible AI deployment across your organization</p>
+                    </div>
+                    <div class="product-info">
+                        <h2>AI Governance Platform</h2>
+                        <p>Comprehensive AI governance solution that ensures ethical AI deployment, compliance monitoring, and risk management. Perfect for enterprises deploying AI at scale.</p>
+                        <ul class="product-features">
+                            <li>Ethical AI compliance monitoring</li>
+                            <li>Automated risk assessment</li>
+                            <li>Regulatory compliance tracking</li>
+                            <li>AI performance analytics</li>
+                            <li>Custom governance frameworks</li>
+                        </ul>
+                        <div class="product-price">Starting at $10,000/month</div>
+                        <a href="contact.html" class="product-button">Request Demo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="pricing-section">
+            <div class="container">
+                <h2 style="text-align: center; color: #1e3a8a; margin-bottom: 1rem;">Flexible Pricing Plans</h2>
+                <p style="text-align: center; color: #64748b; margin-bottom: 3rem;">Choose the plan that fits your needs</p>
+                
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3>Starter</h3>
+                        <div class="price">$2,500/month</div>
+                        <ul>
+                            <li>Basic AI monitoring</li>
+                            <li>Up to 100 users</li>
+                            <li>Email support</li>
+                            <li>Monthly reports</li>
+                        </ul>
+                        <a href="contact.html" class="product-button">Get Started</a>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <h3>Professional</h3>
+                        <div class="price">$7,500/month</div>
+                        <ul>
+                            <li>Advanced AI features</li>
+                            <li>Up to 500 users</li>
+                            <li>Priority support</li>
+                            <li>Real-time analytics</li>
+                        </ul>
+                        <a href="contact.html" class="product-button">Get Started</a>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <h3>Enterprise</h3>
+                        <div class="price">Custom</div>
+                        <ul>
+                            <li>Full AI suite</li>
+                            <li>Unlimited users</li>
+                            <li>24/7 dedicated support</li>
+                            <li>Custom integrations</li>
+                        </ul>
+                        <a href="contact.html" class="product-button">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"></div>
+                    <p>Advanced AI security and governance solutions for the digital age.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="#anti-cheat">AI Anti-Cheat System</a></li>
+                        <li><a href="#governance">AI Governance Platform</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="index.html#demo">Live Demo</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="mailto:info@helm-ai.com">info@helm-ai.com</a></li>
+                        <li><a href="tel:+1234567890">+1 (234) 567-890</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Helm AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

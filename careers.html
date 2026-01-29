@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers at Helm AI - Join Our AI Security Team</title>
+    <meta name="description" content="Explore career opportunities at Helm AI. Join our team of AI security experts and help shape the future of gaming security and AI governance.">
+    <meta property="og:title" content="Careers at Helm AI">
+    <meta property="og:description" content="Join our team of AI security experts">
+    <meta property="og:image" content="helm-ai-logo.png">
+    <meta property="og:logo" content="helm-ai-logo.png">
+    <link rel="icon" type="image/png" href="helm-ai-logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #ffffff;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+        
+        .careers-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .careers-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .careers-hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Culture Section */
+        .culture-section {
+            padding: 80px 0;
+            background: #ffffff;
+        }
+        
+        .culture-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .culture-card {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .culture-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .culture-card p {
+            color: #64748b;
+            line-height: 1.8;
+        }
+        
+        /* Open Positions */
+        .positions-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+        }
+        
+        .positions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .position-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .position-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .position-card .department {
+            color: #ffffff;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+        
+        .position-card .location {
+            color: #ffffff;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .position-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .apply-button {
+            background: #ffffff;
+            color: #1e3a8a;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .apply-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            padding: 80px 0;
+            background: #f8fafc;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .benefit-item {
+            text-align: center;
+        }
+        
+        .benefit-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #ffffff;
+            margin: 0 auto 1rem;
+        }
+        
+        .benefit-item h3 {
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .benefit-item p {
+            color: #64748b;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-section a:hover {
+            opacity: 1;
+        }
+        
+        .footer-logo {
+            width: 100px;
+            height: 100px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .careers-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"></div>
+                Helm AI
+            </a>
+            <ul class="nav-links">
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="careers-hero">
+            <div class="container">
+                <h1>Careers at Helm AI</h1>
+                <p>Join our team of AI security pioneers and help shape the future of gaming security and AI governance. We're looking for talented individuals who are passionate about innovation and making a difference.</p>
+            </div>
+        </section>
+
+        <section class="culture-section">
+            <div class="container">
+                <h2 style="text-align: center; color: #1e3a8a; margin-bottom: 1rem;">Why Work at Helm AI?</h2>
+                <p style="text-align: center; color: #64748b; margin-bottom: 3rem;">Be part of a team that's revolutionizing AI security</p>
+                
+                <div class="culture-content">
+                    <div class="culture-card">
+                        <h3>🚀 Innovation</h3>
+                        <p>Work on cutting-edge AI technology that's shaping the future of digital security and governance.</p>
+                    </div>
+                    
+                    <div class="culture-card">
+                        <h3>🌟 Impact</h3>
+                        <p>Make a real difference in protecting gaming ecosystems and ensuring responsible AI deployment.</p>
+                    </div>
+                    
+                    <div class="culture-card">
+                        <h3>📈 Growth</h3>
+                        <p>Grow your career with opportunities for learning, development, and advancement in a rapidly expanding field.</p>
+                    </div>
+                    
+                    <div class="culture-card">
+                        <h3>🤝 Collaboration</h3>
+                        <p>Join a diverse team of experts who work together to solve complex challenges and drive innovation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="positions-section">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 1rem;">Open Positions</h2>
+                <p style="text-align: center; opacity: 0.9; margin-bottom: 3rem;">Find your next opportunity with us</p>
+                
+                <div class="positions-grid">
+                    <div class="position-card">
+                        <h3>Senior AI Engineer</h3>
+                        <div class="department">Engineering</div>
+                        <div class="location">Remote / San Francisco</div>
+                        <p>We're looking for an experienced AI engineer to help develop our multi-modal AI security systems. You'll work on cutting-edge technology that protects gaming platforms and ensures AI governance.</p>
+                        <a href="contact.html" class="apply-button">Apply Now</a>
+                    </div>
+                    
+                    <div class="position-card">
+                        <h3>Security Researcher</h3>
+                        <div class="department">Research</div>
+                        <div class="location">Remote / New York</div>
+                        <p>Join our research team to develop innovative approaches to AI security and threat detection. You'll work on novel algorithms and techniques for identifying and preventing security breaches.</p>
+                        <a href="contact.html" class="apply-button">Apply Now</a>
+                    </div>
+                    
+                    <div class="position-card">
+                        <h3>Product Manager</h3>
+                        <div class="department">Product</div>
+                        <div class="location">Remote / Austin</div>
+                        <p>Lead the development of our AI security products from concept to launch. You'll work closely with engineering, design, and customers to deliver solutions that meet market needs.</p>
+                        <a href="contact.html" class="apply-button">Apply Now</a>
+                    </div>
+                    
+                    <div class="position-card">
+                        <h3>Frontend Developer</h3>
+                        <div class="department">Engineering</div>
+                        <div class="location">Remote</div>
+                        <p>Create intuitive and beautiful interfaces for our AI security platforms. You'll work with modern web technologies to build user experiences that make complex AI systems accessible.</p>
+                        <a href="contact.html" class="apply-button">Apply Now</a>
+                    </div>
+                    
+                    <div class="position-card">
+                        <h3>DevOps Engineer</h3>
+                        <div class="department">Engineering</div>
+                        <div class="location">Remote / Seattle</div>
+                        <p>Build and maintain the infrastructure that powers our AI security systems. You'll work on scalable, secure, and reliable systems that handle massive amounts of data.</p>
+                        <a href="contact.html" class="apply-button">Apply Now</a>
+                    </div>
+                    
+                    <div class="position-card">
+                        <h3>Business Development Manager</h3>
+                        <div class="department">Sales</div>
+                        <div class="location">Remote / Los Angeles</div>
+                        <p>Drive growth by identifying and developing strategic partnerships with gaming companies and enterprises. You'll be responsible for expanding our customer base and market presence.</p>
+                        <a href="contact.html" class="apply-button">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="benefits-section">
+            <div class="container">
+                <h2 style="text-align: center; color: #1e3a8a; margin-bottom: 1rem;">Benefits & Perks</h2>
+                <p style="text-align: center; color: #64748b; margin-bottom: 3rem;">We take care of our team</p>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">💰</div>
+                        <h3>Competitive Salary</h3>
+                        <p>Market-leading compensation packages</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🏥</div>
+                        <h3>Health Benefits</h3>
+                        <p>Comprehensive medical, dental, and vision</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🏖️</div>
+                        <h3>Flexible Time Off</h3>
+                        <p>Unlimited PTO and flexible work hours</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🏠</div>
+                        <h3>Remote Work</h3>
+                        <p>Work from anywhere in the world</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">📚</div>
+                        <h3>Learning Budget</h3>
+                        <p>Annual budget for courses and conferences</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🎯</div>
+                        <h3>Equity</h3>
+                        <p>Stock options in a growing company</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"></div>
+                    <p>Advanced AI security and governance solutions for the digital age.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="products.html#anti-cheat">AI Anti-Cheat System</a></li>
+                        <li><a href="products.html#governance">AI Governance Platform</a></li>
+                        <li><a href="products.html#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="support.html">Support Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="compliance.html">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Helm AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

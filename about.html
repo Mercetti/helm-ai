@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Helm AI - Advanced AI Security & Governance</title>
+    <meta name="description" content="Learn about Helm AI's mission to revolutionize gaming security and AI governance with cutting-edge multi-modal AI technology.">
+    <meta property="og:title" content="About Helm AI">
+    <meta property="og:description" content="Advanced AI Anti-Cheat System and AI Governance Platform">
+    <meta property="og:image" content="helm-ai-logo.png">
+    <meta property="og:logo" content="helm-ai-logo.png">
+    <link rel="icon" type="image/png" href="helm-ai-logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #ffffff;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+        
+        .about-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .about-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .about-hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .about-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .about-section h2 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .about-section p {
+            color: #64748b;
+            line-height: 1.8;
+        }
+        
+        .team-section {
+            background: #f8fafc;
+            padding: 4rem 0;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .team-member {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .team-member h3 {
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .team-member p {
+            color: #64748b;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-section a:hover {
+            opacity: 1;
+        }
+        
+        .footer-logo {
+            width: 100px;
+            height: 100px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"></div>
+                Helm AI
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="about-hero">
+            <div class="container">
+                <h1>About Helm AI</h1>
+                <p>Pioneering the future of AI security and governance with cutting-edge multi-modal technology that protects digital ecosystems and ensures responsible AI deployment.</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="about-content">
+                <div class="about-section">
+                    <h2>Our Mission</h2>
+                    <p>To revolutionize digital security and AI governance through innovative multi-modal AI solutions that protect, monitor, and ensure ethical AI deployment across gaming, enterprise, and digital platforms.</p>
+                </div>
+                
+                <div class="about-section">
+                    <h2>Our Vision</h2>
+                    <p>A world where AI technology operates safely, ethically, and transparently, enabling businesses and creators to harness AI's full potential while maintaining security and trust.</p>
+                </div>
+                
+                <div class="about-section">
+                    <h2>Our Values</h2>
+                    <p><strong>Innovation:</strong> Pushing boundaries of AI technology<br>
+                    <strong>Security:</strong> Uncompromising protection of digital assets<br>
+                    <strong>Ethics:</strong> Responsible AI development and deployment<br>
+                    <strong>Partnership:</strong> Collaborating for mutual success</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="team-section">
+            <div class="container">
+                <h2 style="text-align: center; color: #1e3a8a; margin-bottom: 1rem;">Leadership Team</h2>
+                <p style="text-align: center; color: #64748b; margin-bottom: 3rem;">Expert leaders driving AI innovation</p>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <h3>CEO & Founder</h3>
+                        <p>Visionary leader with expertise in AI security and enterprise strategy</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <h3>CTO</h3>
+                        <p>AI research pioneer with deep experience in multi-modal systems</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <h3>Head of Security</h3>
+                        <p>Cybersecurity expert specializing in AI threat detection</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <h3>VP of Engineering</h3>
+                        <p>Scalable systems architect with enterprise deployment expertise</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"></div>
+                    <p>Advanced AI security and governance solutions for the digital age.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="products.html#anti-cheat">AI Anti-Cheat System</a></li>
+                        <li><a href="products.html#governance">AI Governance Platform</a></li>
+                        <li><a href="products.html#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="index.html#demo">Live Demo</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="mailto:info@helm-ai.com">info@helm-ai.com</a></li>
+                        <li><a href="tel:+1234567890">+1 (234) 567-890</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Helm AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

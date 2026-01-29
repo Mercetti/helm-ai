@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helm AI Support Center - Help & Technical Support</title>
+    <meta name="description" content="Get help with Helm AI products. Access our support center, documentation, FAQs, and contact our technical support team for assistance.">
+    <meta property="og:title" content="Helm AI Support Center">
+    <meta property="og:description" content="Technical support and help resources">
+    <meta property="og:image" content="helm-ai-logo.png">
+    <meta property="og:logo" content="helm-ai-logo.png">
+    <link rel="icon" type="image/png" href="helm-ai-logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #ffffff;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+        
+        .support-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .support-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .support-hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Support Options */
+        .support-options {
+            padding: 80px 0;
+            background: #ffffff;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .option-card {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .option-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #ffffff;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .option-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .option-card p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .option-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .option-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+        }
+        
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .faq-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .faq-item h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .faq-item p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            padding: 80px 0;
+            background: #f8fafc;
+        }
+        
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        
+        .contact-info h2 {
+            color: #1e3a8a;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        .contact-methods {
+            margin-bottom: 3rem;
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #ffffff;
+            margin-right: 1rem;
+        }
+        
+        .contact-details h3 {
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-details p {
+            color: #64748b;
+        }
+        
+        .contact-details a {
+            color: #1e3a8a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .contact-details a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Support Form */
+        .support-form {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .support-form h2 {
+            color: #1e3a8a;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1e3a8a;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .submit-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Resources Section */
+        .resources-section {
+            padding: 80px 0;
+            background: #ffffff;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .resource-card {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .resource-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #ffffff;
+            margin: 0 auto 1rem;
+        }
+        
+        .resource-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+        
+        .resource-card p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .resource-link {
+            color: #1e3a8a;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .resource-link:hover {
+            color: #0f172a;
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-section a:hover {
+            opacity: 1;
+        }
+        
+        .footer-logo {
+            width: 100px;
+            height: 100px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .support-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"></div>
+                Helm AI
+            </a>
+            <ul class="nav-links">
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="support-hero">
+            <div class="container">
+                <h1>Support Center</h1>
+                <p>Get help with Helm AI products. Access documentation, FAQs, and connect with our technical support team for assistance.</p>
+            </div>
+        </section>
+
+        <section class="support-options">
+            <div class="container">
+                <h2 style="text-align: center; color: #1e3a8a; margin-bottom: 1rem;">How Can We Help?</h2>
+                <p style="text-align: center; color: #64748b; margin-bottom: 3rem;">Choose the support option that best fits your needs</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">
+                        <div class="option-icon">📚</div>
+                        <h3>Documentation</h3>
+                        <p>Comprehensive guides, API references, and technical documentation to help you integrate and use our products effectively.</p>
+                        <a href="documentation.html" class="option-button">View Docs</a>
+                    </div>
+                    
+                    <div class="option-card">
+                        <div class="option-icon">💬</div>
+                        <h3>Live Chat</h3>
+                        <p>Get instant help from our support team through live chat. Available Monday-Friday, 9 AM - 6 PM EST.</p>
+                        <a href="#" class="option-button">Start Chat</a>
+                    </div>
+                    
+                    <div class="option-card">
+                        <div class="option-icon">📧</div>
+                        <h3>Email Support</h3>
+                        <p>Send us your questions and our technical support team will respond within 24 hours during business days.</p>
+                        <a href="mailto:support@helm-ai.com" class="option-button">Email Us</a>
+                    </div>
+                    
+                    <div class="option-card">
+                        <div class="option-icon">📞</div>
+                        <h3>Phone Support</h3>
+                        <p>Speak directly with our technical support team for urgent issues. Available for Enterprise customers.</p>
+                        <a href="tel:+1234567890" class="option-button">Call Us</a>
+                    </div>
+                    
+                    <div class="option-card">
+                        <div class="option-icon">🎥</div>
+                        <h3>Video Tutorials</h3>
+                        <p>Watch step-by-step video tutorials covering installation, configuration, and advanced features.</p>
+                        <a href="#" class="option-button">Watch Videos</a>
+                    </div>
+                    
+                    <div class="option-card">
+                        <div class="option-icon">🏢</div>
+                        <h3>Enterprise Support</h3>
+                        <p>Dedicated support team, SLA guarantees, and priority response times for enterprise customers.</p>
+                        <a href="contact.html" class="option-button">Enterprise Plans</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 1rem;">Frequently Asked Questions</h2>
+                <p style="text-align: center; opacity: 0.9; margin-bottom: 3rem;">Quick answers to common questions</p>
+                
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h3>How do I get started with Helm AI?</h3>
+                        <p>Sign up for an account, choose your plan, and follow our quick start guide. You'll be up and running in minutes with our SDK and API.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3>What programming languages are supported?</h3>
+                        <p>We support Node.js, Python, Java, C#, Go, and Ruby. Our REST API can be used with any programming language.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3>How accurate is the AI Anti-Cheat System?</h3>
+                        <p>Our AI Anti-Cheat System achieves 99.9% accuracy in detecting sophisticated cheating methods using multi-modal analysis.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3>Can I customize detection rules?</h3>
+                        <p>Yes, you can create custom detection rules, set sensitivity levels, and configure response actions through our dashboard.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3>What kind of support do you offer?</h3>
+                        <p>We offer 24/7 email support, live chat during business hours, phone support for enterprise customers, and comprehensive documentation.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3>Is there a free trial available?</h3>
+                        <p>Yes, we offer a 14-day free trial with full access to all features. No credit card required to start.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h2>Contact Technical Support</h2>
+                        
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="contact-icon">📧</div>
+                                <div class="contact-details">
+                                    <h3>Email Support</h3>
+                                    <p><a href="mailto:support@helm-ai.com">support@helm-ai.com</a></p>
+                                    <p>Response within 24 hours</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-method">
+                                <div class="contact-icon">📞</div>
+                                <div class="contact-details">
+                                    <h3>Phone Support</h3>
+                                    <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+                                    <p>Enterprise customers only</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-method">
+                                <div class="contact-icon">💬</div>
+                                <div class="contact-details">
+                                    <h3>Live Chat</h3>
+                                    <p>Available 9 AM - 6 PM EST</p>
+                                    <p>Monday - Friday</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #1e3a8a; margin-bottom: 1rem;">Support Hours</h3>
+                            <p style="color: #64748b; margin-bottom: 0.5rem;">Email Support: 24/7</p>
+                            <p style="color: #64748b; margin-bottom: 0.5rem;">Live Chat: Monday - Friday, 9 AM - 6 PM EST</p>
+                            <p style="color: #64748b;">Phone Support: Enterprise customers, 24/7</p>
+                        </div>
+                    </div>
+                    
+                    <div class="support-form">
+                        <h2>Submit a Support Request</h2>
+                        <form onsubmit="handleSubmit(event)">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product">Product *</label>
+                                <select id="product" name="product" required>
+                                    <option value="">Select a product</option>
+                                    <option value="anti-cheat">AI Anti-Cheat System</option>
+                                    <option value="governance">AI Governance Platform</option>
+                                    <option value="both">Both Products</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="priority">Priority Level</label>
+                                <select id="priority" name="priority">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="urgent">Urgent</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Subject *</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Description *</label>
+                                <textarea id="message" name="message" required placeholder="Please describe your issue in detail..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="submit-button">Submit Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="resources-section">
+            <div class="container">
+                <h2 style="text-align: center; color: #1e3a8a; margin-bottom: 1rem;">Additional Resources</h2>
+                <p style="text-align: center; color: #64748b; margin-bottom: 3rem;">Helpful resources and learning materials</p>
+                
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">📖</div>
+                        <h3>Knowledge Base</h3>
+                        <p>Search our comprehensive knowledge base for articles, tutorials, and troubleshooting guides.</p>
+                        <a href="#" class="resource-link">Browse Articles →</a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-icon">🎓</div>
+                        <h3>Training Courses</h3>
+                        <p>Free online courses to help you master Helm AI products and best practices.</p>
+                        <a href="#" class="resource-link">Start Learning →</a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-icon">🔧</div>
+                        <h3>API Status</h3>
+                        <p>Check the real-time status of our APIs and services for any ongoing issues.</p>
+                        <a href="#" class="resource-link">Check Status →</a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-icon">👥</div>
+                        <h3>Community Forum</h3>
+                        <p>Connect with other Helm AI users, share experiences, and get help from the community.</p>
+                        <a href="#" class="resource-link">Join Forum →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"></div>
+                    <p>Advanced AI security and governance solutions for the digital age.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="products.html#anti-cheat">AI Anti-Cheat System</a></li>
+                        <li><a href="products.html#governance">AI Governance Platform</a></li>
+                        <li><a href="products.html#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="support.html">Support Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="compliance.html">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Helm AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            // Here you would normally send the data to a server
+            // For now, we'll show a success message
+            alert('Support request submitted! We will respond within 24 hours.');
+            
+            // Reset form
+            event.target.reset();
+        }
+    </script>
+</body>
+</html>
