@@ -278,6 +278,36 @@
             <div id="poker-results" class="result-box" style="display: none;"></div>
         </div>
         
+        <div class="demo-section">
+            <h2>🎮 AI Anti-Cheat System</h2>
+            <button class="button" onclick="testAntiCheatHealth()">System Health</button>
+            <button class="button" onclick="testAntiCheatCapabilities()">Detection Capabilities</button>
+            <button class="button" onclick="testPlayerAnalysis()">Player Analysis</button>
+            <button class="button" onclick="testCheatingDetection()">Cheating Detection</button>
+            <button class="button" onclick="testMarketAnalysis()">🎯 Market Analysis</button>
+            <button class="button success" onclick="testDashboard()">📊 Dashboard</button>
+            <div id="gaming-results" class="result-box" style="display: none;"></div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>📊 Analytics & Monitoring</h2>
+            <button class="button" onclick="testRealTimeUpdates()">⚡ Real-Time Updates</button>
+            <button class="button" onclick="testPlayerDetails()">👤 Player Details</button>
+            <button class="button" onclick="testSystemHealth()">🏥 System Health</button>
+            <button class="button" onclick="testRevenueMetrics()">💰 Revenue Metrics</button>
+            <div id="analytics-results" class="result-box" style="display: none;"></div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🚀 AI Performance Optimization</h2>
+            <button class="button" onclick="testPerformanceOptimization()">⚡ Performance Optimization</button>
+            <button class="button" onclick="testLearningEnhancement()">🧠 Learning Enhancement</button>
+            <button class="button" onclick="testLLMIntegration()">🤖 LLM Integration</button>
+            <button class="button" onclick="testSafetyGovernance()">🛡️ Safety Governance</button>
+            <button class="button success" onclick="testPerformanceMetrics()">📊 Performance Metrics</button>
+            <div id="optimization-results" class="result-box" style="display: none;"></div>
+        </div>
+        
         <div class="integration-info">
             <h2>🚀 Helm AI Enterprise Features</h2>
             <p>Revolutionary AI governance technology transforming enterprise AI deployment:</p>
@@ -492,6 +522,186 @@
                         lastAudit: new Date().toISOString()
                     });
                     showResults('constitutional-results', result, '📊 Compliance Audit Results');
+                }
+            }
+            
+            // Anti-Cheat Test Functions
+            async function testAntiCheatHealth() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/health');
+                    const data = await response.json();
+                    showResults('gaming-results', data, '🎮 Anti-Cheat System Health');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ Anti-Cheat Health Check Failed');
+                }
+            }
+            
+            async function testAntiCheatCapabilities() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/capabilities');
+                    const data = await response.json();
+                    showResults('gaming-results', data, '🔍 Detection Capabilities');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ Capabilities Check Failed');
+                }
+            }
+            
+            async function testPlayerAnalysis() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/analyze-player', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            playerId: 'player_123',
+                            gameplayData: {
+                                aimAccuracy: 94.2,
+                                reactionTime: 145,
+                                movementPatterns: 'normal',
+                                suspiciousActivity: false
+                            }
+                        })
+                    });
+                    const data = await response.json();
+                    showResults('gaming-results', data, '👤 Player Analysis');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ Player Analysis Failed');
+                }
+            }
+            
+            async function testCheatingDetection() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/detect-cheating', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            gameId: 'match_456',
+                            players: [
+                                { id: 'player_1', name: 'ProGamer' },
+                                { id: 'player_2', name: 'CasualPlayer' },
+                                { id: 'player_3', name: 'SuspectPlayer' }
+                            ]
+                        })
+                    });
+                    const data = await response.json();
+                    showResults('gaming-results', data, '🛡️ Cheating Detection');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ Cheating Detection Failed');
+                }
+            }
+            
+            async function testMarketAnalysis() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/market-analysis');
+                    const data = await response.json();
+                    showResults('gaming-results', data, '🎯 Gaming Market Analysis');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ Market Analysis Failed');
+                }
+            }
+            
+            // Dashboard Test Functions
+            async function testDashboard() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/dashboard');
+                    const data = await response.json();
+                    showResults('gaming-results', data, '📊 Dashboard Analytics');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ Dashboard Failed');
+                }
+            }
+            
+            async function testRealTimeUpdates() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/dashboard/updates');
+                    const data = await response.json();
+                    showResults('gaming-results', data, '⚡ Real-Time Updates');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ Real-Time Updates Failed');
+                }
+            }
+            
+            async function testPlayerDetails() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/player/player_123/analysis');
+                    const data = await response.json();
+                    showResults('gaming-results', data, '👤 Player Details Analysis');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ Player Details Failed');
+                }
+            }
+            
+            async function testSystemHealth() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/system/health');
+                    const data = await response.json();
+                    showResults('gaming-results', data, '🏥 System Health Check');
+                } catch (error) {
+                    showResults('gaming-results', { error: error.message }, '❌ System Health Failed');
+                }
+            }
+            
+            async function testRevenueMetrics() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/revenue');
+                    const data = await response.json();
+                    showResults('analytics-results', data, '💰 Revenue Metrics');
+                } catch (error) {
+                    showResults('analytics-results', { error: error.message }, '❌ Revenue Metrics Failed');
+                }
+            }
+            
+            // Performance Optimization Test Functions
+            async function testPerformanceOptimization() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/performance/optimize');
+                    const data = await response.json();
+                    showResults('analytics-results', data, '⚡ Performance Optimization');
+                } catch (error) {
+                    showResults('analytics-results', { error: error.message }, '❌ Performance Optimization Failed');
+                }
+            }
+            
+            async function testLearningEnhancement() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/learning/enhance');
+                    const data = await response.json();
+                    showResults('analytics-results', data, '🧠 Learning Enhancement');
+                } catch (error) {
+                    showResults('analytics-results', { error: error.message }, '❌ Learning Enhancement Failed');
+                }
+            }
+            
+            async function testLLMIntegration() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/llm/analyze');
+                    const data = await response.json();
+                    showResults('analytics-results', data, '🤖 LLM Integration');
+                } catch (error) {
+                    showResults('analytics-results', { error: error.message }, '❌ LLM Integration Failed');
+                }
+            }
+            
+            async function testSafetyGovernance() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/safety/fair-play');
+                    const data = await response.json();
+                    showResults('analytics-results', data, '🛡️ Safety Governance');
+                } catch (error) {
+                    showResults('analytics-results', { error: error.message }, '❌ Safety Governance Failed');
+                }
+            }
+            
+            async function testPerformanceMetrics() {
+                try {
+                    const response = await fetch('http://localhost:3001/api/gaming/performance/metrics');
+                    const data = await response.json();
+                    showResults('optimization-results', data, '📊 Performance Metrics');
+                } catch (error) {
+                    showResults('optimization-results', { error: error.message }, '❌ Performance Metrics Failed');
                 }
             }
             

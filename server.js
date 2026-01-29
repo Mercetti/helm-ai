@@ -15,6 +15,7 @@ const { helmImprovementStrategies } = require('./src/ai/core/improvement-strateg
 const { helmIPProtectionStrategy } = require('./src/ai/ip/ip-protection');
 const { helmCompetitiveAdvantageAnalysis } = require('./src/ai/ip/competitive-analysis');
 const { helmValuationAnalysis } = require('./src/ai/ip/valuation-analysis');
+const antiCheatAPI = require('./src/gaming/anti-cheat-api');
 
 const app = express();
 const PORT = process.env.PORT || 3001; // Different port to avoid conflict with poker game
@@ -288,11 +289,15 @@ app.use((req, res) => {
   });
 });
 
+// Gaming anti-cheat endpoints
+app.use('/api/gaming', antiCheatAPI);
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Helm AI Server running on port ${PORT}`);
   console.log(`🧠 AI modules loaded and ready`);
   console.log(`🎮 Poker game integration available`);
   console.log(`🛡️ Constitutional AI safety framework active`);
+  console.log(`🎮 AI Anti-Cheat system operational`);
   console.log(`💰 $12B+ valuation potential unlocked`);
 });
