@@ -1,0 +1,480 @@
+# Helm AI Configuration File
+# YAML configuration for all Helm AI services
+
+# =============================================================================
+# APPLICATION CONFIGURATION
+# =============================================================================
+application:
+  name: "Helm AI"
+  version: "1.0.0"
+  description: "AI-powered anti-cheat detection system"
+  environment: "production"
+  debug: false
+  log_level: "INFO"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+  access_log: true
+
+# =============================================================================
+# DATABASE CONFIGURATION
+# =============================================================================
+database:
+  # PostgreSQL Configuration
+  postgresql:
+    host: "localhost"
+    port: 5432
+    name: "helm_ai"
+    user: "helm_ai"
+    password: "${DATABASE_PASSWORD}"
+    url: "${DATABASE_URL}"
+    pool_size: 20
+    max_overflow: 30
+    pool_timeout: 30
+    pool_recycle: 3600
+    echo: false
+    
+  # SQLite Configuration (development)
+  sqlite:
+    path: "./helm_ai.db"
+    url: "sqlite:///./helm_ai.db"
+    
+  # Database Settings
+  settings:
+    auto_commit: true
+    autoflush: true
+    expire_on_commit: false
+    echo_sql: false
+    pool_pre_ping: true
+
+# =============================================================================
+# REDIS CONFIGURATION
+# =============================================================================
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: "${REDIS_PASSWORD}"
+  url: "${REDIS_URL}"
+  max_connections: 20
+  connection_timeout: 5
+  socket_timeout: 5
+  retry_on_timeout: true
+  decode_responses: true
+  health_check_interval: 30
+
+# =============================================================================
+# AUTHENTICATION CONFIGURATION
+# =============================================================================
+authentication:
+  jwt:
+    secret_key: "${SECRET_KEY}"
+    algorithm: "HS256"
+    access_token_expire_minutes: 30
+    refresh_token_expire_days: 7
+    
+  password:
+    bcrypt_rounds: 12
+    min_length: 8
+    require_uppercase: true
+    require_lowercase: true
+    require_numbers: true
+    require_symbols: true
+    
+  api_key:
+    header: "X-API-Key"
+    prefix: "Bearer"
+    length: 32
+    
+  rate_limiting:
+    requests: 100
+    window: 60
+    burst: 200
+
+# =============================================================================
+# BILLING CONFIGURATION
+# =============================================================================
+billing:
+  stripe:
+    api_key: "${STRIPE_API_KEY}"
+    publishable_key: "${STRIPE_PUBLISHABLE_KEY}"
+    webhook_secret: "${STRIPE_WEBHOOK_SECRET}"
+    success_url: "https://helm-ai.com/billing/success"
+    cancel_url: "https://helm-ai.com/billing/cancel"
+    
+  currency:
+    default: "usd"
+    supported: ["usd", "eur", "gbp", "cad", "aud"]
+    
+  plans:
+    starter:
+      name: "Starter Plan"
+      price: 25000
+      currency: "usd"
+      interval: "month"
+      features:
+        - "Basic AI detection"
+        - "Up to 1,000 requests/month"
+        - "Email support"
+        - "Standard reporting"
+      stripe_price_id: "price_starter_monthly"
+      
+    professional:
+      name: "Professional Plan"
+      price: 100000
+      currency: "usd"
+      interval: "month"
+      features:
+        - "Advanced AI detection"
+        - "Up to 10,000 requests/month"
+        - "Priority support"
+        - "Advanced analytics"
+        - "Custom integrations"
+      stripe_price_id: "price_professional_monthly"
+      
+    enterprise:
+      name: "Enterprise Plan"
+      price: 500000
+      currency: "usd"
+      interval: "month"
+      features:
+        - "Unlimited AI detection"
+        - "Unlimited requests"
+        - "24/7 dedicated support"
+        - "Enterprise analytics"
+        - "Custom AI models"
+        - "On-premise deployment"
+        - "SLA guarantee"
+      stripe_price_id: "price_enterprise_monthly"
+
+# =============================================================================
+# AI MODEL CONFIGURATION
+# =============================================================================
+models:
+  paths:
+    base: "./models"
+    vision: "./models/vision"
+    audio: "./models/audio"
+    network: "./models/network"
+    fusion: "./models/fusion"
+    
+  configuration:
+    device: "auto"
+    batch_size: 32
+    max_workers: 4
+    timeout: 30
+    confidence_threshold: 0.7
+    risk_threshold: 0.8
+    
+  gpu:
+    cuda_visible_devices: "0,1"
+    memory_fraction: 0.8
+    enable_mixed_precision: true
+    
+  vision:
+    model_type: "resnet50"
+    input_size: [224, 224]
+    num_classes: 4
+    pretrained: true
+    
+  audio:
+    sample_rate: 16000
+    n_fft: 1024
+    hop_length: 512
+    n_mels: 64
+    
+  network:
+    sequence_length: 100
+    hidden_size: 256
+    num_layers: 2
+    dropout: 0.2
+
+# =============================================================================
+# MONITORING CONFIGURATION
+# =============================================================================
+monitoring:
+  logging:
+    level: "INFO"
+    format: "json"
+    file: "./logs/app.log"
+    max_size: "100MB"
+    backup_count: 5
+    rotation: "daily"
+    
+  prometheus:
+    port: 9090
+    path: "/metrics"
+    enabled: true
+    
+  health_checks:
+    path: "/health"
+    interval: 30
+    timeout: 10
+    
+  metrics:
+    enabled: true
+    path: "/metrics"
+    include_system: true
+    include_application: true
+
+# =============================================================================
+# EMAIL CONFIGURATION
+# =============================================================================
+email:
+  smtp:
+    host: "smtp.gmail.com"
+    port: 587
+    username: "${SMTP_USERNAME}"
+    password: "${SMTP_PASSWORD}"
+    use_tls: true
+    use_ssl: false
+    
+  from:
+    email: "noreply@helm-ai.com"
+    name: "Helm AI"
+    
+  templates:
+    path: "./templates/email"
+    verification_subject: "Verify your Helm AI account"
+    password_reset_subject: "Reset your Helm AI password"
+    welcome_subject: "Welcome to Helm AI"
+
+# =============================================================================
+# EXTERNAL INTEGRATIONS
+# =============================================================================
+integrations:
+  crm:
+    hubspot:
+      api_key: "${HUBSPOT_API_KEY}"
+      
+    salesforce:
+      api_key: "${SALESFORCE_API_KEY}"
+      url: "${SALESFORCE_URL}"
+      
+  analytics:
+    google_analytics:
+      id: "${GOOGLE_ANALYTICS_ID}"
+      
+    mixpanel:
+      token: "${MIXPANEL_TOKEN}"
+      
+    segment:
+      write_key: "${SEGMENT_WRITE_KEY}"
+      
+  support:
+    zendesk:
+      api_key: "${ZENDESK_API_KEY}"
+      subdomain: "helm-ai"
+      
+    intercom:
+      access_token: "${INTERCOM_ACCESS_TOKEN}"
+
+# =============================================================================
+# SECURITY CONFIGURATION
+# =============================================================================
+security:
+  ssl:
+    cert_path: "./ssl/cert.pem"
+    key_path: "./ssl/key.pem"
+    ca_path: "./ssl/ca.pem"
+    verify_client: false
+    ciphers: "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256"
+    protocols: ["TLSv1.2", "TLSv1.3"]
+    
+  cors:
+    origins: ["https://helm-ai.com", "https://app.helm-ai.com", "https://admin.helm-ai.com"]
+    allow_credentials: true
+    allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_headers: ["*"]
+    
+  csp:
+    enabled: true
+    script_src: ["self", "unsafe-inline", "https://js.stripe.com"]
+    style_src: ["self", "unsafe-inline"]
+    img_src: ["self", "data:", "https:"]
+    connect_src: ["self", "https://api.stripe.com"]
+
+# =============================================================================
+# PERFORMANCE CONFIGURATION
+# =============================================================================
+performance:
+  caching:
+    enabled: true
+    ttl: 3600
+    max_size: 1000
+    key_prefix: "helm_ai"
+    
+  connection_pooling:
+    max_connections: 100
+    min_connections: 10
+    connection_timeout: 30
+    idle_timeout: 600
+    
+  async:
+    pool_size: 100
+    max_workers: 4
+    timeout: 30
+
+# =============================================================================
+# DEVELOPMENT CONFIGURATION
+# =============================================================================
+development:
+  debug:
+    sql: false
+    requests: false
+    responses: false
+    profiling: false
+    
+  testing:
+    database_url: "sqlite:///./test.db"
+    redis_url: "redis://localhost:6379/1"
+    stripe_api_key: "sk_test_your_test_key_here"
+
+# =============================================================================
+# DEPLOYMENT CONFIGURATION
+# =============================================================================
+deployment:
+  docker:
+    registry: "helm-ai"
+    tag: "latest"
+    port: 8000
+    host: "0.0.0.0"
+    
+  kubernetes:
+    namespace: "helm-ai"
+    service_name: "helm-ai-api"
+    replicas: 3
+    cpu_limit: "1000m"
+    memory_limit: "2Gi"
+
+# =============================================================================
+# BUSINESS CONFIGURATION
+# =============================================================================
+business:
+  company:
+    name: "Helm AI"
+    email: "support@helm-ai.com"
+    phone: "+1-555-123-4567"
+    address: "123 AI Security Lane, San Francisco, CA 94105"
+    
+  legal:
+    privacy_policy_url: "https://helm-ai.com/privacy"
+    terms_of_service_url: "https://helm-ai.com/terms"
+    cookie_policy_url: "https://helm-ai.com/cookies"
+    
+  support:
+    email: "support@helm-ai.com"
+    phone: "+1-555-123-4567"
+    url: "https://helm-ai.com/support"
+    documentation_url: "https://docs.helm-ai.com"
+
+# =============================================================================
+# FEATURE FLAGS
+# =============================================================================
+features:
+  billing: true
+  analytics: true
+  monitoring: true
+  email_notifications: true
+  webhooks: true
+  api_docs: true
+  admin_panel: true
+  customer_portal: true
+  
+  beta:
+    enabled: false
+    experimental_models: false
+    advanced_analytics: false
+
+# =============================================================================
+# BACKUP & RECOVERY
+# =============================================================================
+backup:
+  database:
+    enabled: true
+    schedule: "0 2 * * *"
+    retention_days: 30
+    s3_bucket: "helm-ai-backups"
+    s3_region: "us-west-2"
+    
+  files:
+    enabled: true
+    schedule: "0 3 * * *"
+    path: "./backups"
+    retention_days: 7
+
+# =============================================================================
+# COMPLIANCE & AUDIT
+# =============================================================================
+compliance:
+  gdpr:
+    enabled: true
+    data_retention_days: 365
+    anonymization_enabled: true
+    
+  soc2:
+    enabled: true
+    audit_log_enabled: true
+    encryption_at_rest: true
+    encryption_in_transit: true
+    
+  hipaa:
+    enabled: false
+    encryption_required: false
+
+# =============================================================================
+# NOTIFICATIONS
+# =============================================================================
+notifications:
+  system:
+    enabled: true
+    email: "admin@helm-ai.com"
+    slack_webhook: "${SLACK_WEBHOOK_URL}"
+    
+  user:
+    enabled: true
+    email_enabled: true
+    sms_enabled: false
+    push_enabled: false
+
+# =============================================================================
+# API RATE LIMITING
+# =============================================================================
+rate_limiting:
+  api:
+    enabled: true
+    requests: 1000
+    window: 3600
+    burst: 2000
+    
+  user:
+    enabled: true
+    requests: 100
+    window: 3600
+    burst: 200
+    
+  premium:
+    requests: 1000
+    window: 3600
+    burst: 2000
+
+# =============================================================================
+# WEBHOOK CONFIGURATION
+# =============================================================================
+webhooks:
+  enabled: true
+  secret: "${WEBHOOK_SECRET}"
+  timeout: 30
+  retry_attempts: 3
+  retry_delay: 5
+  
+  events:
+    user_created: true
+    user_updated: true
+    subscription_created: true
+    subscription_updated: true
+    payment_succeeded: true
+    payment_failed: true
