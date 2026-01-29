@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior AI Engineer (Technical Lead) - Helm AI Careers</title>
+    <meta name="description" content="Join Helm AI as a Senior AI Engineer (Technical Lead). Lead AI algorithm development for multi-modal anti-cheat systems. $150K-$180K + equity.">
+    <meta property="og:title" content="Senior AI Engineer (Technical Lead) - Helm AI">
+    <meta property="og:description" content="Lead AI algorithm development for multi-modal anti-cheat systems">
+    <meta property="og:image" content="helm-ai-logo.png">
+    <link rel="icon" type="image/png" href="helm-ai-logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #ffffff;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+        
+        .position-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .position-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .position-hero .salary {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+        }
+        
+        .position-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .apply-now-button {
+            background: #ffffff;
+            color: #1e3a8a;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .apply-now-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 60px 0;
+            background: #ffffff;
+        }
+        
+        .content-section:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        .content-section h2 {
+            color: #1e3a8a;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .content-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .content-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .content-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .content-card li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .content-card li:last-child {
+            border-bottom: none;
+        }
+        
+        .content-card li:before {
+            content: "✅ ";
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .requirements-list {
+            background: #f0f9ff;
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #1e3a8a;
+        }
+        
+        .requirements-list h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+        
+        .requirements-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .requirements-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .requirements-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .requirements-list li:before {
+            content: "🔹 ";
+            color: #1e3a8a;
+            font-weight: bold;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-section a:hover {
+            opacity: 1;
+        }
+        
+        .footer-logo {
+            width: 100px;
+            height: 100px;
+            background: url('helm-ai-logo.png') no-repeat center;
+            background-size: contain;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .position-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="careers.html" class="logo">
+                <div class="logo-icon"></div>
+                Helm AI
+            </a>
+            <ul class="nav-links">
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="position-hero">
+            <div class="container">
+                <h1>Senior AI Engineer (Technical Lead)</h1>
+                <div class="salary">$150,000 - $180,000 + Equity</div>
+                <p>Lead AI algorithm development for our multi-modal anti-cheat systems. This is a critical technical leadership role that will shape the future of AI security in gaming.</p>
+                <a href="contact.html" class="apply-now-button">Apply Now</a>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2>Position Overview</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🎯 Key Responsibilities</h3>
+                        <ul>
+                            <li>Lead AI algorithm development for multi-modal anti-cheat systems</li>
+                            <li>Design and implement computer vision solutions</li>
+                            <li>Architect audio analysis and detection systems</li>
+                            <li>Mentor junior engineers and provide technical guidance</li>
+                            <li>Make critical technical decisions for product direction</li>
+                            <li>Ensure code quality and best practices</li>
+                            <li>Collaborate with product and research teams</li>
+                            <li>Drive innovation in AI security technology</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>🚀 Impact & Opportunity</h3>
+                        <ul>
+                            <li>Shape the technical direction of a cutting-edge AI security company</li>
+                            <li>Work on revolutionary multi-modal AI technology</li>
+                            <li>Lead a team of talented AI engineers</li>
+                            <li>Contribute to patents and research publications</li>
+                            <li>Make a real impact in the gaming security industry</li>
+                            <li>Grow into a CTO or VP of Engineering role</li>
+                            <li>Work with leading gaming studios and enterprises</li>
+                            <li>Build technology that protects millions of gamers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2>Requirements & Qualifications</h2>
+                <div class="requirements-list">
+                    <h3>🔹 Must-Have Requirements</h3>
+                    <ul>
+                        <li>5+ years of AI/ML engineering experience</li>
+                        <li>Strong expertise in computer vision and image processing</li>
+                        <li>Proficiency in Python, TensorFlow, PyTorch, or similar frameworks</li>
+                        <li>Experience with deep learning and neural networks</li>
+                        <li>Strong problem-solving and analytical skills</li>
+                        <li>Leadership experience or potential</li>
+                        <li>Excellent communication and collaboration skills</li>
+                        <li>Bachelor's degree in Computer Science, Engineering, or related field</li>
+                    </ul>
+                </div>
+                
+                <div class="requirements-list">
+                    <h3>🌟 Preferred Qualifications</h3>
+                    <ul>
+                        <li>Gaming industry experience or knowledge</li>
+                        <li>Experience with anti-cheat or security systems</li>
+                        <li>Audio processing and analysis experience</li>
+                        <li>Network traffic analysis expertise</li>
+                        <li>Master's or PhD in Computer Science, AI, or related field</li>
+                        <li>Published research papers or patents</li>
+                        <li>Experience with cloud platforms (AWS, GCP, Azure)</li>
+                        <li>Startup experience</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2>Technical Stack & Tools</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>💻 Programming Languages</h3>
+                        <ul>
+                            <li>Python (primary)</li>
+                            <li>C++ (performance-critical components)</li>
+                            <li>TypeScript/JavaScript (frontend integration)</li>
+                            <li>SQL (data analysis)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>🤖 AI/ML Frameworks</h3>
+                        <ul>
+                            <li>TensorFlow</li>
+                            <li>PyTorch</li>
+                            <li>OpenCV</li>
+                            <li>Scikit-learn</li>
+                            <li>Keras</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>☁️ Cloud & Infrastructure</h3>
+                        <ul>
+                            <li>AWS (S3, EC2, Lambda)</li>
+                            <li>Docker & Kubernetes</li>
+                            <li>Git & GitHub</li>
+                            <li>JIRA & Confluence</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2>Why Join Helm AI?</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🎮 Industry Impact</h3>
+                        <ul>
+                            <li>Work on technology that protects millions of gamers</li>
+                            <li>Shape the future of AI security in gaming</li>
+                            <li>Partner with leading gaming studios</li>
+                            <li>Solve real-world security challenges</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>🚀 Career Growth</h3>
+                        <ul>
+                            <li>Technical leadership role with growth potential</li>
+                            <li>Opportunity to build and lead a team</li>
+                            <li>Path to CTO or VP of Engineering</li>
+                            <li>Equity in a growing startup</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>💰 Compensation & Benefits</h3>
+                        <ul>
+                            <li>Competitive salary: $150K-$180K</li>
+                            <li>Significant equity package (0.5% - 1.5%)</li>
+                            <li>Comprehensive health benefits</li>
+                            <li>Flexible remote work options</li>
+                            <li>Unlimited PTO</li>
+                            <li>Professional development budget</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2>Application Process</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>📋 What to Expect</h3>
+                        <ul>
+                            <li>Phone screen with hiring manager (30 minutes)</li>
+                            <li>Technical assessment (2 hours)</li>
+                            <li>Team interview (60 minutes)</li>
+                            <li>Cultural fit interview (45 minutes)</li>
+                            <li>Executive interview (30 minutes)</li>
+                            <li>Reference checks</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>⏰ Timeline</h3>
+                        <ul>
+                            <li>Application review: 1-2 weeks</li>
+                            <li>Interview process: 2-3 weeks</li>
+                            <li>Decision: 1 week after final interview</li>
+                            <li>Start date: Flexible, ideally within 4-6 weeks</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 3rem;">
+                    <a href="contact.html" class="apply-now-button">Apply for This Position</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"></div>
+                    <p>Advanced AI security and governance solutions for the digital age.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="products.html#anti-cheat">AI Anti-Cheat System</a></li>
+                        <li><a href="products.html#governance">AI Governance Platform</a></li>
+                        <li><a href="products.html#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="support.html">Support Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="compliance.html">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Helm AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
