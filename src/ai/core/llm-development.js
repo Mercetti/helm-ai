@@ -1,18 +1,18 @@
 // Helm AI - LLM Development Roadmap and Timeline Analysis
-// Extracted from helm-dashboard-enhanced.html
+// Investor-friendly responses for business presentations
 
 const helmLLMDevelopment = {
-    // Core LLM development phases
+    // Core LLM development phases - simplified for investors
     developmentPhases: {
         foundation: {
             name: 'Foundation Phase',
             duration: '6-12 months',
-            description: 'Build core LLM infrastructure and basic capabilities',
+            description: 'Build core AI infrastructure and basic capabilities',
             milestones: [
-                'Core neural architecture implementation',
-                'Basic multi-modal processing pipeline',
-                'Initial safety framework integration',
-                'Fundamental learning algorithms'
+                'Core AI architecture ready',
+                'Multi-modal processing working',
+                'Safety framework integrated',
+                'Learning algorithms operational'
             ],
             dependencies: ['Computing infrastructure', 'Training data', 'Research team'],
             risks: ['Technical complexity', 'Resource requirements', 'Timeline delays']
@@ -166,14 +166,15 @@ const helmLLMDevelopment = {
         }
     },
     
-    // Get development roadmap
+    // Get development roadmap - investor-friendly version
     getDevelopmentRoadmap: () => {
         const roadmap = {
             summary: {
                 totalTimeline: '30-36 months baseline',
                 acceleratedTimeline: '12-18 months with enhancements',
                 totalInvestment: '$2B-$5B',
-                expectedValue: '$10B-$20B'
+                expectedValue: '$10B-$20B',
+                investorSummary: 'Helm AI will build proprietary AI technology over 2-3 years, creating $10B+ value from $2B-$5B investment. This eliminates dependency on external AI providers and gives us complete control over our technology stack.'
             },
             
             phases: helmLLMDevelopment.developmentPhases,
@@ -206,6 +207,14 @@ const helmLLMDevelopment = {
                 'Safety and reliability metrics',
                 'Cost efficiency improvements',
                 'Scalability and deployment success'
+            ],
+            
+            investorTakeaways: [
+                'Clear 2-3 year timeline to full AI independence',
+                'Strong ROI: $10B+ value from $2B-$5B investment',
+                'Eliminates reliance on external AI providers',
+                'Creates defensible competitive advantage',
+                'Positions Helm AI as AI infrastructure leader'
             ]
         };
         

@@ -7,6 +7,7 @@ require('dotenv').config();
 
 // Import AI modules (will be created next)
 const { helmLLMDevelopment } = require('./src/ai/core/llm-development');
+const { responseSimplifier } = require('./src/ai/core/response-simplifier');
 const { helmLearningEnhancement } = require('./src/ai/core/learning-enhancement');
 const { helmSafetyAndGovernance } = require('./src/ai/core/safety-governance');
 const { helmImprovementStrategies } = require('./src/ai/core/improvement-strategies');
@@ -61,10 +62,19 @@ app.get('/api/health', (req, res) => {
 // Core AI endpoints
 app.get('/api/ai/llm-development', (req, res) => {
   try {
-    const roadmap = helmLLMDevelopment.getDevelopmentRoadmap();
+    const technicalRoadmap = helmLLMDevelopment.getDevelopmentRoadmap();
+    const investorFriendly = responseSimplifier.simplifyLLMDevelopment(technicalRoadmap);
+    
     res.json({
       success: true,
-      data: roadmap,
+      data: {
+        executiveSummary: investorFriendly.executiveSummary,
+        businessValue: investorFriendly.businessValue,
+        keyMilestones: investorFriendly.keyMilestones,
+        riskFactors: investorFriendly.riskFactors,
+        investmentOpportunity: investorFriendly.investmentOpportunity,
+        technicalDetails: technicalRoadmap.summary // Keep technical data for those who want it
+      },
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -78,10 +88,18 @@ app.get('/api/ai/llm-development', (req, res) => {
 
 app.get('/api/ai/learning-enhancement', (req, res) => {
   try {
-    const strategies = helmLearningEnhancement.getEnhancementStrategies();
+    const technicalStrategies = helmLearningEnhancement.getLearningStrategies();
+    const investorFriendly = responseSimplifier.simplifyLearningEnhancement(technicalStrategies);
+    
     res.json({
       success: true,
-      data: strategies,
+      data: {
+        executiveSummary: investorFriendly.executiveSummary,
+        businessValue: investorFriendly.businessValue,
+        keyCapabilities: investorFriendly.keyCapabilities,
+        investmentOpportunity: investorFriendly.investmentOpportunity,
+        technicalDetails: technicalStrategies.learningStrategies // Keep technical data for those who want it
+      },
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -95,10 +113,18 @@ app.get('/api/ai/learning-enhancement', (req, res) => {
 
 app.get('/api/ai/safety-governance', (req, res) => {
   try {
-    const framework = helmSafetyAndGovernance.getSafetyFramework();
+    const technicalFramework = helmSafetyAndGovernance.getSafetyFramework();
+    const investorFriendly = responseSimplifier.simplifySafetyGovernance(technicalFramework);
+    
     res.json({
       success: true,
-      data: framework,
+      data: {
+        executiveSummary: investorFriendly.executiveSummary,
+        businessValue: investorFriendly.businessValue,
+        safetyPrinciples: investorFriendly.safetyPrinciples,
+        investmentOpportunity: investorFriendly.investmentOpportunity,
+        technicalDetails: technicalFramework.constitutionalPrinciples // Keep technical data for those who want it
+      },
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -164,10 +190,18 @@ app.get('/api/ip/competitive-moat', (req, res) => {
 
 app.get('/api/ip/valuation', (req, res) => {
   try {
-    const valuation = helmValuationAnalysis.getComprehensiveValuation();
+    const technicalValuation = helmValuationAnalysis.getComprehensiveValuation();
+    const investorFriendly = responseSimplifier.simplifyValuationAnalysis(technicalValuation);
+    
     res.json({
       success: true,
-      data: valuation,
+      data: {
+        executiveSummary: investorFriendly.executiveSummary,
+        valuationBreakdown: investorFriendly.valuationBreakdown,
+        competitiveAdvantages: investorFriendly.competitiveAdvantages,
+        investmentOpportunity: investorFriendly.investmentOpportunity,
+        technicalDetails: technicalValuation.totalWorkValue // Keep technical data for those who want it
+      },
       timestamp: new Date().toISOString()
     });
   } catch (error) {
