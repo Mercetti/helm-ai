@@ -157,6 +157,16 @@ const helmLearningEnhancement = {
         };
         
         return strategies;
+    },
+    
+    // Get learning strategies for API endpoint
+    getLearningStrategies: () => {
+        return {
+            learningStrategies: helmLearningEnhancement.learningStrategies,
+            implementationPlan: helmLearningEnhancement.implementationPlan,
+            successMetrics: helmLearningEnhancement.successMetrics,
+            riskMitigation: helmLearningEnhancement.riskMitigation
+        };
     }
 };
 
