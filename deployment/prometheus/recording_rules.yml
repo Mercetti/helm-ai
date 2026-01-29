@@ -1,0 +1,80 @@
+groups:
+  - name: helm_ai_recording_rules
+    interval: 30s
+    rules:
+      # API Performance Recording Rules
+      - record: helm_ai:http_requests:rate5m
+        expr: rate(http_requests_total[5m])
+
+      - record: helm_ai:http_request_duration_seconds:rate5m
+        expr: rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])
+
+      - record: helm_ai:http_request_duration_seconds:p95:5m
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
+
+      - record: helm_ai:http_request_duration_seconds:p99:5m
+        expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))
+
+      # Business Metrics Recording Rules
+      - record: helm_ai:active_users:rate1h
+        expr: rate(active_users_total[1h])
+
+      - record: helm_ai:revenue:rate1h
+        expr: rate(revenue_total[1h])
+
+      - record: helm_ai:conversion_rate:5m
+        expr: rate(signups_total[5m]) / rate(visitors_total[5m])
+
+      - record: helm_ai:customer_acquisition_cost:1h
+        expr: rate(marketing_spend_total[1h]) / rate(signups_total[1h])
+
+      - record: helm_ai:customer_lifetime_value:1d
+        expr: rate(revenue_total[1d]) / rate(active_customers_total[1d])
+
+      # System Resource Recording Rules
+      - record: helm_ai:cpu_usage:5m
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+
+      - record: helm_ai:memory_usage:5m
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100
+
+      - record: helm_ai:disk_usage:5m
+        expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100
+
+      - record: helm_ai:network_receive_bytes:5m
+        expr: rate(node_network_receive_bytes_total[5m])
+
+      - record: helm_ai:network_transmit_bytes:5m
+        expr: rate(node_network_transmit_bytes_total[5m])
+
+      # Database Performance Recording Rules
+      - record: helm_ai:postgres_connections:5m
+        expr: pg_stat_activity_count
+
+      - record: helm_ai:postgres_query_duration:5m
+        expr: rate(pg_stat_statements_mean_time_seconds[5m])
+
+      - record: helm_ai:redis_memory_usage:5m
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100
+
+      # Application-Specific Recording Rules
+      - record: helm_ai:ai_model_inference_time:5m
+        expr: histogram_quantile(0.95, rate(ai_model_inference_duration_seconds_bucket[5m]))
+
+      - record: helm_ai:ai_model_requests:5m
+        expr: rate(ai_model_requests_total[5m])
+
+      - record: helm_ai:ai_model_errors:5m
+        expr: rate(ai_model_errors_total[5m]) / rate(ai_model_requests_total[5m]) * 100
+
+      - record: helm_ai:gaming_sessions:5m
+        expr: rate(gaming_sessions_total[5m])
+
+      - record: helm_ai:gaming_session_duration:5m
+        expr: histogram_quantile(0.95, rate(gaming_session_duration_seconds_bucket[5m]))
+
+      - record: helm_ai:anti_cheat_detections:5m
+        expr: rate(anti_cheat_detections_total[5m])
+
+      - record: helm_ai:anti_cheat_false_positives:5m
+        expr: rate(anti_cheat_false_positives_total[5m]) / rate(anti_cheat_detections_total[5m]) * 100
