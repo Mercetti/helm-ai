@@ -1,0 +1,613 @@
+# 📄 HELM AI PDF GENERATION SCRIPT
+
+## 🎯 AUTOMATIC PDF CREATION FOR SALES TEAM
+
+### **📋 FILES TO CONVERT:**
+```
+📄 INVESTOR-ONE-PAGER.md → INVESTOR-ONE-PAGER.pdf
+📄 PARTNERSHIP-SALES-KIT.md → PARTNERSHIP-SALES-KIT.pdf
+📄 BRANDING-GUIDE.md → BRANDING-GUIDE.pdf
+📄 ANTI-CHEAT-TECHNICAL-SPECS.md → ANTI-CHEAT-TECHNICAL-SPECS.pdf
+📄 PARTNERSHIP-EMAIL-TEMPLATES.md → PARTNERSHIP-EMAIL-TEMPLATES.pdf
+```
+
+### **🎮 BRANDING INTEGRATION:**
+```
+🎮 Logo: helm-ai-logo.png (top-right placement)
+📱 QR Code: helm-ai-demo-qr.png (bottom-right placement)
+🔗 Demo URL: https://symphonious-taiyaki-6b6494.netlify.app/
+🎨 Theme: Blue gradient (#2563EB to #1E40AF)
+```
+
+---
+
+## 🚀 IMPLEMENTATION OPTIONS
+
+### **📊 OPTION 1: NODE.JS PDF GENERATION**
+```javascript
+// Install required packages
+npm install puppeteer markdown-it sharp
+
+const puppeteer = require('puppeteer');
+const markdownIt = require('markdown-it');
+const sharp = require('sharp');
+const fs = require('fs');
+
+// PDF generation function
+async function generatePDF(markdownFile, outputFile, logoPath, qrPath) {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    
+    // Read markdown content
+    const markdownContent = fs.readFileSync(markdownFile, 'utf8');
+    const md = new markdownIt();
+    const html = md.render(markdownContent);
+    
+    // Create HTML with branding
+    const brandedHTML = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body { 
+                font-family: Arial, sans-serif; 
+                margin: 40px;
+                color: #1a1a1a;
+                line-height: 1.6;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+            }
+            .logo {
+                width: 200px;
+                height: auto;
+            }
+            .content {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            .footer {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                text-align: center;
+            }
+            .qr-code {
+                width: 150px;
+                height: auto;
+            }
+            h1 { color: #2563EB; border-bottom: 3px solid #2563EB; }
+            h2 { color: #1E40AF; }
+            h3 { color: #2563EB; }
+            .highlight { background: linear-gradient(135deg, #2563EB, #1E40AF); color: white; padding: 20px; border-radius: 10px; }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Helm AI</h1>
+            <img src="${logoPath}" class="logo" alt="Helm AI Logo">
+        </div>
+        <div class="content">
+            ${html}
+        </div>
+        <div class="footer">
+            <img src="${qrPath}" class="qr-code" alt="Demo QR Code">
+            <p>Scan to try live demo:<br>https://symphonious-taiyaki-6b6494.netlify.app/</p>
+        </div>
+    </body>
+    </html>`;
+    
+    await page.setContent(brandedHTML);
+    await page.pdf({
+        path: outputFile,
+        format: 'A4',
+        printBackground: true,
+        margin: {
+            top: '20mm',
+            right: '20mm',
+            bottom: '20mm',
+            left: '20mm'
+        }
+    });
+    
+    await browser.close();
+    console.log(`Generated: ${outputFile}`);
+}
+
+// Generate all PDFs
+async function generateAllPDFs() {
+    const files = [
+        { input: 'INVESTOR-ONE-PAGER.md', output: 'INVESTOR-ONE-PAGER.pdf' },
+        { input: 'PARTNERSHIP-SALES-KIT.md', output: 'PARTNERSHIP-SALES-KIT.pdf' },
+        { input: 'BRANDING-GUIDE.md', output: 'BRANDING-GUIDE.pdf' },
+        { input: 'ANTI-CHEAT-TECHNICAL-SPECS.md', output: 'ANTI-CHEAT-TECHNICAL-SPECS.pdf' },
+        { input: 'PARTNERSHIP-EMAIL-TEMPLATES.md', output: 'PARTNERSHIP-EMAIL-TEMPLATES.pdf' }
+    ];
+    
+    for (const file of files) {
+        await generatePDF(file.input, file.output, 'helm-ai-logo.png', 'helm-ai-demo-qr.png');
+    }
+}
+
+generateAllPDFs().catch(console.error);
+```
+
+### **📱 OPTION 2: PYTHON PDF GENERATION**
+```python
+# Install required packages
+pip install weasyprint markdown pillow
+
+import markdown
+from weasyprint import HTML, CSS
+from PIL import Image
+import os
+
+def generate_pdf(markdown_file, output_file, logo_path, qr_path):
+    # Read markdown content
+    with open(markdown_file, 'r', encoding='utf-8') as f:
+        markdown_content = f.read()
+    
+    # Convert to HTML
+    html = markdown.markdown(markdown_content)
+    
+    # Create branded HTML
+    branded_html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ 
+                font-family: Arial, sans-serif; 
+                margin: 40px;
+                color: #1a1a1a;
+                line-height: 1.6;
+            }}
+            .header {{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+            }}
+            .logo {{
+                width: 200px;
+                height: auto;
+            }}
+            .content {{
+                max-width: 800px;
+                margin: 0 auto;
+            }}
+            .footer {{
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                text-align: center;
+            }}
+            .qr-code {{
+                width: 150px;
+                height: auto;
+            }}
+            h1 {{ color: #2563EB; border-bottom: 3px solid #2563EB; }}
+            h2 {{ color: #1E40AF; }}
+            h3 {{ color: #2563EB; }}
+            .highlight {{ 
+                background: linear-gradient(135deg, #2563EB, #1E40AF); 
+                color: white; 
+                padding: 20px; 
+                border-radius: 10px; 
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Helm AI</h1>
+            <img src="{logo_path}" class="logo" alt="Helm AI Logo">
+        </div>
+        <div class="content">
+            {html}
+        </div>
+        <div class="footer">
+            <img src="{qr_path}" class="qr-code" alt="Demo QR Code">
+            <p>Scan to try live demo:<br>https://symphonious-taiyaki-6b6494.netlify.app/</p>
+        </div>
+    </body>
+    </html>"""
+    
+    # Generate PDF
+    HTML(string=branded_html).write_pdf(output_file)
+    print(f"Generated: {output_file}")
+
+# Generate all PDFs
+files = [
+    ('INVESTOR-ONE-PAGER.md', 'INVESTOR-ONE-PAGER.pdf'),
+    ('PARTNERSHIP-SALES-KIT.md', 'PARTNERSHIP-SALES-KIT.pdf'),
+    ('BRANDING-GUIDE.md', 'BRANDING-GUIDE.pdf'),
+    ('ANTI-CHEAT-TECHNICAL-SPECS.md', 'ANTI-CHEAT-TECHNICAL-SPECS.pdf'),
+    ('PARTNERSHIP-EMAIL-TEMPLATES.md', 'PARTNERSHIP-EMAIL-TEMPLATES.pdf')
+]
+
+for input_file, output_file in files:
+    generate_pdf(input_file, output_file, 'helm-ai-logo.png', 'helm-ai-demo-qr.png')
+```
+
+### **🎮 OPTION 3: BROWSER-BASED PDF GENERATION**
+```javascript
+// Add to your existing Helm AI demo
+function generatePDF(markdownContent, fileName) {
+    const { jsPDF } = window.jspdf;
+    
+    // Convert markdown to HTML
+    const html = marked.parse(markdownContent);
+    
+    // Create PDF with branding
+    const doc = new jsPDF();
+    
+    // Add logo (if available)
+    doc.addImage(helmAiLogo, 'PNG', 150, 10, 50, 20);
+    
+    // Add content
+    doc.setFontSize(16);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Helm AI', 20, 30);
+    
+    // Add HTML content
+    doc.fromHTML(html, 20, 40, {
+        'width': 170
+    });
+    
+    // Add QR code (if available)
+    doc.addImage(helmAiQR, 'PNG', 140, 250, 50, 50);
+    
+    // Save PDF
+    doc.save(fileName);
+}
+```
+
+---
+
+## 🎯 RECOMMENDED IMPLEMENTATION
+
+### **📊 EASIEST - BROWSER-BASED SOLUTION:**
+<tool_call>write_to_file
+<arg_key>CodeContent</arg_key>
+<arg_value><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helm AI PDF Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-placeholder {
+            width: 200px;
+            height: 60px;
+            background: linear-gradient(135deg, #2563EB, #1E40AF);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .file-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .file-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .file-card:hover {
+            border-color: #2563EB;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
+        }
+        .file-card.selected {
+            border-color: #2563EB;
+            background: #f0f9ff;
+        }
+        .file-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .file-description {
+            color: #64748b;
+            font-size: 14px;
+        }
+        .generate-btn {
+            background: linear-gradient(135deg, #2563EB, #1E40AF);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .preview {
+            margin-top: 30px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .preview h3 {
+            color: #2563EB;
+            margin-top: 0;
+        }
+        .branding-upload {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .upload-section {
+            border: 2px dashed #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .upload-section:hover {
+            border-color: #2563EB;
+        }
+        .upload-btn {
+            background: #2563EB;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .status.success {
+            background: #10b981;
+            color: white;
+        }
+        .status.error {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-placeholder">HELM AI</div>
+            <h1>PDF Generator</h1>
+            <p>Convert markdown files to professional PDFs with Helm AI branding</p>
+        </div>
+
+        <div class="branding-upload">
+            <div class="upload-section">
+                <h3>🎮 Logo</h3>
+                <p>Upload helm-ai-logo.png</p>
+                <input type="file" id="logoUpload" accept="image/png" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('logoUpload').click()">Upload Logo</button>
+                <div id="logoStatus"></div>
+            </div>
+            <div class="upload-section">
+                <h3>📱 QR Code</h3>
+                <p>Upload helm-ai-demo-qr.png</p>
+                <input type="file" id="qrUpload" accept="image/png" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('qrUpload').click()">Upload QR Code</button>
+                <div id="qrStatus"></div>
+            </div>
+        </div>
+
+        <div class="file-selector">
+            <div class="file-card" data-file="INVESTOR-ONE-PAGER">
+                <div class="file-title">📊 Investor One-Pager</div>
+                <div class="file-description">Executive summary for investors and quick pitches</div>
+            </div>
+            <div class="file-card" data-file="PARTNERSHIP-SALES-KIT">
+                <div class="file-title">🎮 Partnership Sales Kit</div>
+                <div class="file-description">Complete sales playbook for partnership teams</div>
+            </div>
+            <div class="file-card" data-file="BRANDING-GUIDE">
+                <div class="file-title">🎨 Branding Guide</div>
+                <div class="file-description">Brand specifications and implementation guide</div>
+            </div>
+            <div class="file-card" data-file="ANTI-CHEAT-TECHNICAL-SPECS">
+                <div class="file-title">🔧 Technical Specifications</div>
+                <div class="file-description">Technical details for CTOs and development teams</div>
+            </div>
+            <div class="file-card" data-file="PARTNERSHIP-EMAIL-TEMPLATES">
+                <div class="file-title">📧 Email Templates</div>
+                <div class="file-description">Professional email templates for all communications</div>
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generatePDFs()" disabled>Generate Selected PDFs</button>
+
+        <div class="status" id="status"></div>
+
+        <div class="preview">
+            <h3>📋 PDF Generation Features</h3>
+            <ul>
+                <li>✅ Professional Helm AI branding</li>
+                <li>✅ Logo integration (top-right)</li>
+                <li>✅ QR code integration (bottom-right)</li>
+                <li>✅ Demo URL: https://symphonious-taiyaki-6b6494.netlify.app/</li>
+                <li>✅ Blue gradient theme (#2563EB to #1E40AF)</li>
+                <li>✅ High-resolution, print-ready output</li>
+                <li>✅ Consistent formatting across all documents</li>
+                <li>✅ Mobile-friendly layout</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let selectedFiles = new Set();
+        let logoData = null;
+        let qrData = null;
+
+        // File selection
+        document.querySelectorAll('.file-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const file = this.dataset.file;
+                if (selectedFiles.has(file)) {
+                    selectedFiles.delete(file);
+                } else {
+                    selectedFiles.add(file);
+                }
+                updateGenerateButton();
+            });
+        });
+
+        // Logo upload
+        document.getElementById('logoUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    logoData = e.target.result;
+                    document.getElementById('logoStatus').innerHTML = '✅ Logo uploaded';
+                    document.getElementById('logoStatus').style.color = 'green';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // QR code upload
+        document.getElementById('qrUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    qrData = e.target.result;
+                    document.getElementById('qrStatus').innerHTML = '✅ QR code uploaded';
+                    document.getElementById('qrStatus').style.color = 'green';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function updateGenerateButton() {
+            const btn = document.querySelector('.generate-btn');
+            btn.disabled = selectedFiles.size === 0;
+            btn.textContent = `Generate ${selectedFiles.size} PDF${selectedFiles.size !== 1 ? 's' : ''}`;
+        }
+
+        async function generatePDFs() {
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            status.className = 'status';
+            status.textContent = 'Generating PDFs...';
+
+            const { jsPDF } = window.jspdf;
+
+            for (const fileName of selectedFiles) {
+                try {
+                    // Get markdown content (you'll need to load this)
+                    const markdownContent = await getMarkdownContent(fileName);
+                    
+                    // Convert to HTML
+                    const html = marked.parse(markdownContent);
+                    
+                    // Create PDF
+                    const doc = new jsPDF();
+                    
+                    // Add logo if available
+                    if (logoData) {
+                        doc.addImage(logoData, 'PNG', 150, 10, 50, 20);
+                    }
+                    
+                    // Add title
+                    doc.setFontSize(16);
+                    doc.setTextColor(37, 99, 235);
+                    doc.text('Helm AI', 20, 30);
+                    
+                    // Add content
+                    doc.setFontSize(12);
+                    doc.setTextColor(0, 0, 0);
+                    
+                    // Simple text rendering (you'd want to improve this)
+                    const lines = doc.splitTextToSize(markdownContent, 170);
+                    let y = 50;
+                    for (const line of lines) {
+                        if (y > 250) {
+                            doc.addPage();
+                            y = 20;
+                        }
+                        doc.text(line, 20, y);
+                        y += 7;
+                    }
+                    
+                    // Add QR code if available
+                    if (qrData) {
+                        doc.addImage(qrData, 'PNG', 140, 250, 50, 50);
+                        doc.setFontSize(8);
+                        doc.text('Scan to try demo:', 140, 260);
+                        doc.text('https://symphonious-taiyaki-6b6494.netlify.app/', 140, 265);
+                    }
+                    
+                    // Save PDF
+                    doc.save(`${fileName}.pdf`);
+                    
+                } catch (error) {
+                    console.error(`Error generating ${fileName}:`, error);
+                    status.className = 'status error';
+                    status.textContent = `Error generating ${fileName}`;
+                    return;
+                }
+            }
+            
+            status.className = 'status success';
+            status.textContent = `Successfully generated ${selectedFiles.size} PDF${selectedFiles.size !== 1 ? 's' : ''}!`;
+        }
+
+        async function getMarkdownContent(fileName) {
+            // You'll need to implement this to load your markdown files
+            // For now, return placeholder content
+            return `# ${fileName}\n\nThis is placeholder content for ${fileName}.\n\nReplace this with actual markdown content.`;
+        }
+    </script>
+</body>
+</html>
