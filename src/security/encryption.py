@@ -34,6 +34,13 @@ class EncryptionType(Enum):
     RSA_2048 = "rsa_2048"
     RSA_4096 = "rsa_4096"
 
+class KeyType(Enum):
+    """Key types for encryption"""
+    AES256 = "aes256"
+    AES128 = "aes128"
+    RSA2048 = "rsa2048"
+    RSA4096 = "rsa4096"
+
 class DataClassification(Enum):
     """Data classification levels"""
     PUBLIC = "public"

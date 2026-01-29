@@ -6,6 +6,7 @@ This module provides disaster recovery procedures and failover mechanisms
 import os
 import json
 import logging
+import hashlib
 from typing import Dict, List, Optional, Any, Union
 from datetime import datetime, timedelta
 from enum import Enum
@@ -110,10 +111,16 @@ class DisasterRecoveryManager:
         self.secondary_region = os.getenv('SECONDARY_REGION', 'us-west-2')
         self.health_check_interval = int(os.getenv('HEALTH_CHECK_INTERVAL', '60'))  # seconds
         
-        # Initialize AWS clients
-        self.ec2_client = boto3.client('ec2')
-        self.rds_client = boto3.client('rds')
-        self.route53_client = boto3.client('route53')
+        # Initialize AWS clients (with error handling for test environments)
+        try:
+            self.ec2_client = boto3.client('ec2', region_name=self.primary_region)
+            self.rds_client = boto3.client('rds', region_name=self.primary_region)
+            self.route53_client = boto3.client('route53', region_name=self.primary_region)
+        except Exception as e:
+            logger.warning(f"Failed to initialize AWS clients: {e}")
+            self.ec2_client = None
+            self.rds_client = None
+            self.route53_client = None
         
         # Initialize recovery plans
         self._initialize_recovery_plans()
@@ -280,7 +287,7 @@ class DisasterRecoveryManager:
                         description: str,
                         recovery_plan_id: str = None) -> DisasterEvent:
         """Declare disaster event"""
-        event_id = f"disaster_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.md5(description.encode()).hexdigest()[:8]}"
+        event_id = f"disaster_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.sha256(description.encode()).hexdigest()[:8]}"
         
         # Find appropriate recovery plan if not specified
         if not recovery_plan_id:
@@ -689,5 +696,9 @@ class DisasterRecoveryManager:
         }
 
 
-# Global instance
-disaster_recovery = DisasterRecoveryManager()
+# Global instance (with error handling)
+try:
+    disaster_recovery = DisasterRecoveryManager()
+except Exception as e:
+    logger.warning(f"Failed to initialize disaster recovery manager: {e}")
+    disaster_recovery = None

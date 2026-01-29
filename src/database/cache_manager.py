@@ -7,7 +7,6 @@ import os
 import json
 import logging
 import time
-import pickle
 import hashlib
 from typing import Dict, List, Optional, Any, Union, Callable, TypeVar
 from datetime import datetime, timedelta
@@ -107,7 +106,7 @@ class MemoryCache:
         with self.lock:
             # Calculate size
             try:
-                size_bytes = len(pickle.dumps(value))
+                size_bytes = len(json.dumps(value).encode('utf-8'))
             except:
                 size_bytes = len(str(value))
             
@@ -258,7 +257,7 @@ class RedisCache:
             data = self.client.get(redis_key)
             
             if data:
-                value = pickle.loads(data)
+                value = json.loads(data.decode('utf-8'))
                 self.stats.hits += 1
                 self._update_access_time(time.time() - start_time)
                 return value
@@ -278,12 +277,12 @@ class RedisCache:
         
         try:
             redis_key = self._make_key(key)
-            data = pickle.dumps(value)
+            serialized_data = json.dumps(value).encode('utf-8')
             
             if ttl_seconds:
-                result = self.client.setex(redis_key, ttl_seconds, data)
+                result = self.client.setex(redis_key, ttl_seconds, serialized_data)
             else:
-                result = self.client.set(redis_key, data)
+                result = self.client.set(redis_key, serialized_data)
             
             if result:
                 self.stats.sets += 1
@@ -558,7 +557,7 @@ def cache_query(ttl_seconds: int = 3600,
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Generate cache key based on query parameters
-            query_hash = hashlib.md5(str(args).encode()).hexdigest()
+            query_hash = hashlib.sha256(str(args).encode()).hexdigest()
             cache_key = f"query:{table_name or func.__name__}:{query_hash}"
             
             # Try to get from cache

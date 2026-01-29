@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 import hashlib
 import hmac
 import threading
-import schedule
+import time
 import sqlite3
 from pathlib import Path
 
@@ -168,7 +168,7 @@ class DataIntegrityManager:
             raise ValueError(f"File does not exist: {file_path}")
         
         algorithm = algorithm or self.default_algorithm
-        record_id = f"record_{hashlib.md5(file_path.encode()).hexdigest()[:16]}"
+        record_id = f"record_{hashlib.sha256(file_path.encode()).hexdigest()[:16]}"
         
         # Calculate checksum
         checksum = self._calculate_file_checksum(file_path, algorithm)
@@ -274,7 +274,7 @@ class DataIntegrityManager:
     
     def _create_violation(self, record: IntegrityRecord, violation_type: str, expected: str, actual: str):
         """Create integrity violation"""
-        violation_id = f"violation_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.md5(record.file_path.encode()).hexdigest()[:8]}"
+        violation_id = f"violation_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.sha256(record.file_path.encode()).hexdigest()[:8]}"
         
         # Determine severity based on file type and violation type
         severity = self._determine_violation_severity(record.file_path, violation_type)
@@ -539,7 +539,7 @@ class DataIntegrityManager:
                     results = self.scan_directory(directory, recursive=True)
                     logger.info(f"Integrity scan for {directory}: {results}")
         
-        def schedule_monitoring():
+        def run_scheduler():
             while True:
                 try:
                     monitor_directories()
@@ -547,15 +547,7 @@ class DataIntegrityManager:
                 except Exception as e:
                     logger.error(f"Monitoring error: {e}")
         
-        # Schedule periodic checks
-        schedule.every(self.check_interval).seconds.do(monitor_directories)
-        
         # Start scheduler thread
-        def run_scheduler():
-            while True:
-                schedule.run_pending()
-                threading.Event().wait(60)  # Check every minute
-        
         scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
         scheduler_thread.start()
         

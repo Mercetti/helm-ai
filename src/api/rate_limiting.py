@@ -19,6 +19,14 @@ import ipaddress
 
 logger = logging.getLogger(__name__)
 
+class RateLimitException(Exception):
+    """Rate limit exception"""
+    def __init__(self, message: str, limit: int, window: int, context: Dict[str, Any] = None):
+        super().__init__(message)
+        self.limit = limit
+        self.window = window
+        self.context = context or {}
+
 class RateLimitType(Enum):
     """Rate limit types"""
     IP_BASED = "ip_based"
@@ -479,7 +487,7 @@ class RateLimitManager:
     
     def _create_violation(self, rule: RateLimitRule, identifier: str, endpoint: str = None):
         """Create rate limit violation record"""
-        violation_id = f"violation_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.md5(identifier.encode()).hexdigest()[:8]}"
+        violation_id = f"violation_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.sha256(identifier.encode()).hexdigest()[:8]}"
         
         # Get current request count
         current_requests = self._get_current_request_count(rule, identifier)

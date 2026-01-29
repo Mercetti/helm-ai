@@ -106,6 +106,12 @@ class QueryOptimizer:
     def _initialize_connection(self):
         """Initialize database connection"""
         try:
+            # Skip database connection in test environment
+            if os.getenv('ENVIRONMENT') == 'test' or os.getenv('TESTING') == 'true':
+                logger.info("Skipping database connection in test environment")
+                self.db_connection = None
+                return
+                
             if self.db_type == 'postgresql':
                 self.db_connection = psycopg2.connect(
                     host=os.getenv('DB_HOST', 'localhost'),
@@ -372,7 +378,7 @@ class QueryOptimizer:
         """Generate hash for query identification"""
         # Normalize query (remove extra whitespace, convert to uppercase)
         normalized = ' '.join(query.split()).upper()
-        return hashlib.md5(normalized.encode()).hexdigest()
+        return hashlib.sha256(normalized.encode()).hexdigest()
     
     def _log_slow_query(self, query: str, execution_time: float, params: Tuple = None):
         """Log slow query details"""

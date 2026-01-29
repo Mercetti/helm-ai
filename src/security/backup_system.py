@@ -15,7 +15,7 @@ import gzip
 import shutil
 import subprocess
 import threading
-import schedule
+import time
 import boto3
 from botocore.exceptions import ClientError
 
@@ -176,12 +176,6 @@ class BackupManager:
         )
         
         self.jobs[job_id] = job
-        
-        # Schedule the job
-        try:
-            schedule.every().day.at(schedule.split()[1]).do(self.run_backup_job, job_id).tag(job_id)
-        except Exception as e:
-            logger.error(f"Failed to schedule backup job {job_id}: {e}")
         
         logger.info(f"Created backup job: {name} ({job_id})")
         return job
@@ -541,14 +535,53 @@ class BackupManager:
         """Start backup scheduler"""
         def run_scheduler():
             while True:
-                schedule.run_pending()
-                threading.Event().wait(60)  # Check every minute
+                try:
+                    current_time = datetime.now()
+                    
+                    # Check each job's schedule
+                    for job_id, job in self.jobs.items():
+                        if self._should_run_backup(job, current_time):
+                            self.run_backup_job(job_id)
+                    
+                    # Run cleanup at 1 AM daily
+                    if current_time.hour == 1 and current_time.minute == 0:
+                        self.cleanup_old_backups()
+                    
+                    # Wait 1 minute before next check
+                    time.sleep(60)
+                except Exception as e:
+                    logger.error(f"Scheduler error: {e}")
+                    time.sleep(60)
         
         scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
         scheduler_thread.start()
-        
-        # Schedule cleanup job
-        schedule.every().day.at("01:00").do(self.cleanup_old_backups).tag("cleanup")
+    
+    def _should_run_backup(self, job: BackupJob, current_time: datetime) -> bool:
+        """Check if backup should run based on schedule"""
+        # Simple cron-like parsing for basic schedules
+        # Format: "minute hour * * *" (e.g., "0 2 * * *" for daily at 2 AM)
+        try:
+            cron_parts = job.schedule.split()
+            if len(cron_parts) != 5:
+                return False
+            
+            minute, hour, day, month, weekday = cron_parts
+            
+            # Check if current time matches schedule
+            if (minute == "*" or int(minute) == current_time.minute) and \
+               (hour == "*" or int(hour) == current_time.hour) and \
+               (day == "*" or int(day) == current_time.day) and \
+               (month == "*" or int(month) == current_time.month) and \
+               (weekday == "*" or int(weekday) == current_time.weekday()):
+                
+                # Check if backup was already run recently (avoid duplicate runs)
+                last_run = job.last_run
+                if last_run is None or (current_time - last_run).total_seconds() > 3600:  # At least 1 hour ago
+                    return True
+            
+            return False
+        except Exception:
+            return False
     
     def test_backup_integrity(self, backup_id: str) -> Dict[str, Any]:
         """Test backup integrity"""

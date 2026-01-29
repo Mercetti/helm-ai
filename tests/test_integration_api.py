@@ -9,10 +9,10 @@ import os
 from unittest.mock import Mock, patch
 from datetime import datetime, timedelta
 
-from src.api.middleware import api_middleware, APIResponse
+from src.api.middleware import api_middleware, APIResponse, require_auth, rate_limit
 from src.api.rate_limiting import rate_limit_manager
 from src.api.error_handling import error_handler, ValidationException, AuthenticationException
-from src.api.input_validation import input_validator
+from src.api.input_validation import input_validator, InputValidator
 
 
 class TestAPIEndpoints:
@@ -32,15 +32,15 @@ class TestAPIEndpoints:
         # Test endpoints
         @app.route('/api/v1/health', methods=['GET'])
         def health_check():
-            return APIResponse.success({'status': 'healthy'})
+            return jsonify(APIResponse.success({'status': 'healthy'}))
         
         @app.route('/api/v1/users', methods=['GET', 'POST'])
         def users():
             if request.method == 'GET':
-                return APIResponse.success({'users': []})
+                return jsonify(APIResponse.success({'users': []}))
             else:
                 data = request.get_json()
-                return APIResponse.success({'user': data}, 'User created')
+                return jsonify(APIResponse.success({'user': data}, 'User created'))
         
         @app.route('/api/v1/auth/login', methods=['POST'])
         def login():
@@ -52,26 +52,29 @@ class TestAPIEndpoints:
                 'password': {'type': 'string', 'min_length': 8, 'required': True}
             }
             
-            validated_data = input_validator.create_schema(schema).validate(data)
+            # Create a temporary validator with this schema
+            temp_validator = InputValidator()
+            temp_validator.rules = input_validator.create_schema(schema)
+            validated_data = temp_validator.validate(data)
             
             # Mock authentication
             if validated_data['email'] == 'test@example.com' and validated_data['password'] == 'password123':
-                return APIResponse.success({
+                return jsonify(APIResponse.success({
                     'token': 'mock-jwt-token',
                     'user': {'id': 1, 'email': validated_data['email']}
-                })
+                }))
             else:
                 raise AuthenticationException("Invalid credentials")
         
         @app.route('/api/v1/protected', methods=['GET'])
-        @api_middleware.require_auth
+        @require_auth
         def protected():
-            return APIResponse.success({'message': 'Protected endpoint accessed'})
+            return jsonify(APIResponse.success({'message': 'Protected endpoint accessed'}))
         
         @app.route('/api/v1/rate-limited', methods=['GET'])
-        @api_middleware.rate_limit(requests_per_window=5, window_seconds=60)
+        @rate_limit(requests_per_window=5, window_seconds=60)
         def rate_limited():
-            return APIResponse.success({'message': 'Rate limited endpoint'})
+            return jsonify(APIResponse.success({'message': 'Rate limited endpoint'}))
         
         return app
     
@@ -396,7 +399,7 @@ class TestAPIInputValidation:
     @pytest.fixture
     def app(self):
         """Create Flask app for testing"""
-        from flask import Flask, request
+        from flask import Flask, request, jsonify
         
         app = Flask(__name__)
         app.config['TESTING'] = True
@@ -412,8 +415,11 @@ class TestAPIInputValidation:
                 'description': {'type': 'string', 'max_length': 200, 'required': False}
             }
             
-            validated_data = input_validator.create_schema(schema).validate(request.get_json())
-            return APIResponse.success(validated_data)
+            # Create a temporary validator with this schema
+            temp_validator = InputValidator()
+            temp_validator.rules = input_validator.create_schema(schema)
+            validated_data = temp_validator.validate(request.get_json())
+            return jsonify(APIResponse.success(validated_data))
         
         @app.route('/api/v1/validate/email', methods=['POST'])
         def validate_email():
@@ -422,8 +428,11 @@ class TestAPIInputValidation:
                 'name': {'type': 'string', 'required': False}
             }
             
-            validated_data = input_validator.create_schema(schema).validate(request.get_json())
-            return APIResponse.success(validated_data)
+            # Create a temporary validator with this schema
+            temp_validator = InputValidator()
+            temp_validator.rules = input_validator.create_schema(schema)
+            validated_data = temp_validator.validate(request.get_json())
+            return jsonify(APIResponse.success(validated_data))
         
         @app.route('/api/v1/validate/integer', methods=['POST'])
         def validate_integer():
@@ -432,8 +441,11 @@ class TestAPIInputValidation:
                 'score': {'type': 'integer', 'min_value': 0, 'max_value': 100, 'required': False}
             }
             
-            validated_data = input_validator.create_schema(schema).validate(request.get_json())
-            return APIResponse.success(validated_data)
+            # Create a temporary validator with this schema
+            temp_validator = InputValidator()
+            temp_validator.rules = input_validator.create_schema(schema)
+            validated_data = temp_validator.validate(request.get_json())
+            return jsonify(APIResponse.success(validated_data))
         
         return app
     
@@ -478,7 +490,7 @@ class TestAPIInputValidation:
             result = json.loads(response.data)
             
             assert result['success'] is False
-            assert result['error']['error_code'] == 'VALIDATION_ERROR'
+            assert result['error']['error'] == 'VALIDATION_ERROR'
     
     @pytest.mark.integration
     def test_string_validation_too_long(self, app):
@@ -499,7 +511,7 @@ class TestAPIInputValidation:
             result = json.loads(response.data)
             
             assert result['success'] is False
-            assert result['error']['error_code'] == 'VALIDATION_ERROR'
+            assert result['error']['error'] == 'VALIDATION_ERROR'
     
     @pytest.mark.integration
     def test_email_validation_success(self, app):
@@ -542,7 +554,7 @@ class TestAPIInputValidation:
             result = json.loads(response.data)
             
             assert result['success'] is False
-            assert result['error']['error_code'] == 'VALIDATION_ERROR'
+            assert result['error']['error'] == 'VALIDATION_ERROR'
     
     @pytest.mark.integration
     def test_integer_validation_success(self, app):
@@ -585,7 +597,7 @@ class TestAPIInputValidation:
             result = json.loads(response.data)
             
             assert result['success'] is False
-            assert result['error']['error_code'] == 'VALIDATION_ERROR'
+            assert result['error']['error'] == 'VALIDATION_ERROR'
 
 
 if __name__ == '__main__':

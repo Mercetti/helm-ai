@@ -141,7 +141,7 @@ class MailchimpClient:
             language: Member language preference
         """
         # Generate subscriber hash for email
-        subscriber_hash = hashlib.md5(email.lower().encode()).hexdigest()
+        subscriber_hash = hashlib.sha256(email.lower().encode()).hexdigest()
         
         data = {
             "email_address": email,
@@ -155,7 +155,7 @@ class MailchimpClient:
     
     def get_member(self, list_id: str, email: str) -> Dict[str, Any]:
         """Get member by email"""
-        subscriber_hash = hashlib.md5(email.lower().encode()).hexdigest()
+        subscriber_hash = hashlib.sha256(email.lower().encode()).hexdigest()
         return self._make_request('GET', f'/lists/{list_id}/members/{subscriber_hash}')
     
     def update_member(self, 
@@ -165,7 +165,7 @@ class MailchimpClient:
                      status: str = None,
                      tags: List[str] = None) -> Dict[str, Any]:
         """Update member information"""
-        subscriber_hash = hashlib.md5(email.lower().encode()).hexdigest()
+        subscriber_hash = hashlib.sha256(email.lower().encode()).hexdigest()
         
         data = {}
         if merge_fields:
@@ -179,7 +179,7 @@ class MailchimpClient:
     
     def remove_member(self, list_id: str, email: str) -> Dict[str, Any]:
         """Remove member from list"""
-        subscriber_hash = hashlib.md5(email.lower().encode()).hexdigest()
+        subscriber_hash = hashlib.sha256(email.lower().encode()).hexdigest()
         return self._make_request('DELETE', f'/lists/{list_id}/members/{subscriber_hash}')
     
     def get_members(self, 
@@ -311,7 +311,7 @@ class MailchimpClient:
     
     def get_member_activity(self, list_id: str, email: str) -> Dict[str, Any]:
         """Get member activity history"""
-        subscriber_hash = hashlib.md5(email.lower().encode()).hexdigest()
+        subscriber_hash = hashlib.sha256(email.lower().encode()).hexdigest()
         return self._make_request('GET', f'/lists/{list_id}/members/{subscriber_hash}/activity')
     
     # Automation
@@ -746,3 +746,141 @@ class HelmAIMailchimp:
         except Exception as e:
             logger.error(f"Failed to get campaign analytics: {e}")
             return {"error": str(e)}
+
+    def batch_update_members(self, list_id: str, updates: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Batch update multiple members"""
+        results = {
+            "success_count": 0,
+            "error_count": 0,
+            "errors": []
+        }
+        
+        for update in updates:
+            try:
+                email = update.get('email')
+                if not email:
+                    results["error_count"] += 1
+                    results["errors"].append({"error": "Missing email", "update": update})
+                    continue
+                
+                self.mailchimp.update_member(
+                    list_id=list_id,
+                    email=email,
+                    merge_fields=update.get('merge_fields', {}),
+                    status=update.get('status'),
+                    tags=update.get('tags')
+                )
+                results["success_count"] += 1
+                
+            except Exception as e:
+                results["error_count"] += 1
+                results["errors"].append({"error": str(e), "email": update.get('email')})
+        
+        return results
+
+    def create_ab_test_campaign(self, 
+                              subject_a: str,
+                              subject_b: str,
+                              content_a: str,
+                              content_b: str,
+                              list_id: str,
+                              test_size: int = 50) -> Dict[str, Any]:
+        """Create A/B test campaign"""
+        try:
+            # Create campaign A
+            campaign_a_settings = {
+                "subject_line": subject_a,
+                "preview_text": f"A/B Test - Variant A",
+                "title": f"A/B Test A - {subject_a}",
+                "from_name": "Helm AI",
+                "reply_to": "noreply@helm-ai.com"
+            }
+            
+            campaign_a = self.mailchimp.create_campaign(
+                type="regular",
+                recipients={"list_id": list_id},
+                settings=campaign_a_settings
+            )
+            
+            # Create campaign B
+            campaign_b_settings = {
+                "subject_line": subject_b,
+                "preview_text": f"A/B Test - Variant B",
+                "title": f"A/B Test B - {subject_b}",
+                "from_name": "Helm AI",
+                "reply_to": "noreply@helm-ai.com"
+            }
+            
+            campaign_b = self.mailchimp.create_campaign(
+                type="regular",
+                recipients={"list_id": list_id},
+                settings=campaign_b_settings
+            )
+            
+            # Set content for both campaigns
+            self.mailchimp.set_campaign_content(campaign_a['id'], html=content_a)
+            self.mailchimp.set_campaign_content(campaign_b['id'], html=content_b)
+            
+            return {
+                "campaign_a": campaign_a,
+                "campaign_b": campaign_b,
+                "test_size": test_size,
+                "status": "created"
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to create A/B test campaign: {e}")
+            return {"error": str(e)}
+
+    def get_list_insights(self, list_id: str) -> Dict[str, Any]:
+        """Get comprehensive list insights"""
+        try:
+            # Get list details
+            list_details = self.mailchimp.get_list_details(list_id)
+            
+            # Get growth history
+            growth_history = self.mailchimp.get_list_growth_history(list_id)
+            
+            # Get member count by status
+            members_subscribed = self.mailchimp.get_members(list_id, status="subscribed", count=1000)
+            members_unsubscribed = self.mailchimp.get_members(list_id, status="unsubscribed", count=1000)
+            
+            return {
+                "list_details": list_details,
+                "growth_history": growth_history.get('history', []),
+                "member_stats": {
+                    "subscribed": members_subscribed.get('total_items', 0),
+                    "unsubscribed": members_unsubscribed.get('total_items', 0),
+                    "total": list_details.get('stats', {}).get('member_count', 0)
+                },
+                "engagement_rate": self._calculate_list_engagement_rate(list_id)
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to get list insights: {e}")
+            return {"error": str(e)}
+    
+    def _calculate_list_engagement_rate(self, list_id: str) -> float:
+        """Calculate list engagement rate"""
+        try:
+            # Get recent campaigns for this list
+            campaigns = self.mailchimp.get_campaigns(count=10)
+            list_campaigns = [c for c in campaigns.get('campaigns', []) 
+                            if c.get('recipients', {}).get('list_id') == list_id]
+            
+            if not list_campaigns:
+                return 0.0
+            
+            total_opens = 0
+            total_sends = 0
+            
+            for campaign in list_campaigns:
+                report = self.mailchimp.get_campaign_report(campaign['id'])
+                total_opens += report.get('opens', 0)
+                total_sends += report.get('emails_sent', 0)
+            
+            return (total_opens / total_sends * 100) if total_sends > 0 else 0.0
+            
+        except Exception as e:
+            logger.error(f"Failed to calculate engagement rate: {e}")
+            return 0.0

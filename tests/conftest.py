@@ -26,7 +26,13 @@ def test_config():
         'TEST_REDIS_URL': 'redis://localhost:6379/1',
         'TEST_DATA_DIR': tempfile.mkdtemp(),
         'TEST_LOG_LEVEL': 'DEBUG',
-        'ENVIRONMENT': 'test'
+        'ENVIRONMENT': 'test',
+        'TESTING': 'true',
+        'ENABLE_RATE_LIMITING': 'false',
+        'ENABLE_INPUT_VALIDATION': 'true',
+        'ENABLE_REQUEST_LOGGING': 'false',
+        'ENABLE_SECURITY_HEADERS': 'true',
+        'ENABLE_CORS': 'true'
     }
 
 @pytest.fixture(scope='session')
@@ -422,6 +428,11 @@ def setup_test_environment():
     os.environ['ENVIRONMENT'] = 'test'
     os.environ['LOG_LEVEL'] = 'DEBUG'
     os.environ['TESTING'] = 'true'
+    os.environ['ENABLE_RATE_LIMITING'] = 'false'
+    os.environ['ENABLE_INPUT_VALIDATION'] = 'true'
+    os.environ['ENABLE_REQUEST_LOGGING'] = 'false'
+    os.environ['ENABLE_SECURITY_HEADERS'] = 'true'
+    os.environ['ENABLE_CORS'] = 'true'
     
     # Create test directories if they don't exist
     test_dirs = [
@@ -482,3 +493,85 @@ class TestDataGenerator:
 def test_data_generator():
     """Test data generator fixture"""
     return TestDataGenerator()
+
+@pytest.fixture
+def mock_ai_model():
+    """Mock AI model for testing"""
+    mock_model = Mock()
+    
+    # Mock predict method
+    mock_model.predict = Mock(return_value={
+        'prediction': 'cheat_detected',
+        'confidence': 0.95,
+        'features': {'aimbot': 0.8, 'wallhack': 0.6}
+    })
+    
+    # Mock train method
+    mock_model.train = Mock(return_value={'loss': 0.1, 'accuracy': 0.95})
+    
+    # Mock evaluate method
+    mock_model.evaluate = Mock(return_value={'accuracy': 0.94, 'precision': 0.92})
+    
+    return mock_model
+
+@pytest.fixture
+def sample_gaming_data():
+    """Sample gaming data for testing"""
+    return {
+        'player_id': 'player_123',
+        'game_session': 'session_456',
+        'actions': [
+            {'action': 'aim', 'timestamp': '2026-01-28T20:30:00Z', 'precision': 0.95},
+            {'action': 'shoot', 'timestamp': '2026-01-28T20:30:05Z', 'hit': True}
+        ],
+        'metadata': {
+            'game_type': 'fps',
+            'duration': 1800,
+            'score': 2500
+        }
+    }
+
+@pytest.fixture
+def sample_security_event():
+    """Sample security event for testing"""
+    return {
+        'event_id': 'event_789',
+        'type': 'suspicious_activity',
+        'severity': 'high',
+        'player_id': 'player_123',
+        'description': 'Unusual aiming patterns detected',
+        'timestamp': '2026-01-28T20:30:00Z',
+        'evidence': {
+            'aim_precision': 0.99,
+            'reaction_time': 0.05,
+            'headshot_ratio': 0.95
+        }
+    }
+
+@pytest.fixture
+def mock_file_system():
+    """Mock file system for testing"""
+    import tempfile
+    import os
+    
+    temp_dir = tempfile.mkdtemp()
+    
+    # Create test files
+    test_files = {
+        'config.json': '{"setting": "value"}',
+        'data.csv': 'id,name,value\n1,test,100',
+        'log.txt': '2026-01-28 INFO: Test log entry'
+    }
+    
+    created_files = {}
+    for filename, content in test_files.items():
+        file_path = os.path.join(temp_dir, filename)
+        with open(file_path, 'w') as f:
+            f.write(content)
+        created_files[filename] = file_path
+    
+    yield created_files, temp_dir
+    
+    # Cleanup
+    import shutil
+    shutil.rmtree(temp_dir)

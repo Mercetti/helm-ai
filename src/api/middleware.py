@@ -17,7 +17,7 @@ import hmac
 from flask import request, g, jsonify
 from werkzeug.exceptions import HTTPException
 
-from .rate_limiting import rate_limit_manager
+from .rate_limiting import rate_limit_manager, RateLimitException
 from .error_handling import error_handler, ErrorContext, HelmAIException, APIResponse
 from .input_validation import input_validator
 
@@ -196,7 +196,6 @@ class APIMiddleware:
                 )
                 
                 # Create rate limit exception
-                from .rate_limiting import RateLimitException
                 raise RateLimitException(
                     message="Rate limit exceeded",
                     limit=violating_rule.requests_per_window,
@@ -259,14 +258,17 @@ class APIMiddleware:
         handled_exception = error_handler.handle_exception(exception, context)
         
         # Return error response
-        response = APIResponse.error(handled_exception)
+        response_data = APIResponse.error(handled_exception)
+        
+        # Convert to Flask response
+        response = jsonify(response_data)
         
         # Add security headers if enabled
         if self.enable_security_headers and hasattr(g, 'security_headers'):
             for header, value in g.security_headers.items():
                 response.headers[header] = value
         
-        return jsonify(response), handled_exception.http_status_code
+        return response, handled_exception.http_status_code
     
     def handle_not_found(self, error):
         """Handle 404 errors"""
@@ -516,7 +518,7 @@ def cache_response(timeout: int = 300, key_func: Callable = None):
             if key_func:
                 cache_key = key_func(*args, **kwargs)
             else:
-                cache_key = f"{func.__name__}:{hashlib.md5(str(args + tuple(kwargs.items())).encode()).hexdigest()}"
+                cache_key = f"{func.__name__}:{hashlib.sha256(str(args + tuple(kwargs.items())).encode()).hexdigest()}"
             
             # This would integrate with Redis or other cache
             # For now, just execute the function

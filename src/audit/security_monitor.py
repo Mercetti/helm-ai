@@ -394,7 +394,7 @@ class SecurityMonitor:
                      resource: str = None,
                      details: Dict[str, Any] = None) -> SecurityAlert:
         """Create security alert"""
-        alert_id = f"alert_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
+        alert_id = f"alert_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.sha256(title.encode()).hexdigest()[:8]}"
         
         alert = SecurityAlert(
             alert_id=alert_id,
@@ -407,7 +407,7 @@ class SecurityMonitor:
             resource=resource,
             details=details or {},
             confidence=self._calculate_confidence(alert_type, threat_level, details),
-            correlation_id=f"corr_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.md5(source_ip.encode()).hexdigest()[:8]}"
+            correlation_id=f"corr_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.sha256(source_ip.encode()).hexdigest()[:8]}"
         )
         
         self.alerts[alert_id] = alert
@@ -466,7 +466,7 @@ class SecurityMonitor:
     
     def _create_incident_from_alert(self, alert: SecurityAlert) -> SecurityIncident:
         """Create security incident from alert"""
-        incident_id = f"incident_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.md5(alert.title.encode()).hexdigest()[:8]}"
+        incident_id = f"incident_{datetime.now().strftime('%Y%m%d%H%M%S')}_{hashlib.sha256(alert.title.encode()).hexdigest()[:8]}"
         
         incident = SecurityIncident(
             incident_id=incident_id,
