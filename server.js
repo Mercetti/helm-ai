@@ -8,6 +8,7 @@ require('dotenv').config();
 // Import AI modules (will be created next)
 const { helmLLMDevelopment } = require('./src/ai/core/llm-development');
 const { responseSimplifier } = require('./src/ai/core/response-simplifier');
+const { plainEnglishFormatter } = require('./src/ai/core/plain-english-formatter');
 const { helmLearningEnhancement } = require('./src/ai/core/learning-enhancement');
 const { helmSafetyAndGovernance } = require('./src/ai/core/safety-governance');
 const { helmImprovementStrategies } = require('./src/ai/core/improvement-strategies');
@@ -64,16 +65,17 @@ app.get('/api/ai/llm-development', (req, res) => {
   try {
     const technicalRoadmap = helmLLMDevelopment.getDevelopmentRoadmap();
     const investorFriendly = responseSimplifier.simplifyLLMDevelopment(technicalRoadmap);
+    const plainEnglish = plainEnglishFormatter.formatLLMDevelopment(investorFriendly);
     
     res.json({
       success: true,
       data: {
+        plainEnglish: plainEnglish,
         executiveSummary: investorFriendly.executiveSummary,
         businessValue: investorFriendly.businessValue,
         keyMilestones: investorFriendly.keyMilestones,
         riskFactors: investorFriendly.riskFactors,
-        investmentOpportunity: investorFriendly.investmentOpportunity,
-        technicalDetails: technicalRoadmap.summary // Keep technical data for those who want it
+        investmentOpportunity: investorFriendly.investmentOpportunity
       },
       timestamp: new Date().toISOString()
     });
