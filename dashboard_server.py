@@ -5,7 +5,7 @@ Helm AI - Dashboard API Server
 Simple API server to power the executive dashboard
 """
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, send_file
 from flask_cors import CORS
 import json
 import os
@@ -165,7 +165,7 @@ def pitch_deck_page():
 def serve_logo():
     """Serve the main logo"""
     try:
-        return app.send_from_directory('.', 'Stellar_Logic_AI_Logo.png')
+        return send_file('Stellar_Logic_AI_Logo.png', mimetype='image/png')
     except FileNotFoundError:
         return "Logo not found", 404
 
@@ -173,25 +173,25 @@ def serve_logo():
 def serve_favicon_32():
     """Serve the 32x32 favicon"""
     try:
-        return app.send_from_directory('.', 'favicon_32x32.png')
+        return send_file('favicon_32x32.png', mimetype='image/png')
     except FileNotFoundError:
-        return "Favicon not found", 404
+        return "Favicon 32x32 not found", 404
 
 @app.route('/favicon_16x16.png')
 def serve_favicon_16():
     """Serve the 16x16 favicon"""
     try:
-        return app.send_from_directory('.', 'favicon_16x16.png')
+        return send_file('favicon_16x16.png', mimetype='image/png')
     except FileNotFoundError:
-        return "Favicon not found", 404
+        return "Favicon 16x16 not found", 404
 
 @app.route('/favicon.ico')
 def serve_favicon_ico():
     """Serve the ICO favicon"""
     try:
-        return app.send_from_directory('.', 'favicon_64x64.png')
+        return send_file('favicon_64x64.png', mimetype='image/png')
     except FileNotFoundError:
-        return "Favicon not found", 404
+        return "Favicon ICO not found", 404
 
 @app.route('/test.html')
 def test_page():
