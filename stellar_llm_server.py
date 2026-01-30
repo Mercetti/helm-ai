@@ -264,4 +264,8 @@ if __name__ == '__main__':
             print(f"💡 Your {STELLAR_MODEL} model is already created!")
         
         # Start Flask server
-        app.run(host='0.0.0.0', port=5001, debug=True)
+        print(f"🌐 Starting LLM server on port 5001...")
+        app.run(host='0.0.0.0', port=5001, debug=False)
+    else:
+        print("❌ Cannot connect to Ollama. Please ensure Ollama is running.")
+        exit(1)
