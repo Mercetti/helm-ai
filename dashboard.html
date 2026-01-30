@@ -1234,7 +1234,10 @@
                     messages.removeChild(messages.lastChild);
                     
                     if (response.ok) {
-                        this.addMessage('ai', `Here's your personalized email for ${investorName}:\n\n${data.email}\n\nWould you like me to:\n1. Copy this to clipboard\n2. Generate a different version\n3. Schedule follow-up reminders?`);
+                        // Format the email with proper line breaks
+                        const formattedEmail = data.email.replace(/\n\n/g, '\n\n').replace(/\n/g, '<br>');
+                        
+                        this.addMessage('ai', `Here's your personalized email for ${investorName}:\n\n${formattedEmail}\n\nWould you like me to:\n1. Copy this to clipboard\n2. Generate a different version\n3. Schedule follow-up reminders?`);
                     } else {
                         this.addMessage('ai', 'Sorry, I had trouble generating the email. Please try again.');
                     }

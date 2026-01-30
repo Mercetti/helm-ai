@@ -182,15 +182,19 @@ Generate a personalized email to {investor_name} at {investor_firm}.
 
 Context: {custom_context}
 
-The email should:
-- Be professional and concise
-- Highlight Stellar Logic AI's 99.2% accuracy anti-cheat technology
-- Address the $15B annual gaming losses from cheating
-- Mention our 32 production modules
-- Request a 15-minute meeting
-- Include Jamie Brown's signature as Founder & CEO
+Requirements:
+1. Professional business email format
+2. Clear subject line
+3. Proper paragraph structure (3-4 paragraphs max)
+4. Include specific details about Stellar Logic AI:
+   - 99.2% accuracy anti-cheat technology
+   - $15B annual gaming losses from cheating
+   - 32 production modules
+   - $5M funding goal
+5. Clear call to action (15-minute meeting)
+6. Jamie Brown's signature as Founder & CEO
 
-Format as a complete email with subject line.
+Format the email with proper line breaks between paragraphs. Make it scannable and professional.
 """
         
         ai_response = stellar_llm.generate_response(prompt, custom_context)
