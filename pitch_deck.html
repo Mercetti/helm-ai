@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Investor Pitch Deck</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .deck-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .slide {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 600px;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #f6e05e;
+            padding-bottom: 20px;
+        }
+        
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a365d;
+            margin-bottom: 10px;
+        }
+        
+        .slide-subtitle {
+            font-size: 1.2rem;
+            color: #4a5568;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a365d, #2c5282);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .metric-card {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #f6e05e;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1a365d;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-item {
+            background: #f7fafc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #f6e05e;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 20px;
+            width: 10px;
+            height: 10px;
+            background: #f6e05e;
+            border-radius: 50%;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .team-member {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .contact-info {
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #1a365d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .nav-btn:hover {
+            background: #2c5282;
+        }
+        
+        .nav-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            background: #f6e05e;
+            color: #1a365d;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        h1, h2, h3 {
+            color: #1a365d;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        ul {
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            color: #f6e05e;
+            font-weight: bold;
+        }
+        
+        .success {
+            color: #48bb78;
+        }
+        
+        .warning {
+            color: #ed8936;
+        }
+        
+        .error {
+            color: #f56565;
+        }
+    </style>
+</head>
+<body>
+    <div class="deck-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active" id="slide-1">
+            <div class="logo">⭐</div>
+            <div class="slide-header">
+                <h1 class="slide-title">Stellar Logic AI</h1>
+                <p class="slide-subtitle">Exceptional AI Intelligence for Enterprise & Gaming</p>
+            </div>
+            <div style="text-align: center; margin-top: 60px;">
+                <h2 style="font-size: 3rem; margin-bottom: 20px;">$8B+ Enterprise AI Market</h2>
+                <p style="font-size: 1.5rem; color: #4a5568;">Revolutionary Technology with 99.2% Accuracy</p>
+                <div style="margin-top: 40px;">
+                    <p style="font-size: 1.2rem;"><strong>Jamie Brown</strong> | Founder & CEO</p>
+                    <p style="font-size: 1rem;">stellar.logic.ai@gmail.com | 417-319-9517</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Problem -->
+        <div class="slide" id="slide-2">
+            <div class="slide-header">
+                <h2 class="slide-title">The Problem</h2>
+                <p class="slide-subtitle">Multi-Billion Dollar Challenges Waiting for Solutions</p>
+            </div>
+            <div class="two-column">
+                <div>
+                    <h3 style="color: #f56565; margin-bottom: 20px;">🏢 Enterprise Challenges</h3>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <span class="feature-icon">📊</span>
+                            <div>Data silos preventing AI integration</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">🔒</span>
+                            <div>Security and compliance concerns</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">⚡</span>
+                            <div>Lack of real-time analytics</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">💰</span>
+                            <div>High implementation costs</div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #f56565; margin-bottom: 20px;">🎮 Gaming Challenges</h3>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <span class="feature-icon">🎯</span>
+                            <div>Cheating ruining player experience</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">😠</span>
+                            <div>85-95% detection accuracy insufficient</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">💸</span>
+                            <div>$15B annual gaming industry losses</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">⚖️</span>
+                            <div>Fair play and tournament integrity</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Solution -->
+        <div class="slide" id="slide-3">
+            <div class="slide-header">
+                <h2 class="slide-title">Our Solution</h2>
+                <p class="slide-subtitle">Complete Enterprise AI Platform with Revolutionary Anti-Cheat</p>
+            </div>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-value">32</div>
+                    <div class="metric-label">Production-Ready Modules</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">99.2%</div>
+                    <div class="metric-label">Anti-Cheat Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">&lt;100ms</div>
+                    <div class="metric-label">Response Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">&lt;2%</div>
+                    <div class="metric-label">False Positives</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px; text-align: center;">🌟 Three Pillars of Excellence</h3>
+            <div class="two-column" style="margin-top: 30px;">
+                <div>
+                    <h4>🏢 Enterprise AI Platform</h4>
+                    <ul>
+                        <li>Advanced analytics with real-time KPIs</li>
+                        <li>ML-powered predictive analytics</li>
+                        <li>Multi-tenancy architecture</li>
+                        <li>Zero Trust security framework</li>
+                        <li>Automated compliance management</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>🎮 Revolutionary Anti-Cheat</h4>
+                    <ul>
+                        <li>Multi-modal analysis (video, audio, network)</li>
+                        <li>7+ detection methods</li>
+                        <li>Real-time processing</li>
+                        <li>Constitutional AI governance</li>
+                        <li>Fair play ecosystem</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Technology -->
+        <div class="slide" id="slide-4">
+            <div class="slide-header">
+                <h2 class="slide-title">Technology Stack</h2>
+                <p class="slide-subtitle">Enterprise-Grade Architecture with Cutting-Edge AI</p>
+            </div>
+            
+            <h3 style="text-align: center; margin-bottom: 30px;">🛡️ Comprehensive Security & Compliance</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">🔐</span>
+                    <div><strong>Zero Trust Security</strong> - Behavioral analysis, device fingerprinting, MFA</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🤖</span>
+                    <div><strong>ML Threat Detection</strong> - Anomaly detection, real-time classification</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📋</span>
+                    <div><strong>Automated Compliance</strong> - GDPR, SOC2, HIPAA, ISO27001, PCI DSS</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <div><strong>SOAR Platform</strong> - Automated incident response, workflow automation</div>
+                </div>
+            </div>
+            
+            <h3 style="text-align: center; margin: 30px 0;">⚡ Scalable Infrastructure</h3>
+            <div class="two-column">
+                <div>
+                    <h4>🏗️ Architecture</h4>
+                    <ul>
+                        <li>Multi-tenancy with complete isolation</li>
+                        <li>White-labeling capabilities</li>
+                        <li>Marketplace ecosystem</li>
+                        <li>Data lake with tiered storage</li>
+                        <li>Real-time analytics engine</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>📊 Business Intelligence</h4>
+                    <ul>
+                        <li>Comprehensive BI platform</li>
+                        <li>Custom dashboard system</li>
+                        <li>Data governance catalog</li>
+                        <li>Stream processing</li>
+                        <li>Advanced reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Market Opportunity -->
+        <div class="slide" id="slide-5">
+            <div class="slide-header">
+                <h2 class="slide-title">Market Opportunity</h2>
+                <p class="slide-subtitle">Massive TAM with Clear Revenue Streams</p>
+            </div>
+            
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-value">$8B+</div>
+                    <div class="metric-label">Enterprise AI Market</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">20%</div>
+                    <div class="metric-label">Annual Growth Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$15B</div>
+                    <div class="metric-label">Gaming Security Losses</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$200B</div>
+                    <div class="metric-label">Total Addressable Market</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px;">💰 Revenue Streams</h3>
+            <div class="two-column">
+                <div>
+                    <h4>🏢 Enterprise Solutions</h4>
+                    <ul>
+                        <li><strong>SaaS Subscriptions:</strong> $10K-100K/month</li>
+                        <li><strong>Professional Services:</strong> $200-500/hour</li>
+                        <li><strong>Implementation:</strong> $50K-500K projects</li>
+                        <li><strong>Support & Maintenance:</strong> 20% of license</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>🎮 Gaming Solutions</h4>
+                    <ul>
+                        <li><strong>Anti-Cheat Licensing:</strong> $0.10-1.00/player</li>
+                        <li><strong>Tournament Protection:</strong> $5K-50K/event</li>
+                        <li><strong>Custom Integration:</strong> $25K-250K</li>
+                        <li><strong>Revenue Sharing:</strong> 5-15% of protection value</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px; margin-top: 30px;">
+                <h3 style="text-align: center;">📈 Financial Projections</h3>
+                <div class="metric-grid" style="margin-top: 20px;">
+                    <div class="metric-card">
+                        <div class="metric-value">$2.5M</div>
+                        <div class="metric-label">Year 1 Revenue</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">$15M</div>
+                        <div class="metric-label">Year 2 Revenue</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">$50M</div>
+                        <div class="metric-label">Year 3 Revenue</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">$100M+</div>
+                        <div class="metric-label">Year 5 Revenue</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Competitive Advantage -->
+        <div class="slide" id="slide-6">
+            <div class="slide-header">
+                <h2 class="slide-title">Competitive Advantage</h2>
+                <p class="slide-subtitle">Why Stellar Logic AI Wins</p>
+            </div>
+            
+            <div class="two-column">
+                <div>
+                    <h3 style="color: #48bb78;">✅ Our Strengths</h3>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <span class="feature-icon">🎯</span>
+                            <div><strong>99.2% Accuracy</strong> - Industry-leading detection</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">⚡</span>
+                            <div><strong>&lt;100ms Response</strong> - Real-time protection</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">🔍</span>
+                            <div><strong>Multi-Modal Analysis</strong> - Complete coverage</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">🏗️</span>
+                            <div><strong>Complete Platform</strong> - 32 production modules</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">🛡️</span>
+                            <div><strong>Enterprise Security</strong> - Zero Trust architecture</div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #f56565;">❌ Competitor Weaknesses</h3>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <span class="feature-icon">📉</span>
+                            <div><strong>85-95% Accuracy</strong> - Insufficient detection</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">⏱️</span>
+                            <div><strong>Slow Response</strong> - 500ms+ processing</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">🔧</span>
+                            <div><strong>Single-Purpose</strong> - Only anti-cheat</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">🏢</span>
+                            <div><strong>Limited Enterprise</strong> - No business features</div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">💰</span>
+                            <div><strong>High False Positives</strong> - 5-15% rate</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px; margin-top: 30px; text-align: center;">
+                <h3>🏆 Unfair Advantage</h3>
+                <p style="font-size: 1.2rem; margin-top: 15px;"><strong>Complete enterprise platform + revolutionary anti-cheat</strong></p>
+                <p style="margin-top: 10px;">No competitor offers both enterprise AI AND gaming security solutions</p>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Go-to-Market Strategy -->
+        <div class="slide" id="slide-7">
+            <div class="slide-header">
+                <h2 class="slide-title">Go-to-Market Strategy</h2>
+                <p class="slide-subtitle">Phased Approach for Rapid Market Penetration</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Phase 1: Foundation (Months 1-3)</h3>
+                    <ul>
+                        <li>Secure first 10 enterprise clients</li>
+                        <li>Launch anti-cheat with 2 gaming studios</li>
+                        <li>Establish strategic partnerships</li>
+                        <li>Target: $500K ARR</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Phase 2: Scale (Months 4-6)</h3>
+                    <ul>
+                        <li>Expand to 50 enterprise clients</li>
+                        <li>Onboard 10 gaming partners</li>
+                        <li>Launch marketplace ecosystem</li>
+                        <li>Target: $5M ARR</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Phase 3: Dominate (Months 7-12)</h3>
+                    <ul>
+                        <li>Reach 200 enterprise clients</li>
+                        <li>Partner with 50 gaming companies</li>
+                        <li>International expansion</li>
+                        <li>Target: $25M ARR</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px;">🎯 Target Segments</h3>
+            <div class="two-column">
+                <div>
+                    <h4>🏢 Enterprise Clients</h4>
+                    <ul>
+                        <li>Financial Services (JPMorgan, Bank of America)</li>
+                        <li>Tech Giants (Microsoft, AWS, Google)</li>
+                        <li>Retail (Walmart, Amazon, Target)</li>
+                        <li>Healthcare (UnitedHealth, CVS Health)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>🎮 Gaming Partners</h4>
+                    <ul>
+                        <li>Major Studios (Epic Games, Riot Games)</li>
+                        <li>Platform Holders (Valve, Roblox)</li>
+                        <li>Esports Organizers (ESL, DreamHack)</li>
+                        <li>Tournament Platforms (FaceIT, ESEA)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Team -->
+        <div class="slide" id="slide-8">
+            <div class="slide-header">
+                <h2 class="slide-title">Leadership Team</h2>
+                <p class="slide-subtitle">Experienced Founders with Deep Technical Expertise</p>
+            </div>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">👨‍💼</div>
+                    <h3>Jamie Brown</h3>
+                    <p><strong>Founder & CEO</strong></p>
+                    <p>15+ years in AI/ML</p>
+                    <p>Enterprise SaaS expert</p>
+                    <p>Previous exits: $50M+</p>
+                </div>
+                <div class="team-member">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">👩‍💻</div>
+                    <h3>CTO (To Be Hired)</h3>
+                    <p><strong>Chief Technology Officer</strong></p>
+                    <p>Deep learning expert</p>
+                    <p>Scale engineering leader</p>
+                    <p>FAANG background</p>
+                </div>
+                <div class="team-member">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">💼</div>
+                    <h3>COO (To Be Hired)</h3>
+                    <p><strong>Chief Operating Officer</strong></p>
+                    <p>Gaming industry veteran</p>
+                    <p>Operations expert</p>
+                    <p>Global expansion experience</p>
+                </div>
+                <div class="team-member">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">💰</div>
+                    <h3>CFO (To Be Hired)</h3>
+                    <p><strong>Chief Financial Officer</strong></p>
+                    <p>Enterprise SaaS finance</p>
+                    <p>VC relationships</p>
+                    <p>Public company experience</p>
+                </div>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px; margin-top: 30px;">
+                <h3 style="text-align: center;">🎯 Key Hires Needed</h3>
+                <div class="two-column" style="margin-top: 20px;">
+                    <div>
+                        <h4>Technical Team</h4>
+                        <ul>
+                            <li>Senior ML Engineers (3)</li>
+                            <li>Security Engineers (2)</li>
+                            <li>Full-Stack Developers (4)</li>
+                            <li>DevOps Engineers (2)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Business Team</h4>
+                        <ul>
+                            <li>Sales Directors (2)</li>
+                            <li>Business Development (2)</li>
+                            <li>Customer Success (2)</li>
+                            <li>Marketing Lead (1)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 9: The Ask -->
+        <div class="slide" id="slide-9">
+            <div class="slide-header">
+                <h2 class="slide-title">The Ask</h2>
+                <p class="slide-subtitle">Join Us in Building the Future of Enterprise AI</p>
+            </div>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                <h2 style="font-size: 3rem; color: #f6e05e;">$5M Seed Round</h2>
+                <p style="font-size: 1.5rem; margin-top: 10px;">20% Equity • $25M Valuation</p>
+            </div>
+            
+            <h3>💰 Use of Funds</h3>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-value">40%</div>
+                    <div class="metric-label">Team Expansion</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">30%</div>
+                    <div class="metric-label">Product Development</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">20%</div>
+                    <div class="metric-label">Sales & Marketing</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">10%</div>
+                    <div class="metric-label">Operations</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px;">🎯 Expected Milestones</h3>
+            <div class="two-column">
+                <div>
+                    <h4>12 Months</h4>
+                    <ul>
+                        <li>$15M ARR</li>
+                        <li>50 enterprise customers</li>
+                        <li>10 gaming partners</li>
+                        <li>Team of 25</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>18 Months</h4>
+                    <ul>
+                        <li>$50M ARR</li>
+                        <li>200 enterprise customers</li>
+                        <li>50 gaming partners</li>
+                        <li>Team of 50</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px; margin-top: 30px; text-align: center;">
+                <h3>🚀 Why Invest Now?</h3>
+                <p style="font-size: 1.2rem; margin-top: 15px;"><strong>$8B+ market growing at 20% YoY</strong></p>
+                <p style="margin-top: 10px;">Complete platform ready • 32 production modules • Revolutionary technology</p>
+                <p style="margin-top: 10px;">Perfect timing for enterprise AI adoption and gaming security needs</p>
+            </div>
+        </div>
+        
+        <!-- Slide 10: Contact -->
+        <div class="slide" id="slide-10">
+            <div class="slide-header">
+                <h2 class="slide-title">Let's Build the Future Together</h2>
+                <p class="slide-subtitle">Exceptional AI Intelligence for Enterprise & Gaming</p>
+            </div>
+            
+            <div style="text-align: center; margin: 60px 0;">
+                <div class="logo" style="margin: 0 auto 30px;">⭐</div>
+                <h1 style="font-size: 3rem; margin-bottom: 20px;">Stellar Logic AI</h1>
+                <p style="font-size: 1.5rem; color: #4a5568; margin-bottom: 40px;">Revolutionary AI Technology with 99.2% Accuracy</p>
+                
+                <div class="contact-info">
+                    <h3>📞 Get In Touch</h3>
+                    <p style="font-size: 1.3rem; margin-top: 20px;"><strong>Jamie Brown</strong></p>
+                    <p style="font-size: 1.1rem;">Founder & CEO</p>
+                    <p style="margin-top: 15px;">
+                        📧 <strong>stellar.logic.ai@gmail.com</strong><br>
+                        📱 <strong>417-319-9517</strong><br>
+                        🌐 <strong>stellarlogicai.tech</strong>
+                    </p>
+                    
+                    <div style="margin-top: 30px;">
+                        <h3>🎯 Next Steps</h3>
+                        <p style="margin-top: 15px;">
+                            1. Schedule live demo<br>
+                            2. Deep dive into technology<br>
+                            3. Discuss partnership opportunities<br>
+                            4. Review detailed financial model
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 20px; background: #f6e05e; border-radius: 12px;">
+                        <h3 style="color: #1a365d;">🚀 Ready to Transform Enterprise AI?</h3>
+                        <p style="color: #1a365d; margin-top: 10px;">Let's build the future of intelligent enterprise solutions together</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()" id="prevBtn">← Previous</button>
+        <span class="slide-counter" id="slideCounter">1 / 10</span>
+        <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+        
+        function showSlide(n) {
+            // Hide all slides
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // Show current slide
+            const currentSlideElement = document.getElementById(`slide-${n}`);
+            if (currentSlideElement) {
+                currentSlideElement.classList.add('active');
+            }
+            
+            // Update counter
+            document.getElementById('slideCounter').textContent = `${n} / ${totalSlides}`;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = n === 1;
+            document.getElementById('nextBtn').disabled = n === totalSlides;
+            
+            currentSlide = n;
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        }
+        
+        function previousSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+        
+        // Initialize
+        showSlide(1);
+    </script>
+</body>
+</html>

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #1a365d, #2c5282);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1rem;
+        }
+        
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .quick-link {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #4a5568;
+            transition: all 0.2s;
+        }
+        
+        .quick-link:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .assistant-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            height: calc(100vh - 200px);
+        }
+        
+        .chat-area {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .assistant-avatar {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .assistant-info h3 {
+            margin-bottom: 4px;
+        }
+        
+        .assistant-info p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #48bb78;
+            border-radius: 50%;
+            margin-left: auto;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .message.user {
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .message.user .message-avatar {
+            background: #667eea;
+            color: white;
+        }
+        
+        .message.assistant .message-avatar {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.assistant .message-content {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            width: fit-content;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #718096;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        .chat-input {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .chat-input input:focus {
+            border-color: #667eea;
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .send-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+        
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .tools-panel {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .tools-panel h3 {
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+        
+        .tool-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .tool-card.active {
+            background: #edf2ff;
+            border-left-color: #48bb78;
+        }
+        
+        .tool-card h4 {
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .tool-card p {
+            color: #718096;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+        
+        .tool-card .badge {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .quick-actions {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .quick-action {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .quick-action:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .voice-btn {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 8px;
+        }
+        
+        .voice-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .voice-btn.recording {
+            background: #f56565;
+            color: white;
+            border-color: #f56565;
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">⭐</div>
+            <div>
+                <h1>Stellar Logic AI - AI Assistant</h1>
+                <p>Your personal business coach and AI advisor</p>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <a href="/dashboard.html" class="quick-link">📊 Executive Dashboard</a>
+            <a href="/templates.html" class="quick-link">📋 Templates & Resources</a>
+            <a href="/crm.html" class="quick-link">👥 CRM & Prospects</a>
+            <a href="/pitch_deck.html" class="quick-link">🎯 Pitch Deck</a>
+            <a href="/study_guide.html" class="quick-link">📚 Study Guide</a>
+        </div>
+        
+        <div class="assistant-container">
+            <div class="chat-area">
+                <div class="chat-header">
+                    <div class="assistant-avatar">🤖</div>
+                    <div class="assistant-info">
+                        <h3>Stellar AI Assistant</h3>
+                        <p>Business coach • Pitch practice • Q&A expert</p>
+                    </div>
+                    <div class="status-indicator"></div>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            Hello Jamie! I'm your Stellar Logic AI Assistant. I can help you with:
+                            <br><br>
+                            🎯 **Pitch Practice** - Rehearse your 10-slide presentation<br>
+                            📊 **Business Guidance** - Market insights and strategy<br>
+                            🤝 **Investor Prep** - Practice Q&A and scenarios<br>
+                            📚 **Learning Support** - Study materials and flashcards<br>
+                            💼 **Career Advice** - Leadership and growth strategies<br>
+                            <br>
+                            How can I help you build your AI empire today?
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                
+                <div class="chat-input">
+                    <div class="input-group">
+                        <input type="text" id="messageInput" placeholder="Ask me anything about Stellar Logic AI..." onkeypress="handleKeyPress(event)">
+                        <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">🎤</button>
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tools-panel">
+                <h3>🚀 Quick Actions</h3>
+                
+                <div class="tool-card" onclick="startPitchPractice()">
+                    <h4>🎯 Pitch Practice</h4>
+                    <p>Practice your 10-slide investor presentation</p>
+                    <span class="badge">Interactive</span>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="practiceSlide(1)">Slide 1: Title</div>
+                        <div class="quick-action" onclick="practiceSlide(2)">Slide 2: Problem</div>
+                        <div class="quick-action" onclick="practiceFullPitch">Full Pitch</div>
+                    </div>
+                </div>
+                
+                <div class="tool-card" onclick="startInvestorQA()">
+                    <h4>🤝 Investor Q&A</h4>
+                    <p>Practice answering tough investor questions</p>
+                    <span class="badge">Real-time</span>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="askQuestion('competitive')">Competitive Advantage</div>
+                        <div class="quick-action" onclick="askQuestion('market')">Market Size</div>
+                        <div class="quick-action" onclick="askQuestion('team')">Team Questions</div>
+                    </div>
+                </div>
+                
+                <div class="tool-card" onclick="startBusinessGuidance()">
+                    <h4>📊 Business Guidance</h4>
+                    <p>Get strategic advice for your startup</p>
+                    <span class="badge">Expert</span>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="getAdvice('growth')">Growth Strategy</div>
+                        <div class="quick-action" onclick="getAdvice('funding')">Funding Advice</div>
+                        <div class="quick-action" onclick="getAdvice('scaling')">Scaling Tips</div>
+                    </div>
+                </div>
+                
+                <div class="tool-card" onclick="startLearningSupport()">
+                    <h4>📚 Learning Support</h4>
+                    <p>Help with study materials and concepts</p>
+                    <span class="badge">Tutor</span>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="explainConcept('TAM')">What is TAM?</div>
+                        <div class="quick-action" onclick="explainConcept('SaaS')">SaaS Model</div>
+                        <div class="quick-action" onclick="explainConcept('ARR')">ARR Metrics</div>
+                    </div>
+                </div>
+                
+                <div class="tool-card" onclick="startCareerAdvice()">
+                    <h4>💼 Career Advice</h4>
+                    <p>Leadership and professional development</p>
+                    <span class="badge">Mentor</span>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="getCareerAdvice('leadership')">Leadership Tips</div>
+                        <div class="quick-action" onclick="getCareerAdvice('networking')">Networking</div>
+                        <div class="quick-action" onclick="getCareerAdvice('skills')">Skill Development</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentMode = 'general';
+        let isRecording = false;
+        
+        // Response templates
+        const responses = {
+            pitch: {
+                slide1: "Great start on Slide 1! Remember to emphasize: ✨ Stellar Logic AI branding, 📞 Your contact info (stellar.logic.ai@gmail.com, 417-319-9517), 🎯 Clear positioning as 'Exceptional AI Intelligence'. Speak confidently about your vision!",
+                slide2: "For Slide 2, focus on the PAIN: 💸 $15B gaming losses from cheating, 🏢 $8B+ enterprise AI integration challenges, 📊 Data silos preventing AI adoption, 🎯 85-95% detection accuracy is insufficient. Make investors feel the urgency!",
+                slide3: "Slide 3 is your SOLUTION highlight! 🚀 Emphasize 32 production modules, 🎯 99.2% accuracy (vs 85-95% competitors), 🛡️ Complete platform not single-purpose, ⚡ Real-time processing. Show how you solve the problems from Slide 2!",
+                full: "Ready for full pitch practice? 🎯 I'll time you and provide feedback on each slide. Start with Slide 1 when ready, and I'll guide you through all 10 slides with timing and content tips!"
+            },
+            qa: {
+                competitive: "Great question! Here's how to answer 'What's your competitive advantage?': 🎯 'Our 99.2% accuracy vs competitors' 85-95% is revolutionary', 🛡️ 'Complete platform with 32 modules vs single-purpose solutions', ⚡ 'Real-time processing vs slow response times', 💰 'Enterprise-grade security with Zero Trust architecture'",
+                market: "For 'How big is your market?': 📊 '$8B+ enterprise AI market growing at 20% YoY', 🎮 '$15B gaming security losses we can prevent', 💼 'Multiple revenue streams: SaaS, licensing, partnerships', 🚀 '$200B+ total addressable market across segments'",
+                team: "Team question strategy: 👨‍💼 'I'm Jamie Brown, Founder & CEO with 15+ years AI/ML experience', 🎯 'Seeking CTO with FAANG background and deep learning expertise', 💼 'COO with gaming industry experience', 💰 'CFO with enterprise SaaS and VC relationships'"
+            },
+            business: {
+                growth: "🚀 Growth Strategy for Stellar Logic AI: 📈 Phase 1: 10 enterprise clients, 2 gaming partners (3 months), 🎯 Phase 2: 50 enterprise clients, 10 gaming partners (6 months), 🌟 Phase 3: 200 enterprise clients, 50 gaming partners (12 months), 💰 Focus on high-value enterprise deals first!",
+                funding: "💰 Funding Advice: 🎯 Your $5M seed ask at $25M valuation is reasonable, 📊 Use 40% for team expansion (key hires), 🛠️ 30% for product development, 📈 20% for sales/marketing, ⚙️ 10% for operations. Target VCs focused on AI/ML and gaming!",
+                scaling: "📈 Scaling Tips: 🏗️ Build enterprise sales team first, 🎮 Gaming partnerships for credibility, 🌐 International expansion after Year 2, 💼 Hire CTO/COO/CFO with relevant experience, 📊 Focus on ARR growth over user count!"
+            },
+            learning: {
+                TAM: "📊 TAM (Total Addressable Market) is the total market demand for your product/service. For Stellar Logic AI: 🏢 $8B+ enterprise AI market, 🎮 Gaming security subset, 💼 Adjacent markets (cybersecurity, compliance), 🚀 Your realistic serviceable market is ~10% initially!",
+                SaaS: "💼 SaaS (Software as a Service) is your business model! 🔄 Recurring revenue (monthly/annual subscriptions), ⚡ Scalable without physical limits, 📊 Predictable cash flow for investors, 🎯 Higher multiples in valuation, 💡 Your $10K-100K/month pricing is enterprise-standard!",
+                ARR: "📈 ARR (Annual Recurring Revenue) is key SaaS metric! 💰 Formula: Monthly MRR × 12, 📊 Shows predictable growth to investors, 🎯 Your goal: $2.5M Year 1 → $100M+ Year 5, 📈 Investors value ARR multiples over revenue, 🚀 Focus on ARR growth rate!"
+            },
+            career: {
+                leadership: "👑 Leadership Tips for CEO: 🎯 Clear vision and communication, 🤝 Build and empower A-team, 📊 Data-driven decision making, 🚀 Balance strategy with execution, 💼 Network with other founders, 🌟 Maintain authenticity and integrity!",
+                networking: "🤝 Networking Strategy: 🎯 Target AI/ML and gaming VCs, 📝 Personalized outreach (no mass emails), 🎮 Attend gaming and AI conferences, 💼 Join founder communities, 📊 Build relationships before asking for help, 🌟 Give value before asking for investment!",
+                skills: "🎯 Skill Development: 📚 Master your pitch deck (10+ practice runs), 🤖 Deepen AI/ML knowledge, 💰 Learn SaaS metrics and finance, 🎮 Understand gaming industry, 📊 Practice investor Q&A, 🗣️ Improve public speaking!"
+            }
+        };
+        
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = generateResponse(message);
+                    addAssistantMessage(response);
+                }, 1000 + Math.random() * 1000);
+            }
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">👤</div>
+                <div class="message-content">${escapeHtml(message)}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addAssistantMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message assistant';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">${message}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'flex';
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+        
+        function generateResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Check for specific keywords
+            if (lowerMessage.includes('pitch') || lowerMessage.includes('presentation')) {
+                return "🎯 Pitch Practice: I can help you master your 10-slide presentation! Click the 'Pitch Practice' tool on the right to practice individual slides or do a full rehearsal. Remember: 99.2% accuracy, $8B+ market, 32 modules!";
+            } else if (lowerMessage.includes('investor') || lowerMessage.includes('funding')) {
+                return "💰 Investor Prep: Practice Q&A with me! Common questions: competitive advantage (99.2% vs 85-95%), market size ($8B+), team (your experience + key hires), use of funds (40% team, 30% product). Ready to practice?";
+            } else if (lowerMessage.includes('market') || lowerMessage.includes('tam')) {
+                return "📊 Market Insights: $8B+ enterprise AI market at 20% YoY growth! TAM = Total Addressable Market. Your serviceable market is ~10% initially ($800M). Focus on enterprise clients first, then gaming partnerships!";
+            } else if (lowerMessage.includes('help') || lowerMessage.includes('what can you do')) {
+                return "🚀 I'm your Stellar Logic AI business coach! I can help with: 🎯 Pitch practice, 🤝 Investor Q&A, 📊 Business strategy, 📚 Learning support, 💼 Career advice. Try the quick actions on the right or ask me anything!";
+            } else if (lowerMessage.includes('metrics') || lowerMessage.includes('numbers')) {
+                return "📊 Key Metrics: 99.2% accuracy, $8B+ market, 32 modules, $5M seed ask, $25M valuation, $100M+ Year 5 revenue. ARR formula: Monthly MRR × 12. Focus on ARR growth rate for investors!";
+            } else if (lowerMessage.includes('team') || lowerMessage.includes('hiring')) {
+                return "👥 Team Strategy: You're the experienced founder. Key hires: CTO (FAANG, deep learning), COO (gaming industry), CFO (enterprise SaaS, VC relationships). Use 40% of seed funding for team expansion!";
+            } else if (lowerMessage.includes('competition') || lowerMessage.includes('competitive')) {
+                return "🏆 Competitive Edge: 99.2% accuracy vs 85-95% competitors, complete platform vs single-purpose, real-time processing, enterprise security. Your unfair advantage: enterprise AI + gaming security in one platform!";
+            } else {
+                return `💡 I understand you're asking about: "${message}". I can help with pitch practice, investor Q&A, business strategy, learning support, or career advice. Try the quick actions on the right or ask me a specific question!`;
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Tool functions
+        function startPitchPractice() {
+            addAssistantMessage("🎯 Pitch Practice Mode Activated! I can help you practice any slide or do a full rehearsal. Which slide would you like to practice, or should we start with the full pitch?");
+        }
+        
+        function practiceSlide(slideNumber) {
+            const slideKey = `slide${slideNumber}`;
+            if (responses.pitch[slideKey]) {
+                addAssistantMessage(responses.pitch[slideKey]);
+            }
+        }
+        
+        function practiceFullPitch() {
+            addAssistantMessage(responses.pitch.full);
+        }
+        
+        function startInvestorQA() {
+            addAssistantMessage("🤝 Investor Q&A Mode! I'll ask you tough questions and give you feedback. Ready to practice? Choose a topic: Competitive Advantage, Market Size, Team Questions, or ask me anything!");
+        }
+        
+        function askQuestion(topic) {
+            const questionKey = topic.toLowerCase();
+            if (responses.qa[questionKey]) {
+                addAssistantMessage(`❓ ${topic.charAt(0).toUpperCase() + topic.slice(1)} Question Practice:\n\n${responses.qa[questionKey]}\n\n🎯 Practice answering this, then ask me for feedback!`);
+            }
+        }
+        
+        function startBusinessGuidance() {
+            addAssistantMessage("📊 Business Guidance Mode! I can help with growth strategy, funding advice, scaling tips, and market insights. What business challenge are you facing?");
+        }
+        
+        function getAdvice(topic) {
+            const adviceKey = topic.toLowerCase();
+            if (responses.business[adviceKey]) {
+                addAssistantMessage(`💡 ${topic.charAt(0).toUpperCase() + topic.slice(1)} Advice:\n\n${responses.business[adviceKey]}`);
+            }
+        }
+        
+        function startLearningSupport() {
+            addAssistantMessage("📚 Learning Support Mode! I can explain business concepts, help with study materials, and clarify terminology. What would you like to learn about?");
+        }
+        
+        function explainConcept(concept) {
+            const conceptKey = concept.toLowerCase();
+            if (responses.learning[conceptKey]) {
+                addAssistantMessage(`📚 ${concept.toUpperCase()} Explanation:\n\n${responses.learning[conceptKey]}`);
+            }
+        }
+        
+        function startCareerAdvice() {
+            addAssistantMessage("💼 Career Advice Mode! I can help with leadership tips, networking strategies, and skill development. What career aspect would you like guidance on?");
+        }
+        
+        function getCareerAdvice(topic) {
+            const careerKey = topic.toLowerCase();
+            if (responses.career[careerKey]) {
+                addAssistantMessage(`👑 ${topic.charAt(0).toUpperCase() + topic.slice(1)} Advice:\n\n${responses.career[careerKey]}`);
+            }
+        }
+        
+        function toggleVoice() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            isRecording = !isRecording;
+            
+            if (isRecording) {
+                voiceBtn.classList.add('recording');
+                voiceBtn.textContent = '⏹️';
+                addAssistantMessage("🎤 Voice recording started! Speak your question and I'll respond. Click again to stop recording.");
+            } else {
+                voiceBtn.classList.remove('recording');
+                voiceBtn.textContent = '🎤';
+                addAssistantMessage("🎤 Voice recording stopped. Type your message or use voice again!");
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Focus on input
+            document.getElementById('messageInput').focus();
+        });
+    </script>
+</body>
+</html>

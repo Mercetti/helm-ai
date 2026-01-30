@@ -192,6 +192,10 @@
             color: #975a16;
         }
         
+        .alert.success .alert-title {
+            color: #276749;
+        }
+        
         .alert-title {
             font-weight: bold;
             color: #c53030;
@@ -269,7 +273,10 @@
             </div>
             <div style="margin-top: 16px;">
                 <a href="/templates.html" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-block; transition: all 0.2s; margin-right: 12px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">📋 Templates & Resources</a>
-                <a href="/crm.html" style="background: linear-gradient(135deg, #48bb78, #38a169); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-block; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(72, 187, 120, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">👥 CRM & Prospects</a>
+                <a href="/crm.html" style="background: linear-gradient(135deg, #48bb78, #38a169); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-block; transition: all 0.2s; margin-right: 12px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(72, 187, 120, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">👥 CRM & Prospects</a>
+                <a href="/pitch_deck.html" style="background: linear-gradient(135deg, #f6e05e, #d69e2e); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-block; transition: all 0.2s; margin-right: 12px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(246, 224, 94, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">🎯 Pitch Deck</a>
+                <a href="/study_guide.html" style="background: linear-gradient(135deg, #9f7aea, #805ad5); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-block; transition: all 0.2s; margin-right: 12px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(159, 122, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">📚 Study Guide</a>
+                <a href="/ai_assistant.html" style="background: linear-gradient(135deg, #38b2ac, #319795); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-block; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(56, 178, 172, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">🤖 AI Assistant</a>
             </div>
         </div>
         
@@ -542,8 +549,9 @@
             document.getElementById('completion-rate').textContent = completionRate + '%';
             document.getElementById('completion-progress').style.width = completionRate + '%';
             
-            // Update alerts based on completion
+            // Update alerts and recommendations based on completion
             updateAlerts(completedCount, totalTasks);
+            updateRecommendations(completedCount, totalTasks);
         }
         
         // Update alerts based on task completion
@@ -582,6 +590,75 @@
                     <div class="alert">
                         <div class="alert-title">Focus on High Priority</div>
                         <div>Start with the red-highlighted tasks first</div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Update recommendations based on task completion
+        function updateRecommendations(completed, total) {
+            const recommendationsContainer = document.getElementById('recommendations');
+            const remaining = total - completed;
+            const completionRate = Math.round((completed / total) * 100);
+            
+            if (remaining === 0) {
+                recommendationsContainer.innerHTML = `
+                    <div class="alert success">
+                        <div class="alert-title">🚀 Launch Your Investor Campaign!</div>
+                        <div>With all tasks complete, you're ready to start investor outreach</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Schedule 5 Investor Meetings</div>
+                        <div>Use your CRM to reach out to your top prospects</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Practice Your Pitch</div>
+                        <div>Use the study guide to master your 10-slide presentation</div>
+                    </div>
+                `;
+            } else if (remaining <= 2) {
+                recommendationsContainer.innerHTML = `
+                    <div class="alert success">
+                        <div class="alert-title">🎯 Final Push!</div>
+                        <div>You're so close! Complete the remaining tasks to unlock investor outreach</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Prepare Your Demo</div>
+                        <div>Test your anti-cheat demo and pitch deck</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Research Investors</div>
+                        <div>Start researching VCs while finishing tasks</div>
+                    </div>
+                `;
+            } else if (remaining <= 3) {
+                recommendationsContainer.innerHTML = `
+                    <div class="alert">
+                        <div class="alert-title">📈 Great Progress!</div>
+                        <div>You're ${completionRate}% complete. Keep the momentum going!</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Focus on High-Impact Tasks</div>
+                        <div>Complete email setup and pitch deck preparation first</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Start LinkedIn Outreach</div>
+                        <div>Begin connecting with prospects while completing tasks</div>
+                    </div>
+                `;
+            } else {
+                recommendationsContainer.innerHTML = `
+                    <div class="alert">
+                        <div class="alert-title">Focus on Email Setup</div>
+                        <div>Complete professional email setup first to enable outreach</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Launch Email Campaign</div>
+                        <div>Start with 20 personalized emails to enterprise prospects</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Prepare Investor Materials</div>
+                        <div>Finalize pitch deck before reaching out to investors</div>
                     </div>
                 `;
             }

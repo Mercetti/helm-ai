@@ -134,6 +134,33 @@ def crm_page():
     except FileNotFoundError:
         return "CRM not found", 404
 
+@app.route('/ai_assistant.html')
+def ai_assistant_page():
+    """Serve the AI assistant page"""
+    try:
+        with open('ai_assistant.html', 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        return "AI assistant not found", 404
+
+@app.route('/study_guide.html')
+def study_guide_page():
+    """Serve the study guide page"""
+    try:
+        with open('study_guide.html', 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        return "Study guide not found", 404
+
+@app.route('/pitch_deck.html')
+def pitch_deck_page():
+    """Serve the pitch deck page"""
+    try:
+        with open('pitch_deck.html', 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        return "Pitch deck not found", 404
+
 @app.route('/test.html')
 def test_page():
     """Serve the test page"""
