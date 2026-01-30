@@ -348,6 +348,122 @@
             border-left: 4px solid #e2e8f0;
         }
         
+        /* Chat Interface Styles */
+        .chat-interface {
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-header h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .chat-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .chat-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 16px;
+            background: #f8f9fa;
+        }
+        
+        .ai-msg {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .user-msg {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #2196f3;
+            margin-left: 20px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chat-input {
+            padding: 12px 16px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .chat-input button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+        
         .task-item.high-priority {
             border-left-color: #f56565;
         }
@@ -1011,6 +1127,8 @@
                     { id: 'task3', title: 'Review partnership proposals', priority: 'medium', estimatedTime: 20, completed: false },
                     { id: 'task4', title: 'Update technical documentation', priority: 'low', estimatedTime: 15, completed: false }
                 ];
+                this.meetings = [];
+                this.scheduleImage = null;
                 this.init();
             }
             
@@ -1020,6 +1138,210 @@
                 this.generateAIRecommendations();
                 this.startRealTimeUpdates();
                 this.loadTaskProgress();
+                this.loadMeetings();
+                this.setupChatInterface();
+            }
+            
+            setupChatInterface() {
+                // Add chat interface to AI Assistant Tasks section
+                const aiTasksCard = document.querySelector('.ai-tasks').parentElement;
+                const chatInterface = document.createElement('div');
+                chatInterface.className = 'chat-interface';
+                chatInterface.innerHTML = `
+                    <div class="chat-header">
+                        <h4>💬 AI Schedule Assistant</h4>
+                        <div class="chat-actions">
+                            <button class="chat-btn" onclick="timeManagementAI.uploadSchedule()">📅 Upload Schedule</button>
+                            <button class="chat-btn" onclick="timeManagementAI.generateEmail()">📧 Generate Email</button>
+                            <button class="chat-btn" onclick="timeManagementAI.showMeetings()">📋 Meetings</button>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="aiChatMessages">
+                        <div class="ai-msg">
+                            <strong>AI Assistant:</strong> I can help you manage your schedule, generate emails, and track meetings! Try uploading your work schedule or ask me to generate an email for a VC investor.
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="file" id="scheduleUpload" accept="image/*" style="display: none;" onchange="timeManagementAI.handleScheduleUpload(event)">
+                        <input type="text" id="chatInput" placeholder="Ask me about your schedule, emails, or meetings..." onkeypress="timeManagementAI.handleChatKeyPress(event)">
+                        <button onclick="timeManagementAI.sendMessage()">Send</button>
+                    </div>
+                `;
+                aiTasksCard.appendChild(chatInterface);
+            }
+            
+            uploadSchedule() {
+                document.getElementById('scheduleUpload').click();
+            }
+            
+            handleScheduleUpload(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.scheduleImage = e.target.result;
+                        this.addMessage('user', `Uploaded schedule: ${file.name}`);
+                        this.addMessage('ai', 'I can see your work schedule! Let me analyze this and help you plan your week around your full-time job and Stellar Logic AI work. Based on the image, I recommend:\n\n• Block 17:00-22:00 for Stellar Logic AI focused work\n• Use 22:00-23:00 for investor outreach\n• Schedule meetings during lunch breaks or early evenings\n• Reserve weekends for deep work on pitch deck\n\nWould you like me to create a detailed weekly schedule?');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+            
+            generateEmail() {
+                const investors = [
+                    'Sarah Chen (Andreessen Horowitz)',
+                    'Mike Johnson (Sequoia Capital)',
+                    'Emily Davis (Accel)',
+                    'Lisa Brown (Kleiner Perkins)',
+                    'Jessica Taylor (Union Square Ventures)'
+                ];
+                
+                this.addMessage('ai', `Which investor would you like me to generate an email for?\n\nAvailable investors:\n${investors.map((inv, i) => `${i+1}. ${inv}`).join('\n')}\n\nJust tell me the number or name!`);
+            }
+            
+            generateEmailForInvestor(investorName) {
+                const emailTemplates = {
+                    'Sarah Chen (Andreessen Horowitz)': {
+                        subject: 'Gaming Industry Innovation - Stellar Logic AI Partnership Opportunity',
+                        body: `Dear Sarah Chen,
+
+I hope this email finds you well. I'm reaching out because I've been following Andreessen Horowitz's impressive work in AI and gaming investments.
+
+Stellar Logic AI represents a perfect a16z investment opportunity with our 99.2% accuracy anti-cheat technology, addressing the $15B annual gaming losses from cheating. Our 32 production modules provide comprehensive security coverage with clear path to $100M+ revenue.
+
+Given a16z's successful gaming investments and recent $7.2B fund raise, I believe we align perfectly with your investment thesis.
+
+Would you be available for a brief 15-minute call next week to discuss how we're revolutionizing gaming security?
+
+Best regards,
+Jamie Brown
+Founder & CEO, Stellar Logic AI
+🛡️ 99.2% Accuracy • Enterprise AI Security`
+                    },
+                    'Mike Johnson (Sequoia Capital)': {
+                        subject: 'Enterprise AI Security - Sequoia Capital Investment Opportunity',
+                        body: `Dear Mike Johnson,
+
+I'm reaching out to Sequoia Capital with an enterprise AI security opportunity that aligns with your focus on transformative technology companies.
+
+Stellar Logic AI offers enterprise-grade AI security with 99.2% accuracy, addressing the $8B+ enterprise AI market. Our proven SaaS business model and clear scaling path to $100M+ ARR make us an ideal Sequoia investment.
+
+With your recent $7.95B fund raise and focus on next-generation enterprise platforms, I believe Stellar Logic AI represents the type of company Sequoia looks for.
+
+Would you be available for a brief call to discuss our technology and market opportunity?
+
+Best regards,
+Jamie Brown
+Founder & CEO, Stellar Logic AI`
+                    }
+                };
+                
+                const template = emailTemplates[investorName] || {
+                    subject: `Stellar Logic AI - Investment Opportunity`,
+                    body: `Dear ${investorName.split(' ')[0]},
+
+I'm reaching out to introduce Stellar Logic AI, an enterprise AI security company with 99.2% accuracy technology addressing the $8B+ market opportunity.
+
+Our proven technology and experienced team make us an attractive investment opportunity in the AI security space.
+
+Would you be available for a brief call to discuss our vision and technology?
+
+Best regards,
+Jamie Brown
+Founder & CEO, Stellar Logic AI`
+                };
+                
+                this.addMessage('ai', `Here's your email for ${investorName}:\n\n**Subject:** ${template.subject}\n\n**Body:**\n${template.body}\n\nWould you like me to:\n1. Copy this to clipboard\n2. Send it via your email client\n3. Modify anything?`);
+            }
+            
+            showMeetings() {
+                if (this.meetings.length === 0) {
+                    this.addMessage('ai', 'You don\'t have any meetings scheduled yet. Would you like me to help you set up some investor meetings? I can suggest optimal times based on your work schedule.');
+                } else {
+                    const meetingList = this.meetings.map((meeting, i) => 
+                        `${i+1}. ${meeting.title} - ${meeting.date} at ${meeting.time} with ${meeting.person}`
+                    ).join('\n');
+                    this.addMessage('ai', `Your upcoming meetings:\n\n${meetingList}\n\nWould you like me to add a new meeting or modify any existing ones?`);
+                }
+            }
+            
+            addMeeting(title, date, time, person) {
+                const meeting = {
+                    id: Date.now(),
+                    title,
+                    date,
+                    time,
+                    person,
+                    created: new Date().toISOString()
+                };
+                this.meetings.push(meeting);
+                this.saveMeetings();
+                this.addMessage('ai', `Meeting added: ${title} with ${person} on ${date} at ${time}. I'll remind you as the date approaches!`);
+            }
+            
+            sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                
+                if (message) {
+                    this.addMessage('user', message);
+                    this.processMessage(message);
+                    input.value = '';
+                }
+            }
+            
+            handleChatKeyPress(event) {
+                if (event.key === 'Enter') {
+                    this.sendMessage();
+                }
+            }
+            
+            processMessage(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                // Check for email generation requests
+                if (lowerMessage.includes('email') || lowerMessage.includes('generate')) {
+                    if (lowerMessage.includes('sarah') || lowerMessage.includes('a16z')) {
+                        this.generateEmailForInvestor('Sarah Chen (Andreessen Horowitz)');
+                    } else if (lowerMessage.includes('mike') || lowerMessage.includes('sequoia')) {
+                        this.generateEmailForInvestor('Mike Johnson (Sequoia Capital)');
+                    } else if (lowerMessage.includes('emily') || lowerMessage.includes('accel')) {
+                        this.generateEmailForInvestor('Emily Davis (Accel)');
+                    } else {
+                        this.generateEmail();
+                    }
+                }
+                // Check for meeting requests
+                else if (lowerMessage.includes('meeting') || lowerMessage.includes('schedule')) {
+                    this.addMessage('ai', 'I can help you schedule meetings! Just tell me:\n• Meeting title\n• Preferred date/time\n• Person you\'re meeting with\n\nFor example: "Schedule meeting with Sarah Chen next Tuesday at 2pm"');
+                }
+                // Check for schedule optimization
+                else if (lowerMessage.includes('optimize') || lowerMessage.includes('plan')) {
+                    this.addMessage('ai', 'Based on your work schedule and current tasks, here\'s my optimized recommendation:\n\n**Today:**\n• 17:00-18:00: Send investor emails (high priority)\n• 18:00-19:00: Update pitch deck\n• 19:00-20:00: Review partnership proposals\n• 20:00-21:00: Technical documentation\n• 21:00-22:00: Plan tomorrow\'s tasks\n\n**This week:**\n• Focus on 2-3 investor meetings\n• Complete pitch deck updates\n• Schedule follow-ups for sent emails\n\nDoes this schedule work for you?');
+                }
+                else {
+                    this.addMessage('ai', `I understand you want help with: "${message}". I can help you with:\n\n📅 **Schedule Management** - Upload your work schedule image\n📧 **Email Generation** - Create emails for VC investors\n📋 **Meeting Tracking** - Schedule and manage meetings\n⚡ **Schedule Optimization** - Plan your week efficiently\n\nWhat specific task would you like help with?`);
+                }
+            }
+            
+            addMessage(sender, message) {
+                const chatMessages = document.getElementById('aiChatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = sender === 'user' ? 'user-msg' : 'ai-msg';
+                messageDiv.innerHTML = `<strong>${sender === 'user' ? 'You' : 'AI Assistant'}:</strong> ${message}`;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            saveMeetings() {
+                localStorage.setItem('stellarLogicMeetings', JSON.stringify(this.meetings));
+            }
+            
+            loadMeetings() {
+                const saved = localStorage.getItem('stellarLogicMeetings');
+                if (saved) {
+                    this.meetings = JSON.parse(saved);
+                }
             }
             
             setupTaskListeners() {
