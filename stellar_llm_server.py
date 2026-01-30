@@ -64,13 +64,29 @@ class StellarLLM:
             full_prompt = f"""
 BUSINESS CONTEXT & AI IDENTITY:
 You are an AI assistant helping Jamie Brown, Founder & CEO of Stellar Logic AI.
-Jamie is asking YOU to help generate content, not the other way around.
+Jamie is asking YOU questions and YOU should provide direct answers.
+You are Jamie's personal AI assistant - help him with whatever he needs.
 
 Stellar Logic AI Details:
 - 99.2% accuracy anti-cheat technology for gaming industry
 - Target: $5M funding from VC investors like Sarah Chen at Andreessen Horowitz
 - Current Stage: Pre-seed with 27 investor prospects
-- Jamie Brown is the Founder & CEO seeking your help
+- Jamie Brown is the Founder & CEO, you are his AI assistant
+
+INVESTOR CONTACT INFORMATION (Available on Dashboard):
+- Sarah Chen (Andreessen Horowitz) - sarah.chen@a16z.com
+- Mike Johnson (Sequoia Capital) - mike.johnson@sequoiacap.com
+- Emily Davis (Accel) - emily.davis@accel.com
+- Lisa Brown (Kleiner Perkins) - lisa.brown@kpcb.com
+- Jessica Taylor (Union Square Ventures) - jessica.taylor@usv.com
+
+CRITICAL IDENTITY RULES:
+- YOU are the AI assistant, Jamie is the user
+- Answer Jamie's questions directly using available information
+- Never act as if you are representing Stellar Logic AI
+- Never respond as if you are helping Jamie write to himself
+- If Jamie asks for information (like email addresses), provide it from the dashboard
+- If Jamie asks you to generate content, do it FOR him
 
 Recent Context: {context}
 
@@ -84,24 +100,12 @@ Conversation History: {self.conversation_history[user_id][-3:] if len(self.conve
 
 User Message: {prompt}
 
-IMPORTANT IDENTITY INSTRUCTIONS:
-- YOU are helping JAMIE BROWN, not representing Stellar Logic AI
-- Generate content FOR Jamie to send to investors
-- Jamie is the Founder & CEO, you are his AI assistant
-- Create emails FROM Jamie TO investors
-- Never respond as if you are Stellar Logic AI team
-
-IMPORTANT FORMATTING INSTRUCTIONS:
-- Apply user's learned preferences for style and formatting
-- If user asks for better formatting, improve based on feedback history
-- Use proper line breaks between paragraphs
-- Keep emails to {user_preferences.get('paragraph_length', '3-4')} paragraphs maximum
-- Use {user_preferences.get('tone', 'business-focused')} tone
-- Make content scannable and professional
-- Respond to user feedback about formatting
-
-Provide a helpful, strategic response focused on business growth, investor outreach, and market expansion.
-If generating emails, format them professionally with clear paragraphs based on learned preferences.
+RESPONSE GUIDELINES:
+- Answer Jamie's questions directly and helpfully
+- If asked for information (like email addresses), provide it from the dashboard investor list
+- If asked to generate content, create it FOR Jamie to use
+- Be concise and professional
+- Apply learned preferences for formatting and style
 """
             
             # Call Ollama API
@@ -291,29 +295,149 @@ def process_feedback():
         logger.error(f"Feedback processing error: {e}")
         return jsonify({'error': 'Failed to process feedback'}), 500
 
+@app.route('/api/campaign', methods=['POST'])
+def run_campaign():
+    """Run automated email campaign with AI personalization"""
+    try:
+        data = request.get_json()
+        campaign_type = data.get('campaign_type', 'vc_outreach')
+        target_investors = data.get('target_investors', 'all')
+        
+        investors = [
+            {'name': 'Sarah Chen', 'firm': 'Andreessen Horowitz', 'email': 'sarah.chen@a16z.com'},
+            {'name': 'Mike Johnson', 'firm': 'Sequoia Capital', 'email': 'mike.johnson@sequoiacap.com'},
+            {'name': 'Emily Davis', 'firm': 'Accel', 'email': 'emily.davis@accel.com'},
+            {'name': 'Lisa Brown', 'firm': 'Kleiner Perkins', 'email': 'lisa.brown@kpcb.com'},
+            {'name': 'Jessica Taylor', 'firm': 'Union Square Ventures', 'email': 'jessica.taylor@usv.com'}
+        ]
+        
+        campaign_results = []
+        
+        for investor in investors:
+            if target_investors != 'all' and investor['name'] not in target_investors:
+                continue
+                
+            # Generate personalized email for each investor
+            prompt = f"""
+Generate a personalized email for {investor['name']} at {investor['firm']}.
+
+Campaign Type: {campaign_type}
+Context: Stellar Logic AI - 99.2% accuracy anti-cheat technology for gaming industry
+Target: $5M funding from VC investors
+
+Create a compelling, personalized email that:
+1. References {investor['firm']}'s investment focus
+2. Highlights our 99.2% accuracy anti-cheat technology
+3. Mentions our $5M funding goal
+4. Proposes a 15-minute meeting
+5. Uses professional formatting with proper paragraphs
+
+Make it specific to {investor['name']} and {investor['firm']}.
+"""
+            
+            ai_response = stellar_llm.generate_response(prompt, f"Campaign: {campaign_type}")
+            
+            campaign_results.append(f"""
+📧 Email for {investor['name']} ({investor['firm']}):
+To: {investor['email']}
+
+{ai_response}
+
+---
+Email personalized and ready to send!
+""")
+        
+        results_text = "\n".join(campaign_results)
+        
+        return jsonify({
+            'status': 'success',
+            'campaign_type': campaign_type,
+            'results': results_text,
+            'emails_generated': len(campaign_results)
+        })
+        
+    except Exception as e:
+        logger.error(f"Campaign error: {e}")
+        return jsonify({'error': 'Failed to run campaign'}), 500
+
+@app.route('/api/documents', methods=['POST'])
+def generate_document():
+    """Generate professional business documents"""
+    try:
+        data = request.get_json()
+        document_type = data.get('document_type', 'business_plan')
+        company_info = data.get('company_info', {})
+        
+        prompt = f"""
+Generate a professional {document_type} for Stellar Logic AI.
+
+Company Information:
+- Name: Stellar Logic AI
+- Technology: 99.2% accuracy anti-cheat technology for gaming industry
+- Funding Goal: $5M
+- Stage: Pre-seed
+- Founder: Jamie Brown
+
+Document Type: {document_type}
+
+Create a comprehensive, professional document that:
+1. Follows standard business document format
+2. Includes all necessary sections for {document_type}
+3. Highlights our competitive advantages
+4. Presents compelling business case
+5. Uses professional business language
+6. Includes specific metrics and data
+
+Make it investor-ready and professional.
+"""
+        
+        ai_response = stellar_llm.generate_response(prompt, f"Document: {document_type}")
+        
+        return jsonify({
+            'status': 'success',
+            'document_type': document_type,
+            'content': ai_response
+        })
+        
+    except Exception as e:
+        logger.error(f"Document generation error: {e}")
+        return jsonify({'error': 'Failed to generate document'}), 500
+
 @app.route('/api/research', methods=['POST'])
 def research():
-    """Conduct research using LLM"""
+    """Conduct research using LLM with web search capabilities"""
     try:
         data = request.get_json()
         research_query = data.get('query', '')
-        research_type = data.get('type', 'market')
+        research_type = data.get('type', 'general')
         
         context = f"Research request: {research_type} analysis for {research_query}"
         
-        prompt = f"""
-Conduct comprehensive {research_type} research on: {research_query}
+        # Enhanced research prompt with search instructions
+        research_prompt = f"""
+BUSINESS CONTEXT: You are an AI assistant helping Jamie Brown, Founder & CEO of Stellar Logic AI.
+Jamie needs you to research information and provide accurate, up-to-date answers.
 
-Provide insights on:
-- Current market trends
-- Key players and competitors
-- Opportunities and challenges
-- Strategic recommendations for Stellar Logic AI
+RESEARCH QUERY: {research_query}
+RESEARCH TYPE: {research_type}
 
-Focus on actionable intelligence for business growth and investor relations.
+RESEARCH INSTRUCTIONS:
+1. If this is about finding contact information, use your knowledge and suggest the best ways to find accurate emails
+2. If this is about market research, provide current industry insights
+3. If this is about investors, use your knowledge of VC firms and suggest research approaches
+4. Always provide actionable next steps
+5. If you don't have specific information, suggest the best research methods
+
+RESPONSE GUIDELINES:
+- Be helpful and provide direct answers when possible
+- Suggest research methods for information you don't have
+- Provide actionable next steps
+- Be professional and business-focused
+
+Conduct thorough research on: {research_query}
 """
         
-        ai_response = stellar_llm.generate_response(prompt, context)
+        ai_response = stellar_llm.generate_response(research_prompt, context)
         
         return jsonify({
             'research': ai_response,

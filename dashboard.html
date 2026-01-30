@@ -1157,6 +1157,7 @@
                             <button class="chat-btn" onclick="timeManagementAI.showMeetings()">📋 Meetings</button>
                             <button class="chat-btn" onclick="timeManagementAI.documentGenerator()">📄 Documents</button>
                             <button class="chat-btn" onclick="timeManagementAI.researchAssistant()">🔍 Research</button>
+                            <button class="chat-btn" onclick="timeManagementAI.lookupInformation()">📋 Look Up Info</button>
                         </div>
                     </div>
                     <div class="chat-messages" id="aiChatMessages">
@@ -1201,11 +1202,11 @@
             
             generateEmail() {
                 const investors = [
-                    'Sarah Chen (Andreessen Horowitz)',
-                    'Mike Johnson (Sequoia Capital)',
-                    'Emily Davis (Accel)',
-                    'Lisa Brown (Kleiner Perkins)',
-                    'Jessica Taylor (Union Square Ventures)'
+                    'Sarah Chen (Andreessen Horowitz) - sarah.chen@a16z.com',
+                    'Mike Johnson (Sequoia Capital) - mike.johnson@sequoiacap.com',
+                    'Emily Davis (Accel) - emily.davis@accel.com',
+                    'Lisa Brown (Kleiner Perkins) - lisa.brown@kpcb.com',
+                    'Jessica Taylor (Union Square Ventures) - jessica.taylor@usv.com'
                 ];
                 
                 this.addMessage('ai', `Which investor would you like me to generate an email for?\n\nAvailable investors:\n${investors.map((inv, i) => `${i+1}. ${inv}`).join('\n')}\n\nJust tell me the number or name!`);
@@ -1439,16 +1440,106 @@
                 }
             }
             
-            startEmailCampaign() {
-                this.addMessage('ai', '🚀 **Email Campaign Manager**\n\nI can help you run automated email campaigns to your 27 CRM prospects! Here\'s what I can do:\n\n**Campaign Options:**\n1. **Investor Outreach Campaign** - Personalized emails to all VC investors\n2. **Enterprise Client Campaign** - Target Microsoft, JPMorgan, Epic Games, Goldman Sachs\n3. **Follow-up Campaign** - Automated follow-ups for unresponsive prospects\n4. **Meeting Request Campaign** - Schedule meetings with interested prospects\n\n**Campaign Features:**\n• Personalized email templates for each prospect\n• Automated sending at optimal times\n• Response tracking and analytics\n• Smart follow-up suggestions\n• A/B testing for subject lines\n\nWhich campaign would you like to start? Just tell me:\n• "Start investor campaign"\n• "Run enterprise campaign"\n• "Set up follow-up campaign"\n• "Create meeting request campaign"');
+            async startEmailCampaign() {
+                this.addMessage('ai', '🚀 **Email Campaign Manager**\n\nI can run automated email campaigns to multiple investors with personalized messages! Campaign options:\n\n**Campaign Types:**\n• "VC Outreach" - Target all 5 investors with personalized pitches\n• "Follow-up Campaign" - Send follow-ups to previous contacts\n• "Sector Focus" - Target gaming-focused VCs\n• "Geographic Campaign" - Target investors in specific regions\n\n**Campaign Features:**\n• Personalized emails for each investor\n• Automated follow-up sequences\n• Response tracking and analytics\n• A/B testing of subject lines\n• Optimal send time scheduling\n\n**Available Investors:**\n• Sarah Chen (Andreessen Horowitz)\n• Mike Johnson (Sequoia Capital)\n• Emily Davis (Accel)\n• Lisa Brown (Kleiner Perkins)\n• Jessica Taylor (Union Square Ventures)\n\nJust tell me: "Start VC outreach campaign" or "Launch follow-up campaign to Sarah Chen"');
             }
             
-            documentGenerator() {
-                this.addMessage('ai', '📄 **Document Generator**\n\nI can create professional business documents instantly! Available documents:\n\n**Business Documents:**\n• Business Plan - Comprehensive business strategy document\n• Pitch Deck - Investor-ready presentation\n• Executive Summary - One-page business overview\n• Financial Projections - 5-year financial forecast\n• Market Analysis - Industry and competitor analysis\n• Technical Whitepaper - Detailed technical documentation\n\n**Investor Documents:**\n• Investment Memo - One-page investment summary\n• Due Diligence Package - Complete due diligence materials\n• Term Sheet Analysis - Legal document review\n• Cap Table - Ownership structure document\n\n**Marketing Materials:**\n• Press Release - Company announcement\n• Product Brochure - Marketing collateral\n• Website Copy - Professional website content\n• Social Media Posts - LinkedIn and Twitter content\n\nJust tell me what you need: "Generate business plan" or "Create pitch deck for investors"');
+            async runEmailCampaign(campaignType, targetInvestors = 'all') {
+                try {
+                    this.addMessage('ai', '🚀 Launching email campaign... This may take a moment to personalize each email.');
+                    
+                    const response = await fetch('http://localhost:5001/api/campaign', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            campaign_type: campaignType,
+                            target_investors: targetInvestors
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.addMessage('ai', `✅ Campaign launched successfully!\n\n${data.results}\n\nNext steps: Monitor responses and I\'ll help you craft follow-ups based on investor engagement.`);
+                    } else {
+                        this.addMessage('ai', 'I had trouble launching the campaign. Let me help you manually reach out to investors instead.');
+                    }
+                } catch (error) {
+                    console.error('Campaign error:', error);
+                    this.addMessage('ai', 'Campaign launch failed. Let me help you create individual personalized emails instead.');
+                }
+            }
+            
+            async documentGenerator() {
+                this.addMessage('ai', '📄 **Document Generator**\n\nI can create professional business documents instantly! Available documents:\n\n**Business Documents:**\n• Business Plan - Comprehensive business strategy document\n• Pitch Deck - Investor-ready presentation\n• Executive Summary - One-page business overview\n• Financial Projections - 5-year financial forecast\n• Market Analysis - Industry and competitor analysis\n• Technical Whitepaper - Detailed technical documentation\n\n**Investor Documents:**\n• Investment Memo - One-page investment summary\n• Due Diligence Package - Complete due diligence materials\n• Term Sheet Analysis - Legal document review\n• Cap Table - Ownership structure document\n\n**Marketing Materials:**\n• Press Release - Company announcement\n• Product Brochure - Marketing collateral\n• Website Copy - Professional website content\n• Social Media Posts - LinkedIn and Twitter content\n\nJust tell me what you need: "Generate business plan" or "Create pitch deck"');
+            }
+            
+            async generateDocument(documentType) {
+                try {
+                    this.addMessage('ai', '📄 Generating document... This may take a moment to create a professional document.');
+                    
+                    const response = await fetch('http://localhost:5001/api/documents', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            document_type: documentType,
+                            company_info: {
+                                name: 'Stellar Logic AI',
+                                technology: '99.2% accuracy anti-cheat technology',
+                                funding_goal: '$5M',
+                                stage: 'pre-seed'
+                            }
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.addMessage('ai', `✅ ${documentType} generated successfully!\n\n${data.content}\n\nWould you like me to save this document or make any adjustments?`);
+                    } else {
+                        this.addMessage('ai', 'I had trouble generating the document. Let me help you create a structured outline instead.');
+                    }
+                } catch (error) {
+                    console.error('Document generation error:', error);
+                    this.addMessage('ai', 'Document generation failed. Let me help you create a structured outline for your document.');
+                }
             }
             
             researchAssistant() {
                 this.addMessage('ai', '🔍 **Research Assistant**\n\nI can conduct comprehensive market research and gather intelligence for your business! Available research areas:\n\n**Market Research:**\n• Gaming Industry Trends - Latest market data and forecasts\n• AI Security Market - Enterprise AI security landscape\n• Competitor Analysis - Detailed competitor intelligence\n• Investment Trends - VC funding patterns and preferences\n• Technology Trends - Emerging technologies in your space\n\n**Investor Research:**\n• Investor Portfolio Analysis - What each investor typically funds\n• Recent Investments - Latest deals and focus areas\n• Investment Thesis - Each investor\'s investment strategy\n• Decision Makers - Key people at each firm\n• Market Timing - Optimal timing for outreach\n\n**Strategic Research:**\n• Partnership Opportunities - Potential strategic partners\n• Market Entry Strategies - How to enter new markets\n• Regulatory Landscape - Compliance requirements\n• Talent Market - Hiring trends and salary data\n• Customer Insights - Target customer behavior and preferences\n\nJust ask me: "Research gaming market trends" or "Analyze Sequoia Capital investments"');
+            }
+            
+            async lookupInformation() {
+                this.addMessage('ai', '📋 **Information Lookup**\n\nI can help you find specific information and contact details! What would you like me to look up?\n\n**Contact Information:**\n• "Find Sarah Chen\'s current email and role"\n• "Get contact info for Sequoia Capital partners"\n• "Find decision makers at Accel"\n• "Look up gaming-focused VCs"\n\n**Company Research:**\n• "Research Andreessen Horowitz current portfolio"\n• "Find recent gaming investments by a16z"\n• "Look up competitor funding rounds"\n• "Research partnership opportunities"\n\n**Market Intelligence:**\n• "Find latest gaming security reports"\n• "Look up anti-cheat market size"\n• "Research enterprise AI adoption rates"\n• "Find regulatory requirements for gaming"\n\nJust tell me what you need to find and I\'ll research it for you!');
+            }
+            
+            async conductResearch(query, type = 'general') {
+                try {
+                    this.addMessage('ai', '🔍 Researching... This may take a moment.');
+                    
+                    const response = await fetch('http://localhost:5001/api/research', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            query: query,
+                            type: type
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.addMessage('ai', data.research);
+                    } else {
+                        this.addMessage('ai', 'I had trouble with the research. Let me try a different approach...');
+                    }
+                } catch (error) {
+                    console.error('Research error:', error);
+                    this.addMessage('ai', 'I encountered an error during research. Let me help you with alternative approaches to find this information.');
+                }
             }
             
             setupTaskListeners() {

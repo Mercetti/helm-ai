@@ -69,7 +69,7 @@ echo.
 echo  ╔══════════════════════════════════════════════════════════════╗
 echo  ║                    🎉 PLATFORM READY! 🎉                      ║
 echo  ║                                                              ║
-echo  ║  🌐 Dashboard:     http://localhost:8000                      ║
+echo  ║  🌐 Dashboard:     http://localhost:5000/dashboard.html           ║
 echo  ║  🤖 LLM API:        http://localhost:5001/api/health           ║
 echo  ║  📊 Models:         http://localhost:11434/api/tags             ║
 echo  ║                                                              ║
@@ -79,7 +79,7 @@ echo.
 
 REM Open dashboard in browser
 echo 🌐 Opening dashboard in your browser...
-start http://localhost:8000
+start http://localhost:5000/dashboard.html
 
 echo.
 echo 💡 Try these commands in your AI chat:
