@@ -103,7 +103,7 @@ class HelmAILoggingConfig:
                     'class': 'logging.handlers.RotatingFileHandler',
                     'level': env_config['level'],
                     'formatter': env_config['format'],
-                    'filename': os.getenv('LOG_FILE', 'logs/helm_ai.log'),
+                    'filename': os.getenv('LOG_FILE', 'logs/stellar_logic_ai.log'),
                     'maxBytes': 10485760,  # 10MB
                     'backupCount': 5,
                     'encoding': 'utf8'
@@ -112,7 +112,7 @@ class HelmAILoggingConfig:
                     'class': 'logging.handlers.RotatingFileHandler',
                     'level': 'ERROR',
                     'formatter': env_config['format'],
-                    'filename': os.getenv('ERROR_LOG_FILE', 'logs/helm_ai_errors.log'),
+                    'filename': os.getenv('ERROR_LOG_FILE', 'logs/stellar_logic_ai_errors.log'),
                     'maxBytes': 10485760,  # 10MB
                     'backupCount': 5,
                     'encoding': 'utf8'
@@ -124,7 +124,7 @@ class HelmAILoggingConfig:
                     'handlers': env_config['handlers'],
                     'propagate': env_config['propagate']
                 },
-                'helm_ai': {  # Application logger
+                'stellar_logic_ai': {  # Application logger
                     'level': env_config['level'],
                     'handlers': env_config['handlers'],
                     'propagate': False
@@ -176,7 +176,7 @@ class HelmAILoggingConfig:
         logging.config.dictConfig(logging_config)
         
         # Create log directory if it doesn't exist
-        log_file_path = os.getenv('LOG_FILE', 'logs/helm_ai.log')
+        log_file_path = os.getenv('LOG_FILE', 'logs/stellar_logic_ai.log')
         log_dir = os.path.dirname(log_file_path)
         if log_dir:  # Only create directory if path is not empty
             os.makedirs(log_dir, exist_ok=True)

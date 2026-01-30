@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🛡️ Stellar Logic AI - 99.2% Accuracy Anti-Cheat Demo</title>
-    <link rel="icon" href="Stellar_Logic_AI_Logo.png" type="image/png">
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="favicon_16x16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="Stellar_Logic_AI_Logo.png">
     <script src="./helm-ai-integration.js"></script>
     <style>
         body {
@@ -224,13 +226,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><div class="logo" style="background: url('./Helm_AI_Logo.png') center/contain no-repeat;"></div> Helm AI - $12B+ AI Governance</h1>
+            <h1><div class="logo" style="background: url('./Stellar_Logic_AI_Logo.png') center/contain no-repeat;"></div> Stellar Logic AI - 99.2% Accuracy AI Security</h1>
             <p>Revolutionary AI governance technology with constitutional safety framework</p>
         </div>
         
         <div class="status-grid">
             <div class="status-card">
-                <h3>🤖 Helm AI Server</h3>
+                <h3>🤖 Stellar Logic AI Server</h3>
                 <p><span id="helm-status" class="status-indicator status-offline"></span> <span id="helm-status-text">Checking...</span></p>
                 <p><strong>Endpoint:</strong> http://localhost:3001</p>
                 <p><strong>Version:</strong> 1.0.0</p>
@@ -252,7 +254,7 @@
         </div>
         
         <div class="demo-section">
-            <h2>🧠 Helm AI Core Capabilities</h2>
+            <h2>🧠 Stellar Logic AI Core Capabilities</h2>
             <button class="button" onclick="testHealthCheck()">System Health</button>
             <button class="button" onclick="testLLMDevelopment()">LLM Development</button>
             <button class="button" onclick="testLearningEnhancement()">Learning Enhancement</button>
@@ -309,7 +311,7 @@
         </div>
         
         <div class="integration-info">
-            <h2>🚀 Helm AI Enterprise Features</h2>
+            <h2>🚀 Stellar Logic AI Enterprise Features</h2>
             <p>Revolutionary AI governance technology transforming enterprise AI deployment:</p>
             
             <div class="feature-list">
@@ -358,7 +360,7 @@
                     integrationStatus.helmAvailable = status.helmAvailable;
                     integrationStatus.fallbackMode = status.fallbackMode;
                     
-                    // Update Helm AI status
+                    // Update Stellar Logic AI status
                     const helmStatusEl = document.getElementById('helm-status');
                     const helmStatusTextEl = document.getElementById('helm-status-text');
                     
@@ -374,7 +376,7 @@
                     document.getElementById('fallback-status').textContent = status.fallbackMode ? 'Enabled' : 'Disabled';
                     
                     // Update analysis status
-                    document.getElementById('analysis-status').textContent = status.helmAvailable ? 'Helm AI Active' : 'Fallback Mode';
+                    document.getElementById('analysis-status').textContent = status.helmAvailable ? 'Stellar Logic AI Active' : 'Fallback Mode';
                 }
             }
             
@@ -397,9 +399,9 @@
                 try {
                     const response = await fetch('http://localhost:3001/api/health');
                     const data = await response.json();
-                    showResults('helm-results', data, '✅ Helm AI Health Check');
+                    showResults('helm-results', data, '✅ Stellar Logic AI Health Check');
                 } catch (error) {
-                    showResults('helm-results', { error: error.message }, '❌ Helm AI Health Check Failed');
+                    showResults('helm-results', { error: error.message }, '❌ Stellar Logic AI Health Check Failed');
                 }
             }
             
@@ -707,7 +709,7 @@
             
             // Initialize
             document.addEventListener('DOMContentLoaded', async () => {
-                // Wait for Helm AI integration to initialize
+                // Wait for Stellar Logic AI integration to initialize
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 
                 // Update status

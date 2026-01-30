@@ -28,7 +28,7 @@ def test_database_simple():
         print("📦 Creating SQLite connection pool...")
         pool = connection_pool_manager.create_sqlite_pool(
             name="sqlite",
-            db_path="test_helm_ai_simple.db",
+            db_path="test_stellar_logic_ai_simple.db",
             min_connections=1,
             max_connections=5
         )
@@ -111,8 +111,8 @@ def test_database_simple():
                 print("🧹 Connection pools closed")
             
             # Remove test database file
-            if os.path.exists("test_helm_ai_simple.db"):
-                os.remove("test_helm_ai_simple.db")
+            if os.path.exists("test_stellar_logic_ai_simple.db"):
+                os.remove("test_stellar_logic_ai_simple.db")
                 print("🗑️ Test database file removed")
         except Exception as e:
             print(f"⚠️ Cleanup warning: {e}")

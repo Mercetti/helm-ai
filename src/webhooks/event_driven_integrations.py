@@ -105,7 +105,7 @@ class WebhookEvent:
     event_type: EventType
     data: Dict[str, Any]
     timestamp: datetime = field(default_factory=datetime.utcnow)
-    source: str = "helm_ai"
+    source: str = "stellar_logic_ai"
     version: str = "1.0"
     metadata: Dict[str, Any] = field(default_factory=dict)
 
