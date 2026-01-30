@@ -1280,8 +1280,14 @@
                 
                 if (message) {
                     this.addMessage('user', message);
-                    this.callStellarAI(message);
+                    this.processMessage(message);
                     input.value = '';
+                }
+            }
+            
+            handleChatKeyPress(event) {
+                if (event.key === 'Enter') {
+                    this.sendMessage();
                 }
             }
             
@@ -1324,9 +1330,84 @@
                 }
             }
             
-            handleChatKeyPress(event) {
-                if (event.key === 'Enter') {
-                    this.sendMessage();
+            processMessage(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                // Check for feedback patterns and learn from them
+                if (this.detectFeedbackPattern(lowerMessage)) {
+                    this.processFeedback(message);
+                    return; // Don't send to AI, just process feedback
+                }
+                
+                // For all other messages, send to AI
+                this.callStellarAI(message);
+            }
+            
+            detectFeedbackPattern(message) {
+                const feedbackPatterns = [
+                    'format better',
+                    'make it shorter',
+                    'make it longer',
+                    'more professional',
+                    'more casual',
+                    'better structure',
+                    'improve formatting',
+                    'too long',
+                    'too short',
+                    'not clear',
+                    'can you',
+                    'could you',
+                    'would you'
+                ];
+                
+                return feedbackPatterns.some(pattern => message.includes(pattern));
+            }
+            
+            async processFeedback(message) {
+                // Extract feedback type and content
+                const feedbackType = this.classifyFeedback(message);
+                const feedbackContent = message;
+                
+                // Send feedback to learning system
+                try {
+                    const response = await fetch('http://localhost:5001/api/feedback', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            user_id: 'jamie_brown',
+                            feedback_type: feedbackType,
+                            feedback_content: feedbackContent,
+                            ai_adaptation: 'User requested formatting/style improvements',
+                            improvement_success: 1
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        this.addMessage('ai', 'Thanks for your feedback! I\'ve learned from your preferences and will apply them to future responses. How else can I help you?');
+                    }
+                } catch (error) {
+                    console.error('Feedback processing error:', error);
+                    this.addMessage('ai', 'I appreciate your feedback! I\'m working on improving based on your input.');
+                }
+            }
+            
+            classifyFeedback(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                if (lowerMessage.includes('format') || lowerMessage.includes('structure')) {
+                    return 'formatting';
+                } else if (lowerMessage.includes('shorter') || lowerMessage.includes('concise')) {
+                    return 'length_shorter';
+                } else if (lowerMessage.includes('longer') || lowerMessage.includes('detailed')) {
+                    return 'length_longer';
+                } else if (lowerMessage.includes('professional') || lowerMessage.includes('formal')) {
+                    return 'tone_professional';
+                } else if (lowerMessage.includes('casual') || lowerMessage.includes('informal')) {
+                    return 'tone_casual';
+                } else {
+                    return 'general_improvement';
                 }
             }
             

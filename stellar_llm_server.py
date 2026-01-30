@@ -10,6 +10,7 @@ import time
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import logging
+from stellar_learning_platform import learning_platform
 
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:5000', 'http://localhost:8000', 'http://127.0.0.1:5000', 'http://127.0.0.1:8000'])
@@ -49,13 +50,17 @@ class StellarLLM:
             return []
     
     def generate_response(self, prompt, context="", user_id="default"):
-        """Generate response using Stellar Logic AI model"""
+        """Generate response using Stellar Logic AI model with learning"""
         try:
-            # Build conversation context
+            # Get user preferences and learning context
+            user_preferences = learning_platform.get_user_preferences(user_id)
+            learning_context = learning_platform.get_learning_context(user_id)
+            
+            # Build conversation context with learning
             if user_id not in self.conversation_history:
                 self.conversation_history[user_id] = []
             
-            # Add context to prompt
+            # Enhanced prompt with learning integration
             full_prompt = f"""
 Business Context: Stellar Logic AI - 99.2% accuracy anti-cheat technology for gaming industry
 Target: $5M funding from VC investors
@@ -64,9 +69,27 @@ User: Jamie Brown, Founder & CEO
 
 Recent Context: {context}
 
+LEARNED USER PREFERENCES:
+{user_preferences}
+
+LEARNING INSIGHTS:
+{learning_context}
+
+Conversation History: {self.conversation_history[user_id][-3:] if len(self.conversation_history[user_id]) > 3 else self.conversation_history[user_id]}
+
 User Message: {prompt}
 
+IMPORTANT FORMATTING INSTRUCTIONS:
+- Apply user's learned preferences for style and formatting
+- If user asks for better formatting, improve based on feedback history
+- Use proper line breaks between paragraphs
+- Keep emails to {user_preferences.get('paragraph_length', '3-4')} paragraphs maximum
+- Use {user_preferences.get('tone', 'business-focused')} tone
+- Make content scannable and professional
+- Respond to user feedback about formatting
+
 Provide a helpful, strategic response focused on business growth, investor outreach, and market expansion.
+If generating emails, format them professionally with clear paragraphs based on learned preferences.
 """
             
             # Call Ollama API
@@ -90,6 +113,14 @@ Provide a helpful, strategic response focused on business growth, investor outre
             if response.status_code == 200:
                 result = response.json()
                 ai_response = result.get('response', '')
+                
+                # Store conversation with learning metadata
+                learning_platform.store_conversation(
+                    user_id=user_id,
+                    user_message=prompt,
+                    ai_response=ai_response,
+                    context=context
+                )
                 
                 # Store in conversation history
                 self.conversation_history[user_id].append({
@@ -208,6 +239,45 @@ Format the email with proper line breaks between paragraphs. Make it scannable a
     except Exception as e:
         logger.error(f"Email generation error: {e}")
         return jsonify({'error': 'Failed to generate email'}), 500
+
+@app.route('/api/feedback', methods=['POST'])
+def process_feedback():
+    """Process user feedback for continuous learning"""
+    try:
+        data = request.get_json()
+        
+        user_id = data.get('user_id', 'default')
+        feedback_type = data.get('feedback_type', 'formatting')
+        feedback_content = data.get('feedback_content', '')
+        ai_adaptation = data.get('ai_adaptation', '')
+        improvement_success = data.get('improvement_success', 0)
+        
+        # Store feedback and learn from it
+        learning_platform.learn_from_feedback(
+            user_id=user_id,
+            feedback_type=feedback_type,
+            feedback_content=feedback_content,
+            ai_adaptation=ai_adaptation,
+            improvement_success=improvement_success
+        )
+        
+        # Store successful patterns
+        if improvement_success > 0:
+            learning_platform.store_successful_pattern(
+                pattern_type=feedback_type,
+                pattern_content=ai_adaptation,
+                success=True
+            )
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Feedback processed and learned successfully',
+            'preferences_updated': True
+        })
+        
+    except Exception as e:
+        logger.error(f"Feedback processing error: {e}")
+        return jsonify({'error': 'Failed to process feedback'}), 500
 
 @app.route('/api/research', methods=['POST'])
 def research():
