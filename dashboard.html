@@ -827,6 +827,146 @@
             background: #5a67d8;
         }
         
+        /* Voice/Video Call Styles */
+        .voice-call-ui, .video-call-ui {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            min-width: 400px;
+            max-width: 600px;
+        }
+        
+        .video-call-ui {
+            min-width: 800px;
+            max-width: 1200px;
+        }
+        
+        .call-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+        
+        .call-header h4 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+        
+        .call-info {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .video-container {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .local-video, .remote-video {
+            flex: 1;
+            position: relative;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 200px;
+        }
+        
+        .local-video video, .remote-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-label {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .call-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .call-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        
+        .call-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .call-btn.danger {
+            background: #ef4444;
+        }
+        
+        .call-btn.danger:hover {
+            background: #dc2626;
+        }
+        
+        .call-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .status-indicator {
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .call-timer {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        #remote-media {
+            min-height: 100px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+        }
+        
+        #remote-media audio, #remote-media video {
+            width: 100%;
+            border-radius: 8px;
+        }
+        
         .chat-messages {
             height: 300px;
             overflow-y: auto;
@@ -976,6 +1116,8 @@
             background: linear-gradient(135deg, #48bb78, #38a169);
         }
     </style>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="webrtc-client.js"></script>
 </head>
 <body>
     <div class="dashboard">
@@ -2356,7 +2498,18 @@
                     
                     if (response.ok) {
                         const data = await response.json();
-                        this.addMessage('ai', `✅ Voice call started!\n\n📞 Call ID: ${data.call_id}\n🔗 Signaling Server: ${data.signaling_server}\n🎤 Microphone access requested\n\n📝 Call is being recorded for compliance.\n\n🎧 Voice call interface would open here with WebRTC.`);
+                        
+                        // Initialize WebRTC voice call
+                        const voiceResult = await window.webrtcClient.initializeVoiceCall(data.call_id, 1);
+                        
+                        if (voiceResult.success) {
+                            this.addMessage('ai', `✅ Voice call started!\n\n📞 Call ID: ${data.call_id}\n🔗 Signaling Server: ${data.signaling_server}\n🎤 Microphone access granted\n\n📝 Call is being recorded for compliance.\n\n🎧 Voice call active - speak into your microphone!`);
+                            
+                            // Show voice call UI
+                            this.showVoiceCallUI(data.call_id);
+                        } else {
+                            this.addMessage('ai', `❌ Voice call failed: ${voiceResult.error}`);
+                        }
                     } else {
                         this.addMessage('ai', '❌ Voice call server not available. Please start the voice chat server.');
                     }
@@ -2385,7 +2538,18 @@
                     
                     if (response.ok) {
                         const data = await response.json();
-                        this.addMessage('ai', `✅ Video call started!\n\n📹 Call ID: ${data.call_id}\n🔗 Signaling Server: ${data.signaling_server}\n📊 Quality: ${data.quality}\n🖥️ Screen sharing: Available\n\n📝 Call is being recorded for compliance.\n\n📹 Video call interface would open here with WebRTC.`);
+                        
+                        // Initialize WebRTC video call
+                        const videoResult = await window.webrtcClient.initializeVideoCall(data.call_id, 1, data.quality);
+                        
+                        if (videoResult.success) {
+                            this.addMessage('ai', `✅ Video call started!\n\n📹 Call ID: ${data.call_id}\n🔗 Signaling Server: ${data.signaling_server}\n📊 Quality: ${data.quality}\n🖥️ Screen sharing: Available\n\n📝 Call is being recorded for compliance.\n\n📹 Video call active - camera and microphone enabled!`);
+                            
+                            // Show video call UI
+                            this.showVideoCallUI(data.call_id);
+                        } else {
+                            this.addMessage('ai', `❌ Video call failed: ${videoResult.error}`);
+                        }
                     } else {
                         this.addMessage('ai', '❌ Video call server not available. Please start the video chat server.');
                     }
@@ -2393,6 +2557,151 @@
                     console.error('Video call error:', error);
                     this.addMessage('ai', '❌ Video call feature requires video chat server to be running.\n\nStart with: python video_chat_server.py');
                 }
+            }
+            
+            showVoiceCallUI(callId) {
+                const chatInterface = document.querySelector('.chat-interface');
+                const voiceCallHTML = `
+                    <div class="voice-call-ui">
+                        <div class="call-header">
+                            <h4>🎤 Voice Call Active</h4>
+                            <div class="call-info">Call ID: ${callId} | Recording: 🔴 ON</div>
+                        </div>
+                        <div class="call-controls">
+                            <button class="call-btn" onclick="timeManagementAI.toggleMute()">🎤 Mute</button>
+                            <button class="call-btn" onclick="timeManagementAI.endCall('${callId}')">📞 End Call</button>
+                            <button class="call-btn" onclick="timeManagementAI.switchToAI()">🤖 Back to AI</button>
+                        </div>
+                        <div class="call-status">
+                            <div class="status-indicator">🔴 Recording for compliance</div>
+                            <div class="call-timer" id="callTimer">00:00</div>
+                        </div>
+                        <div id="remote-media"></div>
+                    </div>
+                `;
+                
+                // Insert voice call UI
+                const existingUI = chatInterface.querySelector('.voice-call-ui');
+                if (existingUI) {
+                    existingUI.remove();
+                }
+                
+                chatInterface.insertAdjacentHTML('beforeend', voiceCallHTML);
+                
+                // Start call timer
+                this.startCallTimer();
+            }
+            
+            showVideoCallUI(callId) {
+                const chatInterface = document.querySelector('.chat-interface');
+                const videoCallHTML = `
+                    <div class="video-call-ui">
+                        <div class="call-header">
+                            <h4>📹 Video Call Active</h4>
+                            <div class="call-info">Call ID: ${callId} | Recording: 🔴 ON</div>
+                        </div>
+                        <div class="video-container">
+                            <div class="local-video">
+                                <video id="localVideo" autoplay muted playsinline></video>
+                                <div class="video-label">You</div>
+                            </div>
+                            <div class="remote-video">
+                                <div id="remote-media"></div>
+                                <div class="video-label">Remote</div>
+                            </div>
+                        </div>
+                        <div class="call-controls">
+                            <button class="call-btn" onclick="timeManagementAI.toggleMute()">🎤 Mute</button>
+                            <button class="call-btn" onclick="timeManagementAI.toggleVideo()">📹 Video Off</button>
+                            <button class="call-btn" onclick="timeManagementAI.toggleScreenShare('${callId}')">🖥️ Share Screen</button>
+                            <button class="call-btn" onclick="timeManagementAI.endCall('${callId}')">📞 End Call</button>
+                            <button class="call-btn" onclick="timeManagementAI.switchToAI()">🤖 Back to AI</button>
+                        </div>
+                        <div class="call-status">
+                            <div class="status-indicator">🔴 Recording for compliance</div>
+                            <div class="call-timer" id="callTimer">00:00</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Insert video call UI
+                const existingUI = chatInterface.querySelector('.video-call-ui');
+                if (existingUI) {
+                    existingUI.remove();
+                }
+                
+                chatInterface.insertAdjacentHTML('beforeend', videoCallHTML);
+                
+                // Set local video
+                const localVideo = document.getElementById('localVideo');
+                if (localVideo && window.webrtcClient.localStream) {
+                    localVideo.srcObject = window.webrtcClient.localStream;
+                }
+                
+                // Start call timer
+                this.startCallTimer();
+            }
+            
+            startCallTimer() {
+                let seconds = 0;
+                this.callTimerInterval = setInterval(() => {
+                    seconds++;
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    const timer = document.getElementById('callTimer');
+                    if (timer) {
+                        timer.textContent = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    }
+                }, 1000);
+            }
+            
+            stopCallTimer() {
+                if (this.callTimerInterval) {
+                    clearInterval(this.callTimerInterval);
+                    this.callTimerInterval = null;
+                }
+            }
+            
+            toggleMute() {
+                if (window.webrtcClient.localStream) {
+                    const audioTracks = window.webrtcClient.localStream.getAudioTracks();
+                    audioTracks.forEach(track => {
+                        track.enabled = !track.enabled;
+                    });
+                    this.addMessage('ai', audioTracks[0].enabled ? '🎤 Microphone unmuted' : '🔇 Microphone muted');
+                }
+            }
+            
+            toggleVideo() {
+                if (window.webrtcClient.localStream) {
+                    const videoTracks = window.webrtcClient.localStream.getVideoTracks();
+                    videoTracks.forEach(track => {
+                        track.enabled = !track.enabled;
+                    });
+                    this.addMessage('ai', videoTracks[0].enabled ? '📹 Video enabled' : '📹 Video disabled');
+                }
+            }
+            
+            async toggleScreenShare(callId) {
+                const result = await window.webrtcClient.startScreenShare(callId);
+                if (result.success) {
+                    this.addMessage('ai', '🖥️ Screen sharing started');
+                } else {
+                    this.addMessage('ai', `❌ Screen share failed: ${result.error}`);
+                }
+            }
+            
+            async endCall(callId) {
+                await window.webrtcClient.endCall(callId);
+                this.stopCallTimer();
+                
+                // Remove call UI
+                const callUI = document.querySelector('.voice-call-ui, .video-call-ui');
+                if (callUI) {
+                    callUI.remove();
+                }
+                
+                this.addMessage('ai', '📞 Call ended and saved for compliance');
             }
             
             async conductResearch(query, type = 'general') {
