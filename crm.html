@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - CRM & Prospect Tracking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5rem;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 16px;
+            padding: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #718096;
+            transition: all 0.2s;
+        }
+        
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .nav-tab:hover {
+            background: #f7fafc;
+        }
+        
+        .nav-tab.active:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .prospect-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        
+        .prospect-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            transition: all 0.2s;
+        }
+        
+        .prospect-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .prospect-card.high-priority {
+            border-left-color: #f56565;
+        }
+        
+        .prospect-card.medium-priority {
+            border-left-color: #ed8936;
+        }
+        
+        .prospect-card.low-priority {
+            border-left-color: #48bb78;
+        }
+        
+        .prospect-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .prospect-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .prospect-company {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        .prospect-title {
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .prospect-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-new {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .status-contacted {
+            background: #fefcbf;
+            color: #975a16;
+        }
+        
+        .status-responded {
+            background: #c6f6d5;
+            color: #276749;
+        }
+        
+        .status-meeting_scheduled {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        
+        .status-closed_won {
+            background: #c6f6d5;
+            color: #276749;
+        }
+        
+        .status-closed_lost {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        .contact-info {
+            margin: 16px 0;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .contact-item a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+        
+        .prospect-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+        
+        .value-prop {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+        
+        .pain-points {
+            margin: 12px 0;
+        }
+        
+        .pain-points h4 {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+        
+        .pain-point {
+            background: #fed7d7;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #c53030;
+            margin-right: 4px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+        
+        .activities {
+            margin-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 16px;
+        }
+        
+        .activity-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .activity-date {
+            color: #718096;
+            font-size: 0.7rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 24px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .quick-link {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #4a5568;
+            transition: all 0.2s;
+        }
+        
+        .quick-link:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #1a365d, #2c5282); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">⭐</div>
+                <div>
+                    <h1>🌟 Stellar Logic AI - CRM</h1>
+                    <p>Prospect Tracking & Outreach Management</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-prospects">14</div>
+                    <div class="stat-label">Total Prospects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="pipeline-value">$43.5M</div>
+                    <div class="stat-label">Pipeline Value</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="contacted-count">0</div>
+                    <div class="stat-label">Contacted</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <a href="/dashboard.html" class="quick-link">📊 Executive Dashboard</a>
+            <a href="/templates.html" class="quick-link">📋 Email Templates</a>
+            <a href="#" class="quick-link" onclick="exportData()">📤 Export Data</a>
+            <a href="#" class="quick-link" onclick="showAddActivityModal()">➕ Add Activity</a>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('all-prospects')">All Prospects</button>
+            <button class="nav-tab" onclick="showTab('enterprise-clients')">Enterprise Clients</button>
+            <button class="nav-tab" onclick="showTab('gaming-partners')">Gaming Partners</button>
+            <button class="nav-tab" onclick="showTab('vc-investors')">VC Investors</button>
+            <button class="nav-tab" onclick="showTab('strategic-partners')">Strategic Partners</button>
+            <button class="nav-tab" onclick="showTab('activities')">Recent Activities</button>
+        </div>
+        
+        <!-- All Prospects Section -->
+        <div id="all-prospects" class="content-section active">
+            <div class="prospect-grid" id="all-prospects-grid">
+                <!-- Prospects will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Enterprise Clients Section -->
+        <div id="enterprise-clients" class="content-section">
+            <div class="prospect-grid" id="enterprise-clients-grid">
+                <!-- Enterprise prospects will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Gaming Partners Section -->
+        <div id="gaming-partners" class="content-section">
+            <div class="prospect-grid" id="gaming-partners-grid">
+                <!-- Gaming prospects will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- VC Investors Section -->
+        <div id="vc-investors" class="content-section">
+            <div class="prospect-grid" id="vc-investors-grid">
+                <!-- VC prospects will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Strategic Partners Section -->
+        <div id="strategic-partners" class="content-section">
+            <div class="prospect-grid" id="strategic-partners-grid">
+                <!-- Strategic prospects will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Activities Section -->
+        <div id="activities" class="content-section">
+            <div id="activities-list">
+                <!-- Activities will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Activity Modal -->
+    <div id="activityModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Outreach Activity</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="activityForm">
+                <div class="form-group">
+                    <label for="prospectSelect">Prospect:</label>
+                    <select id="prospectSelect" required>
+                        <option value="">Select a prospect...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="methodSelect">Method:</label>
+                    <select id="methodSelect" required>
+                        <option value="email">Email</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="phone">Phone</option>
+                        <option value="referral">Referral</option>
+                        <option value="event">Event</option>
+                        <option value="cold_call">Cold Call</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subjectInput">Subject:</label>
+                    <input type="text" id="subjectInput" required>
+                </div>
+                <div class="form-group">
+                    <label for="contentInput">Content:</label>
+                    <textarea id="contentInput" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="notesInput">Notes:</label>
+                    <textarea id="notesInput"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Activity</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Sample prospect data (in production, this would come from the backend)
+        const prospects = [
+            {
+                id: "1",
+                name: "Sarah Chen",
+                title: "Director of AI Strategy",
+                company: "Microsoft",
+                industry: "Technology",
+                prospect_type: "enterprise_client",
+                status: "new",
+                priority: "high",
+                contact_info: {
+                    email: "sarah.chen@microsoft.com",
+                    phone: "425-882-8080",
+                    linkedin_url: "https://www.linkedin.com/in/sarahchenmicrosoft/",
+                    linkedin_id: "sarahchenmicrosoft",
+                    twitter_url: "https://twitter.com/sarahchenmsft",
+                    company_website: "https://microsoft.com"
+                },
+                pain_points: ["Data silos", "Compliance issues", "Scalability", "AI integration"],
+                value_proposition: "Complete enterprise AI platform with 32 modules for seamless integration",
+                estimated_value: 2500000,
+                next_action: "Send initial outreach email",
+                activities: []
+            },
+            {
+                id: "2",
+                name: "Michael Rodriguez",
+                title: "Head of Enterprise AI",
+                company: "JPMorgan Chase",
+                industry: "Finance",
+                prospect_type: "enterprise_client",
+                status: "new",
+                priority: "high",
+                contact_info: {
+                    email: "michael.rodriguez@jpmorgan.com",
+                    phone: "212-270-6000",
+                    linkedin_url: "https://www.linkedin.com/in/michaelrodriguezjpmc/",
+                    linkedin_id: "michaelrodriguezjpmc",
+                    twitter_url: "https://twitter.com/mrodriguezjpmc",
+                    company_website: "https://jpmorgan.com"
+                },
+                pain_points: ["Risk management", "Fraud detection", "Regulatory compliance", "Data security"],
+                value_proposition: "AI-powered risk management and fraud detection with enterprise security",
+                estimated_value: 5000000,
+                next_action: "Send initial outreach email",
+                activities: []
+            },
+            {
+                id: "3",
+                name: "Alex Thompson",
+                title: "Head of Anti-Cheat",
+                company: "Epic Games",
+                industry: "Gaming",
+                prospect_type: "gaming_partner",
+                status: "new",
+                priority: "high",
+                contact_info: {
+                    email: "alex.thompson@epicgames.com",
+                    phone: "919-854-0070",
+                    linkedin_url: "https://www.linkedin.com/in/alexthompsonepic/",
+                    linkedin_id: "alexthompsonepic",
+                    twitter_url: "https://twitter.com/alexthompsonepic",
+                    company_website: "https://epicgames.com"
+                },
+                pain_points: ["Fortnite cheating", "False positives", "Player experience", "Tournament integrity"],
+                value_proposition: "99.2% accuracy anti-cheat system with real-time detection",
+                estimated_value: 1500000,
+                next_action: "Send initial outreach email",
+                activities: []
+            },
+            {
+                id: "4",
+                name: "John Smith",
+                title: "Partner",
+                company: "Sequoia Capital",
+                industry: "Venture Capital",
+                prospect_type: "vc_investor",
+                status: "new",
+                priority: "high",
+                contact_info: {
+                    email: "john.smith@sequoiacap.com",
+                    phone: "650-854-0720",
+                    linkedin_url: "https://www.linkedin.com/in/johnsmithsequoia/",
+                    linkedin_id: "johnsmithsequoia",
+                    twitter_url: "https://twitter.com/johnsmithsequoia",
+                    company_website: "https://sequoiacap.com"
+                },
+                pain_points: ["Finding AI unicorns", "Market timing", "Technical due diligence", "Competitive advantage"],
+                value_proposition: "$8B+ TAM enterprise AI platform with 32 production modules",
+                estimated_value: 10000000,
+                next_action: "Send initial outreach email",
+                activities: []
+            }
+        ];
+        
+        function showTab(tabName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Load prospects for the selected tab
+            loadProspects(tabName);
+        }
+        
+        function loadProspects(tabName) {
+            let filteredProspects = [];
+            
+            switch(tabName) {
+                case 'all-prospects':
+                    filteredProspects = prospects;
+                    break;
+                case 'enterprise-clients':
+                    filteredProspects = prospects.filter(p => p.prospect_type === 'enterprise_client');
+                    break;
+                case 'gaming-partners':
+                    filteredProspects = prospects.filter(p => p.prospect_type === 'gaming_partner');
+                    break;
+                case 'vc-investors':
+                    filteredProspects = prospects.filter(p => p.prospect_type === 'vc_investor');
+                    break;
+                case 'strategic-partners':
+                    filteredProspects = prospects.filter(p => p.prospect_type === 'strategic_partner');
+                    break;
+                case 'activities':
+                    loadActivities();
+                    return;
+            }
+            
+            const gridId = tabName + '-grid';
+            const grid = document.getElementById(gridId);
+            
+            if (!grid) return;
+            
+            grid.innerHTML = filteredProspects.map(prospect => createProspectCard(prospect)).join('');
+        }
+        
+        function createProspectCard(prospect) {
+            const statusClass = `status-${prospect.status}`;
+            const priorityClass = `${prospect.priority}-priority`;
+            
+            return `
+                <div class="prospect-card ${priorityClass}">
+                    <div class="prospect-header">
+                        <div>
+                            <div class="prospect-name">${prospect.name}</div>
+                            <div class="prospect-company">${prospect.company}</div>
+                            <div class="prospect-title">${prospect.title}</div>
+                        </div>
+                        <div class="prospect-status ${statusClass}">${prospect.status.replace('_', ' ')}</div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            📧 <a href="mailto:${prospect.contact_info.email}">${prospect.contact_info.email}</a>
+                        </div>
+                        <div class="contact-item">
+                            📱 ${prospect.contact_info.phone}
+                        </div>
+                        <div class="contact-item">
+                            💼 <a href="${prospect.contact_info.linkedin_url}" target="_blank">LinkedIn Profile</a>
+                        </div>
+                        <div class="contact-item">
+                            🌐 <a href="${prospect.contact_info.company_website}" target="_blank">${prospect.company}</a>
+                        </div>
+                    </div>
+                    
+                    <div class="value-prop">
+                        <strong>Value Proposition:</strong><br>
+                        ${prospect.value_proposition}
+                    </div>
+                    
+                    <div class="pain-points">
+                        <h4>Pain Points:</h4>
+                        ${prospect.pain_points.map(point => `<span class="pain-point">${point}</span>`).join('')}
+                    </div>
+                    
+                    <div class="prospect-actions">
+                        <button class="btn btn-primary" onclick="markAsContacted('${prospect.id}')">Mark as Contacted</button>
+                        <button class="btn btn-secondary" onclick="addActivity('${prospect.id}')">Add Activity</button>
+                        <button class="btn btn-secondary" onclick="updateStatus('${prospect.id}')">Update Status</button>
+                    </div>
+                    
+                    ${prospect.activities.length > 0 ? `
+                        <div class="activities">
+                            <h4>Recent Activities:</h4>
+                            ${prospect.activities.slice(-3).map(activity => `
+                                <div class="activity-item">
+                                    <div class="activity-date">${new Date(activity.date).toLocaleDateString()}</div>
+                                    <div><strong>${activity.method}:</strong> ${activity.subject}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        function markAsContacted(prospectId) {
+            const prospect = prospects.find(p => p.id === prospectId);
+            if (prospect) {
+                prospect.status = 'contacted';
+                prospect.activities.push({
+                    id: Date.now(),
+                    method: 'email',
+                    date: new Date().toISOString(),
+                    subject: 'Initial outreach',
+                    content: 'Sent initial email template'
+                });
+                loadProspects('all-prospects');
+                updateStats();
+                alert('Marked as contacted!');
+            }
+        }
+        
+        function addActivity(prospectId) {
+            document.getElementById('prospectSelect').value = prospectId;
+            document.getElementById('activityModal').style.display = 'block';
+        }
+        
+        function updateStatus(prospectId) {
+            const prospect = prospects.find(p => p.id === prospectId);
+            if (prospect) {
+                const newStatus = prompt('Update status (new, contacted, responded, meeting_scheduled, meeting_completed, proposal_sent, negotiating, closed_won, closed_lost):');
+                if (newStatus && ['new', 'contacted', 'responded', 'meeting_scheduled', 'meeting_completed', 'proposal_sent', 'negotiating', 'closed_won', 'closed_lost'].includes(newStatus)) {
+                    prospect.status = newStatus;
+                    loadProspects('all-prospects');
+                    updateStats();
+                    alert('Status updated!');
+                }
+            }
+        }
+        
+        function showAddActivityModal() {
+            document.getElementById('activityModal').style.display = 'block';
+            populateProspectSelect();
+        }
+        
+        function closeModal() {
+            document.getElementById('activityModal').style.display = 'none';
+        }
+        
+        function populateProspectSelect() {
+            const select = document.getElementById('prospectSelect');
+            select.innerHTML = '<option value="">Select a prospect...</option>' + 
+                prospects.map(p => `<option value="${p.id}">${p.name} - ${p.company}</option>`).join('');
+        }
+        
+        function updateStats() {
+            const contacted = prospects.filter(p => p.status !== 'new').length;
+            document.getElementById('contacted-count').textContent = contacted;
+        }
+        
+        function exportData() {
+            const dataStr = JSON.stringify(prospects, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'stellar_logic_ai_prospects.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+        
+        function loadActivities() {
+            const activitiesList = document.getElementById('activities-list');
+            const allActivities = [];
+            
+            prospects.forEach(prospect => {
+                prospect.activities.forEach(activity => {
+                    allActivities.push({
+                        ...activity,
+                        prospect_name: prospect.name,
+                        company: prospect.company
+                    });
+                });
+            });
+            
+            allActivities.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            activitiesList.innerHTML = allActivities.map(activity => `
+                <div class="prospect-card">
+                    <div class="prospect-header">
+                        <div>
+                            <div class="prospect-name">${activity.prospect_name}</div>
+                            <div class="prospect-company">${activity.company}</div>
+                        </div>
+                        <div class="prospect-status status-contacted">${activity.method}</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-date">${new Date(activity.date).toLocaleString()}</div>
+                        <div><strong>Subject:</strong> ${activity.subject}</div>
+                        <div><strong>Content:</strong> ${activity.content}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Handle form submission
+        document.getElementById('activityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const prospectId = document.getElementById('prospectSelect').value;
+            const method = document.getElementById('methodSelect').value;
+            const subject = document.getElementById('subjectInput').value;
+            const content = document.getElementById('contentInput').value;
+            const notes = document.getElementById('notesInput').value;
+            
+            const prospect = prospects.find(p => p.id === prospectId);
+            if (prospect) {
+                prospect.activities.push({
+                    id: Date.now(),
+                    method: method,
+                    date: new Date().toISOString(),
+                    subject: subject,
+                    content: content,
+                    notes: notes
+                });
+                
+                if (prospect.status === 'new') {
+                    prospect.status = 'contacted';
+                }
+                
+                loadProspects('all-prospects');
+                updateStats();
+                closeModal();
+                this.reset();
+                alert('Activity added successfully!');
+            }
+        });
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProspects('all-prospects');
+            updateStats();
+        });
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('activityModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

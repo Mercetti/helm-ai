@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helm AI - Executive Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .card h3 {
+            color: #2d3748;
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .metric-label {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .task-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-left: 4px solid #e2e8f0;
+            margin-bottom: 8px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+        
+        .task-item.high-priority {
+            border-left-color: #f56565;
+        }
+        
+        .task-item.medium-priority {
+            border-left-color: #ed8936;
+        }
+        
+        .task-item.low-priority {
+            border-left-color: #48bb78;
+        }
+        
+        .task-title {
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+        
+        .task-status {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .alert {
+            background: #fed7d7;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .alert.warning {
+            background: #fefcbf;
+            border-color: #f6e05e;
+        }
+        
+        .alert-title {
+            font-weight: bold;
+            color: #c53030;
+            margin-bottom: 4px;
+        }
+        
+        .alert.warning .alert-title {
+            color: #975a16;
+        }
+        
+        .schedule-block {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .schedule-time {
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 4px;
+        }
+        
+        .schedule-title {
+            color: #2d3748;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-indicator.green {
+            background: #48bb78;
+        }
+        
+        .status-indicator.yellow {
+            background: #ed8936;
+        }
+        
+        .status-indicator.red {
+            background: #f56565;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #1a365d, #2c5282); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">⭐</div>
+                <div>
+                    <h1>Stellar Logic AI Executive Dashboard</h1>
+                    <p><span id="current-date"></span> • Real-time business intelligence & schedule management</p>
+                </div>
+            </div>
+            <div style="margin-top: 16px;">
+                <a href="/templates.html" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-block; transition: all 0.2s; margin-right: 12px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">📋 Templates & Resources</a>
+                <a href="/crm.html" style="background: linear-gradient(135deg, #48bb78, #38a169); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-block; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(72, 187, 120, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">👥 CRM & Prospects</a>
+            </div>
+        </div>
+        
+        <!-- Overview Metrics -->
+        <div class="grid">
+            <div class="card">
+                <h3>📊 Overview</h3>
+                <div class="metric">
+                    <span class="metric-label">Total Tasks</span>
+                    <span class="metric-value" id="total-tasks">8</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Completed</span>
+                    <span class="metric-value" id="completed-tasks">0</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Completion Rate</span>
+                    <span class="metric-value" id="completion-rate">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="completion-progress" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>🎯 Initiatives</h3>
+                <div class="metric">
+                    <span class="metric-label">Active Initiatives</span>
+                    <span class="metric-value" id="active-initiatives">5</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">On Track</span>
+                    <span class="metric-value" id="on-track">3</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">At Risk</span>
+                    <span class="metric-value" id="at-risk">2</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>📈 Weekly Goals</h3>
+                <div class="metric">
+                    <span class="metric-label">Emails Sent</span>
+                    <span class="metric-value" id="emails-sent">0/50</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="emails-progress" style="width: 0%"></div>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Meetings Booked</span>
+                    <span class="metric-value" id="meetings-booked">0/5</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="meetings-progress" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Today's Schedule & Tasks -->
+        <div class="grid">
+            <div class="card">
+                <h3>📅 Today's Schedule</h3>
+                <div id="today-schedule">
+                    <div class="schedule-block">
+                        <div class="schedule-time">09:00 - 10:00</div>
+                        <div class="schedule-title">Daily Planning & Review</div>
+                    </div>
+                    <div class="schedule-block">
+                        <div class="schedule-time">10:00 - 12:00</div>
+                        <div class="schedule-title">Email Outreach Campaign</div>
+                    </div>
+                    <div class="schedule-block">
+                        <div class="schedule-time">13:00 - 15:00</div>
+                        <div class="schedule-title">Follow-up & Responses</div>
+                    </div>
+                    <div class="schedule-block">
+                        <div class="schedule-time">15:00 - 17:00</div>
+                        <div class="schedule-title">Demo Preparation</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>📋 Priority Tasks</h3>
+                <div class="task-list" id="priority-tasks">
+                    <div class="task-item high-priority">
+                        <span class="task-title">Set up professional email</span>
+                        <span class="task-status">Not Started</span>
+                    </div>
+                    <div class="task-item high-priority">
+                        <span class="task-title">Launch first email campaign</span>
+                        <span class="task-status">Not Started</span>
+                    </div>
+                    <div class="task-item medium-priority">
+                        <span class="task-title">Prepare investor pitch deck</span>
+                        <span class="task-status">Not Started</span>
+                    </div>
+                    <div class="task-item medium-priority">
+                        <span class="task-title">Create demo presentation</span>
+                        <span class="task-status">Not Started</span>
+                    </div>
+                    <div class="task-item low-priority">
+                        <span class="task-title">Optimize LinkedIn profile</span>
+                        <span class="task-status">Not Started</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Alerts & Recommendations -->
+        <div class="grid">
+            <div class="card">
+                <h3>🚨 Alerts</h3>
+                <div id="alerts">
+                    <div class="alert warning">
+                        <div class="alert-title">8 Tasks Not Started</div>
+                        <div>You have 8 high-priority tasks that need immediate attention</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Daily Planning Reminder</div>
+                        <div>Start your day with planning and priority review</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>💡 Recommendations</h3>
+                <div id="recommendations">
+                    <div class="alert">
+                        <div class="alert-title">Focus on Email Setup</div>
+                        <div>Complete professional email setup first to enable outreach</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Launch Email Campaign</div>
+                        <div>Start with 20 personalized emails to enterprise prospects</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Prepare Investor Materials</div>
+                        <div>Finalize pitch deck before reaching out to investors</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="card">
+            <h3>⚡ Quick Actions</h3>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn" onclick="markTaskComplete()">Complete Task</button>
+                <button class="btn" onclick="addNewTask()">Add Task</button>
+                <button class="btn" onclick="updateProgress()">Update Progress</button>
+                <button class="btn" onclick="refreshDashboard()">Refresh Dashboard</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize dashboard
+        function initDashboard() {
+            updateDateTime();
+            loadDashboardData();
+            setInterval(updateDateTime, 60000); // Update every minute
+        }
+        
+        // Update current date/time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+        }
+        
+        // Load dashboard data (mock data for now)
+        function loadDashboardData() {
+            // This would connect to the backend API
+            updateMetrics();
+            updateSchedule();
+            updateTasks();
+        }
+        
+        // Update metrics
+        function updateMetrics() {
+            // Mock data - would come from API
+            const totalTasks = 8;
+            const completedTasks = 0;
+            const completionRate = Math.round((completedTasks / totalTasks) * 100);
+            
+            document.getElementById('total-tasks').textContent = totalTasks;
+            document.getElementById('completed-tasks').textContent = completedTasks;
+            document.getElementById('completion-rate').textContent = completionRate + '%';
+            document.getElementById('completion-progress').style.width = completionRate + '%';
+            
+            // Weekly goals
+            document.getElementById('emails-sent').textContent = '0/50';
+            document.getElementById('emails-progress').style.width = '0%';
+            document.getElementById('meetings-booked').textContent = '0/5';
+            document.getElementById('meetings-progress').style.width = '0%';
+        }
+        
+        // Update schedule
+        function updateSchedule() {
+            // Schedule is already in HTML, but could be updated dynamically
+        }
+        
+        // Update tasks
+        function updateTasks() {
+            // Tasks are already in HTML, but could be updated dynamically
+        }
+        
+        // Action functions
+        function markTaskComplete() {
+            const taskTitle = prompt('Enter task title to mark complete:');
+            if (taskTitle) {
+                alert(`Task "${taskTitle}" marked as complete!`);
+                loadDashboardData(); // Refresh data
+            }
+        }
+        
+        function addNewTask() {
+            const title = prompt('Enter task title:');
+            const priority = prompt('Enter priority (high/medium/low):');
+            if (title && priority) {
+                alert(`Task "${title}" with ${priority} priority added!`);
+                loadDashboardData(); // Refresh data
+            }
+        }
+        
+        function updateProgress() {
+            const progress = prompt('Enter progress percentage (0-100):');
+            if (progress) {
+                alert(`Progress updated to ${progress}%!`);
+                loadDashboardData(); // Refresh data
+            }
+        }
+        
+        function refreshDashboard() {
+            alert('Dashboard refreshed!');
+            loadDashboardData();
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>
