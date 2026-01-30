@@ -367,6 +367,15 @@ class FriendsSystem:
 friends_system = FriendsSystem()
 
 # API Routes
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Check if the service is running"""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'friends_system_server',
+        'timestamp': datetime.now().isoformat()
+    })
+
 @app.route('/api/friends', methods=['GET'])
 def get_friends():
     """Get user's friends list"""

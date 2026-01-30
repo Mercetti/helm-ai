@@ -8,6 +8,8 @@ import os
 import sys
 import time
 import threading
+import json
+from datetime import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -25,6 +27,17 @@ class DashboardHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.path = '/dashboard.html'
+        elif self.path == '/api/health':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            health_data = {
+                'status': 'healthy',
+                'service': 'dashboard_server',
+                'timestamp': datetime.now().isoformat()
+            }
+            self.wfile.write(json.dumps(health_data).encode())
+            return
         return super().do_GET()
 
 class DashboardReloader(FileSystemEventHandler):

@@ -64,6 +64,15 @@ class VideoChatManager:
 
 video_manager = VideoChatManager()
 
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Check if the service is running"""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'video_chat_server',
+        'timestamp': datetime.now().isoformat()
+    })
+
 @app.route('/api/video/call', methods=['POST'])
 def create_video_call():
     """Create a new video call"""

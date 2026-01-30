@@ -1,0 +1,431 @@
+{
+  "timestamp": "2026-01-30T04:18:35.935314",
+  "successes": [
+    {
+      "component": "files",
+      "success": "dashboard.html exists",
+      "timestamp": "2026-01-30T04:17:04.491641"
+    },
+    {
+      "component": "files",
+      "success": "mobile.html exists",
+      "timestamp": "2026-01-30T04:17:04.491839"
+    },
+    {
+      "component": "files",
+      "success": "stellar_llm_server.py exists",
+      "timestamp": "2026-01-30T04:17:04.492048"
+    },
+    {
+      "component": "files",
+      "success": "team_chat_server.py exists",
+      "timestamp": "2026-01-30T04:17:04.492160"
+    },
+    {
+      "component": "files",
+      "success": "voice_chat_server.py exists",
+      "timestamp": "2026-01-30T04:17:04.492257"
+    },
+    {
+      "component": "files",
+      "success": "video_chat_server.py exists",
+      "timestamp": "2026-01-30T04:17:04.492353"
+    },
+    {
+      "component": "files",
+      "success": "friends_system_server.py exists",
+      "timestamp": "2026-01-30T04:17:04.492448"
+    },
+    {
+      "component": "files",
+      "success": "analytics_server.py exists",
+      "timestamp": "2026-01-30T04:17:04.492545"
+    },
+    {
+      "component": "files",
+      "success": "security_server.py exists",
+      "timestamp": "2026-01-30T04:17:04.492636"
+    },
+    {
+      "component": "files",
+      "success": "webrtc-client.js exists",
+      "timestamp": "2026-01-30T04:17:04.492730"
+    },
+    {
+      "component": "files",
+      "success": "dev_server.py exists",
+      "timestamp": "2026-01-30T04:17:04.492823"
+    },
+    {
+      "component": "files",
+      "success": "deploy_production.py exists",
+      "timestamp": "2026-01-30T04:17:04.492960"
+    },
+    {
+      "component": "files",
+      "success": "start_stellar_ai_clean.bat exists",
+      "timestamp": "2026-01-30T04:17:04.493075"
+    },
+    {
+      "component": "llm",
+      "success": "Health check passed - healthy",
+      "timestamp": "2026-01-30T04:17:12.723637"
+    },
+    {
+      "component": "team_chat",
+      "success": "Health check passed - healthy",
+      "timestamp": "2026-01-30T04:17:14.783515"
+    },
+    {
+      "component": "voice_chat",
+      "success": "Health check passed - healthy",
+      "timestamp": "2026-01-30T04:17:16.850450"
+    },
+    {
+      "component": "video_chat",
+      "success": "Health check passed - healthy",
+      "timestamp": "2026-01-30T04:17:18.899641"
+    },
+    {
+      "component": "friends_system",
+      "success": "Health check passed - healthy",
+      "timestamp": "2026-01-30T04:17:20.952089"
+    },
+    {
+      "component": "analytics",
+      "success": "Health check passed - healthy",
+      "timestamp": "2026-01-30T04:17:22.987507"
+    },
+    {
+      "component": "security",
+      "success": "Health check passed - healthy",
+      "timestamp": "2026-01-30T04:17:25.043462"
+    },
+    {
+      "component": "llm_api",
+      "success": "POST /api/chat - 200",
+      "timestamp": "2026-01-30T04:17:35.384592"
+    },
+    {
+      "component": "llm_api",
+      "success": "GET /api/models - 200",
+      "timestamp": "2026-01-30T04:17:39.475213"
+    },
+    {
+      "component": "llm_api",
+      "success": "POST /api/feedback - 200",
+      "timestamp": "2026-01-30T04:18:29.743450"
+    },
+    {
+      "component": "team_chat_api",
+      "success": "GET /api/channels - 200",
+      "timestamp": "2026-01-30T04:18:31.816743"
+    },
+    {
+      "component": "team_chat_api",
+      "success": "GET /api/chat/messages/general - 200",
+      "timestamp": "2026-01-30T04:18:33.870320"
+    },
+    {
+      "component": "dashboard_ui",
+      "success": "Contains webrtc-client.js",
+      "timestamp": "2026-01-30T04:18:33.871715"
+    },
+    {
+      "component": "dashboard_ui",
+      "success": "Contains socket.io",
+      "timestamp": "2026-01-30T04:18:33.871848"
+    },
+    {
+      "component": "dashboard_ui",
+      "success": "Contains timeManagementAI",
+      "timestamp": "2026-01-30T04:18:33.871932"
+    },
+    {
+      "component": "dashboard_ui",
+      "success": "Contains startVoiceCall",
+      "timestamp": "2026-01-30T04:18:33.872040"
+    },
+    {
+      "component": "dashboard_ui",
+      "success": "Contains startVideoCall",
+      "timestamp": "2026-01-30T04:18:33.872139"
+    },
+    {
+      "component": "dashboard_ui",
+      "success": "Contains openFriendsSystem",
+      "timestamp": "2026-01-30T04:18:33.872221"
+    },
+    {
+      "component": "dashboard_ui",
+      "success": "Contains openTeamChat",
+      "timestamp": "2026-01-30T04:18:33.872293"
+    },
+    {
+      "component": "mobile_ui",
+      "success": "Contains mobile-container",
+      "timestamp": "2026-01-30T04:18:33.872782"
+    },
+    {
+      "component": "mobile_ui",
+      "success": "Contains showSection",
+      "timestamp": "2026-01-30T04:18:33.872854"
+    },
+    {
+      "component": "mobile_ui",
+      "success": "Contains sendAIMessage",
+      "timestamp": "2026-01-30T04:18:33.872908"
+    },
+    {
+      "component": "mobile_ui",
+      "success": "Contains loadAnalyticsData",
+      "timestamp": "2026-01-30T04:18:33.872961"
+    },
+    {
+      "component": "dependencies",
+      "success": "stellar_llm_server.py imports flask",
+      "timestamp": "2026-01-30T04:18:33.873635"
+    },
+    {
+      "component": "dependencies",
+      "success": "stellar_llm_server.py imports requests",
+      "timestamp": "2026-01-30T04:18:33.873694"
+    },
+    {
+      "component": "dependencies",
+      "success": "stellar_llm_server.py imports json",
+      "timestamp": "2026-01-30T04:18:33.873799"
+    },
+    {
+      "component": "dependencies",
+      "success": "team_chat_server.py imports flask",
+      "timestamp": "2026-01-30T04:18:33.874017"
+    },
+    {
+      "component": "dependencies",
+      "success": "team_chat_server.py imports sqlite3",
+      "timestamp": "2026-01-30T04:18:33.874128"
+    },
+    {
+      "component": "dependencies",
+      "success": "team_chat_server.py imports json",
+      "timestamp": "2026-01-30T04:18:33.874174"
+    },
+    {
+      "component": "dependencies",
+      "success": "voice_chat_server.py imports flask",
+      "timestamp": "2026-01-30T04:18:33.874381"
+    },
+    {
+      "component": "dependencies",
+      "success": "voice_chat_server.py imports json",
+      "timestamp": "2026-01-30T04:18:33.874526"
+    },
+    {
+      "component": "dependencies",
+      "success": "video_chat_server.py imports flask",
+      "timestamp": "2026-01-30T04:18:33.874729"
+    },
+    {
+      "component": "dependencies",
+      "success": "video_chat_server.py imports json",
+      "timestamp": "2026-01-30T04:18:33.874873"
+    },
+    {
+      "component": "dependencies",
+      "success": "friends_system_server.py imports flask",
+      "timestamp": "2026-01-30T04:18:33.875084"
+    },
+    {
+      "component": "dependencies",
+      "success": "friends_system_server.py imports sqlite3",
+      "timestamp": "2026-01-30T04:18:33.875242"
+    },
+    {
+      "component": "dependencies",
+      "success": "friends_system_server.py imports json",
+      "timestamp": "2026-01-30T04:18:33.875299"
+    },
+    {
+      "component": "dependencies",
+      "success": "analytics_server.py imports flask",
+      "timestamp": "2026-01-30T04:18:33.875520"
+    },
+    {
+      "component": "dependencies",
+      "success": "analytics_server.py imports sqlite3",
+      "timestamp": "2026-01-30T04:18:33.875629"
+    },
+    {
+      "component": "dependencies",
+      "success": "analytics_server.py imports json",
+      "timestamp": "2026-01-30T04:18:33.875675"
+    },
+    {
+      "component": "dependencies",
+      "success": "security_server.py imports flask",
+      "timestamp": "2026-01-30T04:18:33.875917"
+    },
+    {
+      "component": "dependencies",
+      "success": "security_server.py imports sqlite3",
+      "timestamp": "2026-01-30T04:18:33.876032"
+    },
+    {
+      "component": "dependencies",
+      "success": "security_server.py imports json",
+      "timestamp": "2026-01-30T04:18:33.876078"
+    },
+    {
+      "component": "database",
+      "success": "team_chat.db exists",
+      "timestamp": "2026-01-30T04:18:33.876465"
+    },
+    {
+      "component": "database",
+      "success": "friends_system.db exists",
+      "timestamp": "2026-01-30T04:18:33.876652"
+    },
+    {
+      "component": "database",
+      "success": "analytics.db exists",
+      "timestamp": "2026-01-30T04:18:33.876783"
+    },
+    {
+      "component": "database",
+      "success": "security_compliance.db exists",
+      "timestamp": "2026-01-30T04:18:33.876948"
+    },
+    {
+      "component": "ollama",
+      "success": "Connected - 8 models available",
+      "timestamp": "2026-01-30T04:18:35.926762"
+    },
+    {
+      "component": "ollama",
+      "success": "Stellar Logic AI model found",
+      "timestamp": "2026-01-30T04:18:35.926898"
+    },
+    {
+      "component": "websocket",
+      "success": "Socket.io included in dashboard",
+      "timestamp": "2026-01-30T04:18:35.928999"
+    },
+    {
+      "component": "css",
+      "success": "CSS class .dashboard found",
+      "timestamp": "2026-01-30T04:18:35.930381"
+    },
+    {
+      "component": "css",
+      "success": "CSS class .chat-interface found",
+      "timestamp": "2026-01-30T04:18:35.930479"
+    },
+    {
+      "component": "css",
+      "success": "CSS class .friends-system-container found",
+      "timestamp": "2026-01-30T04:18:35.930532"
+    },
+    {
+      "component": "css",
+      "success": "CSS class .voice-call-ui found",
+      "timestamp": "2026-01-30T04:18:35.930590"
+    },
+    {
+      "component": "css",
+      "success": "CSS class .video-call-ui found",
+      "timestamp": "2026-01-30T04:18:35.930642"
+    }
+  ],
+  "warnings": [
+    {
+      "component": "dependencies",
+      "warning": "stellar_llm_server.py missing sqlite3",
+      "timestamp": "2026-01-30T04:18:33.873753"
+    },
+    {
+      "component": "dependencies",
+      "warning": "team_chat_server.py missing requests",
+      "timestamp": "2026-01-30T04:18:33.874084"
+    },
+    {
+      "component": "dependencies",
+      "warning": "voice_chat_server.py missing requests",
+      "timestamp": "2026-01-30T04:18:33.874440"
+    },
+    {
+      "component": "dependencies",
+      "warning": "voice_chat_server.py missing sqlite3",
+      "timestamp": "2026-01-30T04:18:33.874484"
+    },
+    {
+      "component": "dependencies",
+      "warning": "video_chat_server.py missing requests",
+      "timestamp": "2026-01-30T04:18:33.874788"
+    },
+    {
+      "component": "dependencies",
+      "warning": "video_chat_server.py missing sqlite3",
+      "timestamp": "2026-01-30T04:18:33.874832"
+    },
+    {
+      "component": "dependencies",
+      "warning": "friends_system_server.py missing requests",
+      "timestamp": "2026-01-30T04:18:33.875180"
+    },
+    {
+      "component": "dependencies",
+      "warning": "analytics_server.py missing requests",
+      "timestamp": "2026-01-30T04:18:33.875587"
+    },
+    {
+      "component": "dependencies",
+      "warning": "security_server.py missing requests",
+      "timestamp": "2026-01-30T04:18:33.875987"
+    },
+    {
+      "component": "database",
+      "warning": "stellar_learning_platform.db not found (will be created)",
+      "timestamp": "2026-01-30T04:18:33.876260"
+    },
+    {
+      "component": "css",
+      "warning": "CSS class .mobile-container missing",
+      "timestamp": "2026-01-30T04:18:35.930722"
+    }
+  ],
+  "issues": [
+    {
+      "component": "dashboard",
+      "issue": "Health check failed with status 404",
+      "severity": "error",
+      "timestamp": "2026-01-30T04:17:06.566492"
+    },
+    {
+      "component": "llm_api",
+      "issue": "POST /api/email/generate - HTTPConnectionPool(host='localhost', port=5001): Read timed out. (read timeout=10)",
+      "severity": "error",
+      "timestamp": "2026-01-30T04:17:51.512466"
+    },
+    {
+      "component": "llm_api",
+      "issue": "POST /api/research - HTTPConnectionPool(host='localhost', port=5001): Read timed out. (read timeout=10)",
+      "severity": "error",
+      "timestamp": "2026-01-30T04:18:03.572662"
+    },
+    {
+      "component": "llm_api",
+      "issue": "POST /api/campaign - HTTPConnectionPool(host='localhost', port=5001): Read timed out. (read timeout=10)",
+      "severity": "error",
+      "timestamp": "2026-01-30T04:18:15.647091"
+    },
+    {
+      "component": "llm_api",
+      "issue": "POST /api/documents - HTTPConnectionPool(host='localhost', port=5001): Read timed out. (read timeout=10)",
+      "severity": "error",
+      "timestamp": "2026-01-30T04:18:27.688304"
+    }
+  ],
+  "success_rate": 80.72289156626506,
+  "total_checks": 83
+}

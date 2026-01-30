@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .mobile-container {
+            max-width: 428px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mobile-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .mobile-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .mobile-header .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .status-bar {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            display: flex;
+            gap: 5px;
+            font-size: 12px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .mobile-nav {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        
+        .nav-item:hover {
+            background: #e5e7eb;
+        }
+        
+        .nav-item.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-label {
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .mobile-content {
+            padding: 20px;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .quick-action {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .quick-action:hover {
+            transform: translateY(-2px);
+        }
+        
+        .quick-action .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .quick-action .label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .ai-chat {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        
+        .user-message {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+        }
+        
+        .ai-message {
+            background: #e5e7eb;
+            color: #333;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .chat-input button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .metrics-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .metrics-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+        
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .metric-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .friends-list {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+        }
+        
+        .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .friend-item:last-child {
+            border-bottom: none;
+        }
+        
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+        
+        .friend-info {
+            flex: 1;
+        }
+        
+        .friend-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .friend-status {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .friend-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .friend-action {
+            background: #f3f4f6;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .friend-action:hover {
+            background: #e5e7eb;
+        }
+        
+        .mobile-bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        
+        .bottom-nav-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .bottom-nav-item:hover {
+            color: #667eea;
+        }
+        
+        .bottom-nav-item.active {
+            color: #667eea;
+        }
+        
+        .bottom-nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        
+        .bottom-nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="mobile-header">
+            <div class="status-bar">
+                <div class="status-dot"></div>
+                <span>Online</span>
+            </div>
+            <h1>Stellar Logic AI</h1>
+            <div class="subtitle">Mobile Command Center</div>
+        </div>
+        
+        <div class="mobile-nav">
+            <div class="nav-item active" onclick="showSection('dashboard')">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+            </div>
+            <div class="nav-item" onclick="showSection('ai')">
+                <div class="nav-icon">🤖</div>
+                <div class="nav-label">AI Assistant</div>
+            </div>
+            <div class="nav-item" onclick="showSection('friends')">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Friends</div>
+            </div>
+            <div class="nav-item" onclick="showSection('analytics')">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Analytics</div>
+            </div>
+        </div>
+        
+        <div class="mobile-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section">
+                <div class="quick-actions">
+                    <div class="quick-action" onclick="quickAction('ai')">
+                        <div class="icon">🤖</div>
+                        <div class="label">AI Assistant</div>
+                    </div>
+                    <div class="quick-action" onclick="quickAction('email')">
+                        <div class="icon">📧</div>
+                        <div class="label">Email Campaign</div>
+                    </div>
+                    <div class="quick-action" onclick="quickAction('research')">
+                        <div class="icon">🔍</div>
+                        <div class="label">Research</div>
+                    </div>
+                    <div class="quick-action" onclick="quickAction('voice')">
+                        <div class="icon">🎤</div>
+                        <div class="label">Voice Call</div>
+                    </div>
+                </div>
+                
+                <div class="metrics-card">
+                    <h3>📊 Platform Metrics</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Active Users</span>
+                        <span class="metric-value" id="active-users">3</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">AI Interactions</span>
+                        <span class="metric-value" id="ai-interactions">47</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Messages Sent</span>
+                        <span class="metric-value" id="messages-sent">156</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Response Time</span>
+                        <span class="metric-value" id="response-time">2.3s</span>
+                    </div>
+                </div>
+                
+                <div class="ai-chat">
+                    <h3>💬 Quick AI Chat</h3>
+                    <div class="chat-messages" id="mobile-chat-messages">
+                        <div class="message ai-message">
+                            Hello! I'm your AI assistant. How can I help you today?
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="mobile-chat-input" placeholder="Ask me anything..." onkeypress="handleMobileChatKeypress(event)">
+                        <button onclick="sendMobileMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Assistant Section -->
+            <div id="ai-section" class="section hidden">
+                <div class="metrics-card">
+                    <h3>🤖 AI Assistant</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Model</span>
+                        <span class="metric-value">Stellar Logic AI</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Status</span>
+                        <span class="metric-value" style="color: #10b981;">Online</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Capabilities</span>
+                        <span class="metric-value">Full</span>
+                    </div>
+                </div>
+                
+                <div class="ai-chat">
+                    <h3>💬 AI Conversation</h3>
+                    <div class="chat-messages" id="ai-chat-messages">
+                        <div class="message ai-message">
+                            Hello Jamie! I'm your AI assistant. I can help you with business planning, investor outreach, market research, and more. What would you like to work on?
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="ai-chat-input" placeholder="Ask me anything..." onkeypress="handleAIChatKeypress(event)">
+                        <button onclick="sendAIMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Friends Section -->
+            <div id="friends-section" class="section hidden">
+                <div class="friends-list">
+                    <h3>👥 Team Friends</h3>
+                    <div class="friend-item">
+                        <div class="friend-avatar">👤</div>
+                        <div class="friend-info">
+                            <div class="friend-name">Jamie Brown</div>
+                            <div class="friend-status">🟢 Working on investor outreach</div>
+                        </div>
+                        <div class="friend-actions">
+                            <button class="friend-action">💬</button>
+                            <button class="friend-action">🎤</button>
+                            <button class="friend-action">📹</button>
+                        </div>
+                    </div>
+                    <div class="friend-item">
+                        <div class="friend-avatar">👥</div>
+                        <div class="friend-info">
+                            <div class="friend-name">Sarah Chen</div>
+                            <div class="friend-status">⚫ Last seen 2 hours ago</div>
+                        </div>
+                        <div class="friend-actions">
+                            <button class="friend-action">💬</button>
+                            <button class="friend-action">🎤</button>
+                            <button class="friend-action">📹</button>
+                        </div>
+                    </div>
+                    <div class="friend-item">
+                        <div class="friend-avatar">👨‍💼</div>
+                        <div class="friend-info">
+                            <div class="friend-name">Mike Johnson</div>
+                            <div class="friend-status">🟢 In strategy meeting</div>
+                        </div>
+                        <div class="friend-actions">
+                            <button class="friend-action">💬</button>
+                            <button class="friend-action">🎤</button>
+                            <button class="friend-action">📹</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="section hidden">
+                <div class="metrics-card">
+                    <h3>📈 Real-time Analytics</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Daily Users</span>
+                        <span class="metric-value" id="daily-users">12</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Feature Usage</span>
+                        <span class="metric-value" id="feature-usage">AI Chat</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Avg Session</span>
+                        <span class="metric-value" id="avg-session">8m 32s</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Satisfaction</span>
+                        <span class="metric-value" id="satisfaction">4.8/5</span>
+                    </div>
+                </div>
+                
+                <div class="metrics-card">
+                    <h3>🔒 Security Status</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Security Events</span>
+                        <span class="metric-value" style="color: #10b981;">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Active Sessions</span>
+                        <span class="metric-value" id="active-sessions">3</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Compliance</span>
+                        <span class="metric-value" style="color: #10b981;">Pass</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mobile-bottom-nav">
+            <div class="bottom-nav-item active" onclick="showSection('dashboard')">
+                <div class="bottom-nav-icon">🏠</div>
+                <div class="bottom-nav-label">Home</div>
+            </div>
+            <div class="bottom-nav-item" onclick="quickAction('ai')">
+                <div class="bottom-nav-icon">🤖</div>
+                <div class="bottom-nav-label">AI</div>
+            </div>
+            <div class="bottom-nav-item" onclick="quickAction('voice')">
+                <div class="bottom-nav-icon">🎤</div>
+                <div class="bottom-nav-label">Voice</div>
+            </div>
+            <div class="bottom-nav-item" onclick="quickAction('video')">
+                <div class="bottom-nav-icon">📹</div>
+                <div class="bottom-nav-label">Video</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mobile interface functionality
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Add active class to clicked nav item
+            event.target.closest('.nav-item, .bottom-nav-item').classList.add('active');
+            
+            // Load section-specific data
+            if (sectionName === 'analytics') {
+                loadAnalyticsData();
+            }
+        }
+        
+        function quickAction(action) {
+            switch(action) {
+                case 'ai':
+                    showSection('ai');
+                    break;
+                case 'email':
+                    alert('📧 Email Campaign feature would open here');
+                    break;
+                case 'research':
+                    alert('🔍 Market Research feature would open here');
+                    break;
+                case 'voice':
+                    alert('🎤 Voice Call feature would open here');
+                    break;
+                case 'video':
+                    alert('📹 Video Call feature would open here');
+                    break;
+            }
+        }
+        
+        function sendMobileMessage() {
+            const input = document.getElementById('mobile-chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMobileMessage(message, 'user');
+                input.value = '';
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    addMobileMessage('I received your message: ' + message, 'ai');
+                }, 1000);
+            }
+        }
+        
+        function sendAIMessage() {
+            const input = document.getElementById('ai-chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addAIMessage(message, 'user');
+                input.value = '';
+                
+                // Call actual AI API
+                fetch('http://localhost:5001/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        user_id: 'mobile_user'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    addAIMessage(data.response, 'ai');
+                })
+                .catch(error => {
+                    addAIMessage('Sorry, I encountered an error. Please try again.', 'ai');
+                });
+            }
+        }
+        
+        function addMobileMessage(message, type) {
+            const messagesContainer = document.getElementById('mobile-chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            messageDiv.textContent = message;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function addAIMessage(message, type) {
+            const messagesContainer = document.getElementById('ai-chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            messageDiv.textContent = message;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function handleMobileChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendMobileMessage();
+            }
+        }
+        
+        function handleAIChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendAIMessage();
+            }
+        }
+        
+        function loadAnalyticsData() {
+            // Load real-time analytics
+            fetch('http://localhost:5006/api/analytics/realtime')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('daily-users').textContent = data.daily_users;
+                    document.getElementById('active-sessions').textContent = data.active_users;
+                    document.getElementById('ai-interactions').textContent = data.ai_interactions;
+                })
+                .catch(error => {
+                    console.log('Analytics not available');
+                });
+        }
+        
+        // Update metrics periodically
+        setInterval(() => {
+            // Simulate real-time updates
+            const activeUsers = document.getElementById('active-users');
+            if (activeUsers) {
+                activeUsers.textContent = Math.floor(Math.random() * 10) + 1;
+            }
+            
+            const aiInteractions = document.getElementById('ai-interactions');
+            if (aiInteractions) {
+                aiInteractions.textContent = Math.floor(Math.random() * 100) + 20;
+            }
+        }, 5000);
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAnalyticsData();
+        });
+    </script>
+</body>
+</html>

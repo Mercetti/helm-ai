@@ -56,6 +56,20 @@ start /B python friends_system_server.py
 REM Wait for friends system server to start
 timeout /t 2 /nobreak >nul
 
+REM Start Analytics Server in background
+echo 📊 Starting Analytics & Intelligence Server...
+start /B python analytics_server.py
+
+REM Wait for analytics server to start
+timeout /t 2 /nobreak >nul
+
+REM Start Security Server in background
+echo 🔒 Starting Security & Compliance Server...
+start /B python security_server.py
+
+REM Wait for security server to start
+timeout /t 2 /nobreak >nul
+
 REM Check if LLM server is ready
 echo 🔍 Checking LLM server...
 curl -s http://localhost:5001/api/health >nul 2>&1

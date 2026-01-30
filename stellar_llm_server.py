@@ -103,12 +103,11 @@ User Message: {prompt}
 RESPONSE GUIDELINES:
 - Answer Jamie's questions directly and helpfully
 - If asked for information (like email addresses), provide it from the dashboard investor list
-- If asked to generate content, create it FOR Jamie to use
 - Be concise and professional
 - Apply learned preferences for formatting and style
 """
             
-            # Call Ollama API
+            # Call Ollama API with longer timeout
             payload = {
                 "model": self.model,
                 "prompt": full_prompt,

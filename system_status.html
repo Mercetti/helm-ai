@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - System Status</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .status-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .status-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .status-healthy {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+        .status-unhealthy {
+            border-color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+        }
+        .status-checking {
+            border-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+        .server-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .server-port {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        .server-status {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .overall-status {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        .health-percentage {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .launch-ready {
+            color: #4ade80;
+        }
+        .needs-attention {
+            color: #fbbf24;
+        }
+        .critical {
+            color: #f87171;
+        }
+        .check-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+        }
+        .check-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .timestamp {
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Stellar Logic AI System Status</h1>
+        
+        <div class="timestamp" id="timestamp"></div>
+        
+        <button class="check-button" onclick="checkSystemStatus()">
+            🔍 Check System Status
+        </button>
+        
+        <div class="status-grid" id="statusGrid">
+            <!-- Status items will be inserted here -->
+        </div>
+        
+        <div class="overall-status" id="overallStatus">
+            <h2>📊 Overall System Health</h2>
+            <div class="health-percentage" id="healthPercentage">--%</div>
+            <div id="statusMessage">Click "Check System Status" to begin</div>
+        </div>
+    </div>
+
+    <script>
+        const servers = [
+            { name: 'Dashboard', port: 5000 },
+            { name: 'LLM Server', port: 5001 },
+            { name: 'Team Chat', port: 5002 },
+            { name: 'Voice Chat', port: 5003 },
+            { name: 'Video Chat', port: 5004 },
+            { name: 'Friends System', port: 5005 },
+            { name: 'Analytics', port: 5006 },
+            { name: 'Security', port: 5007 },
+            { name: 'Ollama', port: 11434 }
+        ];
+
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('timestamp').textContent = 
+                `📅 ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+        }
+
+        async function checkServerHealth(server) {
+            const statusElement = document.getElementById(`status-${server.port}`);
+            const statusText = statusElement.querySelector('.server-status');
+            
+            // Show checking status
+            statusElement.className = 'status-item status-checking';
+            statusText.textContent = '🔄 Checking...';
+            
+            try {
+                const response = await fetch(`http://localhost:${server.port}/api/health`, {
+                    method: 'GET',
+                    timeout: 2000
+                });
+                
+                if (response.ok) {
+                    statusElement.className = 'status-item status-healthy';
+                    statusText.textContent = '✅ HEALTHY';
+                    return true;
+                } else {
+                    statusElement.className = 'status-item status-unhealthy';
+                    statusText.textContent = `❌ HTTP ${response.status}`;
+                    return false;
+                }
+            } catch (error) {
+                statusElement.className = 'status-item status-unhealthy';
+                statusText.textContent = '❌ OFFLINE';
+                return false;
+            }
+        }
+
+        async function checkSystemStatus() {
+            updateTimestamp();
+            
+            // Initialize status grid
+            const statusGrid = document.getElementById('statusGrid');
+            statusGrid.innerHTML = '';
+            
+            servers.forEach(server => {
+                const statusItem = document.createElement('div');
+                statusItem.className = 'status-item';
+                statusItem.id = `status-${server.port}`;
+                statusItem.innerHTML = `
+                    <div class="server-name">${server.name}</div>
+                    <div class="server-port">Port ${server.port}</div>
+                    <div class="server-status">⏳ Waiting...</div>
+                `;
+                statusGrid.appendChild(statusItem);
+            });
+            
+            // Check all servers
+            const healthPromises = servers.map(server => checkServerHealth(server));
+            const results = await Promise.all(healthPromises);
+            
+            // Calculate overall health
+            const healthyCount = results.filter(r => r).length;
+            const totalCount = servers.length;
+            const healthPercentage = Math.round((healthyCount / totalCount) * 100);
+            
+            // Update overall status
+            const healthElement = document.getElementById('healthPercentage');
+            const messageElement = document.getElementById('statusMessage');
+            
+            healthElement.textContent = `${healthPercentage}%`;
+            
+            if (healthPercentage >= 80) {
+                healthElement.className = 'health-percentage launch-ready';
+                messageElement.innerHTML = `
+                    🎉 <strong>PLATFORM IS LAUNCH-READY!</strong><br>
+                    ✅ Ready for investor demos<br>
+                    🚀 Ready for market launch
+                `;
+            } else if (healthPercentage >= 60) {
+                healthElement.className = 'health-percentage needs-attention';
+                messageElement.innerHTML = `
+                    ⚠️ <strong>System Mostly Operational</strong><br>
+                    🔧 Minor issues to address<br>
+                    📊 ${healthyCount}/${totalCount} systems running
+                `;
+            } else {
+                healthElement.className = 'health-percentage critical';
+                messageElement.innerHTML = `
+                    ❌ <strong>System Needs Attention</strong><br>
+                    🛠️ Significant issues found<br>
+                    📊 Only ${healthyCount}/${totalCount} systems running
+                `;
+            }
+        }
+
+        // Auto-check on page load
+        window.addEventListener('load', () => {
+            updateTimestamp();
+            setTimeout(checkSystemStatus, 1000);
+        });
+
+        // Update timestamp every minute
+        setInterval(updateTimestamp, 60000);
+    </script>
+</body>
+</html>
