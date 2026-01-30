@@ -1153,17 +1153,29 @@
                         <div class="chat-actions">
                             <button class="chat-btn" onclick="timeManagementAI.uploadSchedule()">📅 Upload Schedule</button>
                             <button class="chat-btn" onclick="timeManagementAI.generateEmail()">📧 Generate Email</button>
+                            <button class="chat-btn" onclick="timeManagementAI.startEmailCampaign()">🚀 Email Campaign</button>
                             <button class="chat-btn" onclick="timeManagementAI.showMeetings()">📋 Meetings</button>
+                            <button class="chat-btn" onclick="timeManagementAI.documentGenerator()">📄 Documents</button>
+                            <button class="chat-btn" onclick="timeManagementAI.researchAssistant()">🔍 Research</button>
                         </div>
                     </div>
                     <div class="chat-messages" id="aiChatMessages">
                         <div class="ai-msg">
-                            <strong>AI Assistant:</strong> I can help you manage your schedule, generate emails, and track meetings! Try uploading your work schedule or ask me to generate an email for a VC investor.
+                            <strong>AI Assistant:</strong> I'm powered by your custom Stellar Logic AI model through Ollama! I can help you with:
+                            <ul>
+                                <li>📅 Upload your work schedule image and I'll help plan your week</li>
+                                <li>📧 Generate intelligent emails for VC investors</li>
+                                <li>🚀 Run automated email campaigns with real AI</li>
+                                <li>📋 Track and manage meetings intelligently</li>
+                                <li>📄 Generate professional documents with real intelligence</li>
+                                <li>🔍 Conduct real market research and analysis</li>
+                            </ul>
+                            I learn from our conversations and get smarter over time. What would you like to work on?
                         </div>
                     </div>
                     <div class="chat-input">
                         <input type="file" id="scheduleUpload" accept="image/*" style="display: none;" onchange="timeManagementAI.handleScheduleUpload(event)">
-                        <input type="text" id="chatInput" placeholder="Ask me about your schedule, emails, or meetings..." onkeypress="timeManagementAI.handleChatKeyPress(event)">
+                        <input type="text" id="chatInput" placeholder="Ask me about schedules, emails, campaigns, meetings, documents, or research..." onkeypress="timeManagementAI.handleChatKeyPress(event)">
                         <button onclick="timeManagementAI.sendMessage()">Send</button>
                     </div>
                 `;
@@ -1199,59 +1211,39 @@
                 this.addMessage('ai', `Which investor would you like me to generate an email for?\n\nAvailable investors:\n${investors.map((inv, i) => `${i+1}. ${inv}`).join('\n')}\n\nJust tell me the number or name!`);
             }
             
-            generateEmailForInvestor(investorName) {
-                const emailTemplates = {
-                    'Sarah Chen (Andreessen Horowitz)': {
-                        subject: 'Gaming Industry Innovation - Stellar Logic AI Partnership Opportunity',
-                        body: `Dear Sarah Chen,
-
-I hope this email finds you well. I'm reaching out because I've been following Andreessen Horowitz's impressive work in AI and gaming investments.
-
-Stellar Logic AI represents a perfect a16z investment opportunity with our 99.2% accuracy anti-cheat technology, addressing the $15B annual gaming losses from cheating. Our 32 production modules provide comprehensive security coverage with clear path to $100M+ revenue.
-
-Given a16z's successful gaming investments and recent $7.2B fund raise, I believe we align perfectly with your investment thesis.
-
-Would you be available for a brief 15-minute call next week to discuss how we're revolutionizing gaming security?
-
-Best regards,
-Jamie Brown
-Founder & CEO, Stellar Logic AI
-🛡️ 99.2% Accuracy • Enterprise AI Security`
-                    },
-                    'Mike Johnson (Sequoia Capital)': {
-                        subject: 'Enterprise AI Security - Sequoia Capital Investment Opportunity',
-                        body: `Dear Mike Johnson,
-
-I'm reaching out to Sequoia Capital with an enterprise AI security opportunity that aligns with your focus on transformative technology companies.
-
-Stellar Logic AI offers enterprise-grade AI security with 99.2% accuracy, addressing the $8B+ enterprise AI market. Our proven SaaS business model and clear scaling path to $100M+ ARR make us an ideal Sequoia investment.
-
-With your recent $7.95B fund raise and focus on next-generation enterprise platforms, I believe Stellar Logic AI represents the type of company Sequoia looks for.
-
-Would you be available for a brief call to discuss our technology and market opportunity?
-
-Best regards,
-Jamie Brown
-Founder & CEO, Stellar Logic AI`
+            async generateEmailForInvestor(investorName) {
+                try {
+                    this.addMessage('ai', '🤔 Generating personalized email...');
+                    
+                    const response = await fetch('/api/email/generate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            investor_name: investorName,
+                            investor_firm: investorName.split('(')[1]?.replace(')', '') || '',
+                            context: 'Stellar Logic AI - 99.2% accuracy anti-cheat technology seeking $5M funding'
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // Remove typing indicator
+                    const messages = document.getElementById('aiChatMessages');
+                    messages.removeChild(messages.lastChild);
+                    
+                    if (response.ok) {
+                        this.addMessage('ai', `Here's your personalized email for ${investorName}:\n\n${data.email}\n\nWould you like me to:\n1. Copy this to clipboard\n2. Generate a different version\n3. Schedule follow-up reminders?`);
+                    } else {
+                        this.addMessage('ai', 'Sorry, I had trouble generating the email. Please try again.');
                     }
-                };
-                
-                const template = emailTemplates[investorName] || {
-                    subject: `Stellar Logic AI - Investment Opportunity`,
-                    body: `Dear ${investorName.split(' ')[0]},
-
-I'm reaching out to introduce Stellar Logic AI, an enterprise AI security company with 99.2% accuracy technology addressing the $8B+ market opportunity.
-
-Our proven technology and experienced team make us an attractive investment opportunity in the AI security space.
-
-Would you be available for a brief call to discuss our vision and technology?
-
-Best regards,
-Jamie Brown
-Founder & CEO, Stellar Logic AI`
-                };
-                
-                this.addMessage('ai', `Here's your email for ${investorName}:\n\n**Subject:** ${template.subject}\n\n**Body:**\n${template.body}\n\nWould you like me to:\n1. Copy this to clipboard\n2. Send it via your email client\n3. Modify anything?`);
+                } catch (error) {
+                    console.error('Email generation error:', error);
+                    const messages = document.getElementById('aiChatMessages');
+                    messages.removeChild(messages.lastChild);
+                    this.addMessage('ai', 'I\'m having trouble generating the email. Please check if the Stellar LLM server is running.');
+                }
             }
             
             showMeetings() {
@@ -1285,8 +1277,47 @@ Founder & CEO, Stellar Logic AI`
                 
                 if (message) {
                     this.addMessage('user', message);
-                    this.processMessage(message);
+                    this.callStellarAI(message);
                     input.value = '';
+                }
+            }
+            
+            async callStellarAI(message) {
+                try {
+                    // Show typing indicator
+                    this.addMessage('ai', '🤔 Thinking...');
+                    
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            context: 'Stellar Logic AI dashboard - business management, investor relations, and strategic planning',
+                            user_id: 'jamie_brown'
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Remove typing indicator and add real response
+                        const messages = document.getElementById('aiChatMessages');
+                        messages.removeChild(messages.lastChild);
+                        this.addMessage('ai', data.response);
+                    } else {
+                        // Remove typing indicator and show error
+                        const messages = document.getElementById('aiChatMessages');
+                        messages.removeChild(messages.lastChild);
+                        this.addMessage('ai', 'Sorry, I\'m having trouble connecting to my AI brain. Please make sure the Stellar LLM server is running.');
+                    }
+                } catch (error) {
+                    console.error('AI Error:', error);
+                    // Remove typing indicator and show error
+                    const messages = document.getElementById('aiChatMessages');
+                    messages.removeChild(messages.lastChild);
+                    this.addMessage('ai', 'I\'m having trouble connecting to my AI brain. Please ensure the Ollama server is running on localhost:11434 and the Stellar LLM server is running on port 5000.');
                 }
             }
             
@@ -1342,6 +1373,18 @@ Founder & CEO, Stellar Logic AI`
                 if (saved) {
                     this.meetings = JSON.parse(saved);
                 }
+            }
+            
+            startEmailCampaign() {
+                this.addMessage('ai', '🚀 **Email Campaign Manager**\n\nI can help you run automated email campaigns to your 27 CRM prospects! Here\'s what I can do:\n\n**Campaign Options:**\n1. **Investor Outreach Campaign** - Personalized emails to all VC investors\n2. **Enterprise Client Campaign** - Target Microsoft, JPMorgan, Epic Games, Goldman Sachs\n3. **Follow-up Campaign** - Automated follow-ups for unresponsive prospects\n4. **Meeting Request Campaign** - Schedule meetings with interested prospects\n\n**Campaign Features:**\n• Personalized email templates for each prospect\n• Automated sending at optimal times\n• Response tracking and analytics\n• Smart follow-up suggestions\n• A/B testing for subject lines\n\nWhich campaign would you like to start? Just tell me:\n• "Start investor campaign"\n• "Run enterprise campaign"\n• "Set up follow-up campaign"\n• "Create meeting request campaign"');
+            }
+            
+            documentGenerator() {
+                this.addMessage('ai', '📄 **Document Generator**\n\nI can create professional business documents instantly! Available documents:\n\n**Business Documents:**\n• Business Plan - Comprehensive business strategy document\n• Pitch Deck - Investor-ready presentation\n• Executive Summary - One-page business overview\n• Financial Projections - 5-year financial forecast\n• Market Analysis - Industry and competitor analysis\n• Technical Whitepaper - Detailed technical documentation\n\n**Investor Documents:**\n• Investment Memo - One-page investment summary\n• Due Diligence Package - Complete due diligence materials\n• Term Sheet Analysis - Legal document review\n• Cap Table - Ownership structure document\n\n**Marketing Materials:**\n• Press Release - Company announcement\n• Product Brochure - Marketing collateral\n• Website Copy - Professional website content\n• Social Media Posts - LinkedIn and Twitter content\n\nJust tell me what you need: "Generate business plan" or "Create pitch deck for investors"');
+            }
+            
+            researchAssistant() {
+                this.addMessage('ai', '🔍 **Research Assistant**\n\nI can conduct comprehensive market research and gather intelligence for your business! Available research areas:\n\n**Market Research:**\n• Gaming Industry Trends - Latest market data and forecasts\n• AI Security Market - Enterprise AI security landscape\n• Competitor Analysis - Detailed competitor intelligence\n• Investment Trends - VC funding patterns and preferences\n• Technology Trends - Emerging technologies in your space\n\n**Investor Research:**\n• Investor Portfolio Analysis - What each investor typically funds\n• Recent Investments - Latest deals and focus areas\n• Investment Thesis - Each investor\'s investment strategy\n• Decision Makers - Key people at each firm\n• Market Timing - Optimal timing for outreach\n\n**Strategic Research:**\n• Partnership Opportunities - Potential strategic partners\n• Market Entry Strategies - How to enter new markets\n• Regulatory Landscape - Compliance requirements\n• Talent Market - Hiring trends and salary data\n• Customer Insights - Target customer behavior and preferences\n\nJust ask me: "Research gaming market trends" or "Analyze Sequoia Capital investments"');
             }
             
             setupTaskListeners() {
