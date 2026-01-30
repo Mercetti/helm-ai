@@ -111,7 +111,7 @@ def home():
 def dashboard_page():
     """Serve the main dashboard"""
     try:
-        with open('dashboard.html', 'r') as f:
+        with open('dashboard.html', 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
         return "Dashboard not found", 404
@@ -120,7 +120,7 @@ def dashboard_page():
 def templates_page():
     """Serve the templates page"""
     try:
-        with open('templates.html', 'r') as f:
+        with open('templates.html', 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
         return "Templates not found", 404
@@ -129,10 +129,19 @@ def templates_page():
 def crm_page():
     """Serve the CRM page"""
     try:
-        with open('crm.html', 'r') as f:
+        with open('crm.html', 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
         return "CRM not found", 404
+
+@app.route('/test.html')
+def test_page():
+    """Serve the test page"""
+    try:
+        with open('test.html', 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        return "Test page not found", 404
 
 @app.route('/api/dashboard')
 def get_dashboard():

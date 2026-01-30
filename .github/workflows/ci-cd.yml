@@ -189,7 +189,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
-    environment: staging
+    environment: 
+      name: staging
+      url: https://staging.helm-ai.com
 
     steps:
     - name: Checkout code
@@ -206,7 +208,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
-    environment: production
+    environment: 
+      name: production
+      url: https://helm-ai.com
 
     steps:
     - name: Checkout code

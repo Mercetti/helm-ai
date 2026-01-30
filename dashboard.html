@@ -108,31 +108,60 @@
         }
         
         .task-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.2s;
+        }
+        
+        .task-item.completed {
+            border-left-color: #48bb78;
+            opacity: 0.7;
+        }
+        
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            color: #718096;
+        }
+        
+        .task-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            border-left: 4px solid #e2e8f0;
             margin-bottom: 8px;
-            background: #f7fafc;
-            border-radius: 8px;
-        }
-        
-        .task-item.high-priority {
-            border-left-color: #f56565;
-        }
-        
-        .task-item.medium-priority {
-            border-left-color: #ed8936;
-        }
-        
-        .task-item.low-priority {
-            border-left-color: #48bb78;
         }
         
         .task-title {
-            font-size: 0.9rem;
+            font-weight: 500;
             color: #2d3748;
+        }
+        
+        .task-complete-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        
+        .task-complete-btn:hover {
+            background: #38a169;
+            transform: translateY(-1px);
+        }
+        
+        .task-complete-btn.completed {
+            background: #718096;
+            cursor: default;
+        }
+        
+        .task-complete-btn.completed:hover {
+            background: #718096;
+            transform: none;
         }
         
         .task-status {
@@ -151,9 +180,16 @@
             margin-bottom: 12px;
         }
         
+        .alert.success {
+            background: #c6f6d5;
+            border-left-color: #48bb78;
+            color: #276749;
+        }
+        
         .alert.warning {
             background: #fefcbf;
-            border-color: #f6e05e;
+            border-left-color: #f6e05e;
+            color: #975a16;
         }
         
         .alert-title {
@@ -320,24 +356,39 @@
             <div class="card">
                 <h3>📋 Priority Tasks</h3>
                 <div class="task-list" id="priority-tasks">
-                    <div class="task-item high-priority">
-                        <span class="task-title">Set up professional email</span>
+                    <div class="task-item high-priority" id="task-1">
+                        <div class="task-header">
+                            <span class="task-title">Set up professional email</span>
+                            <button class="task-complete-btn" onclick="completeTask(1)">✓ Complete</button>
+                        </div>
                         <span class="task-status">Not Started</span>
                     </div>
-                    <div class="task-item high-priority">
-                        <span class="task-title">Launch first email campaign</span>
+                    <div class="task-item high-priority" id="task-2">
+                        <div class="task-header">
+                            <span class="task-title">Launch first email campaign</span>
+                            <button class="task-complete-btn" onclick="completeTask(2)">✓ Complete</button>
+                        </div>
                         <span class="task-status">Not Started</span>
                     </div>
-                    <div class="task-item medium-priority">
-                        <span class="task-title">Prepare investor pitch deck</span>
+                    <div class="task-item medium-priority" id="task-3">
+                        <div class="task-header">
+                            <span class="task-title">Prepare investor pitch deck</span>
+                            <button class="task-complete-btn" onclick="completeTask(3)">✓ Complete</button>
+                        </div>
                         <span class="task-status">Not Started</span>
                     </div>
-                    <div class="task-item medium-priority">
-                        <span class="task-title">Create demo presentation</span>
+                    <div class="task-item medium-priority" id="task-4">
+                        <div class="task-header">
+                            <span class="task-title">Prepare investor demo presentation</span>
+                            <button class="task-complete-btn" onclick="completeTask(4)">✓ Complete</button>
+                        </div>
                         <span class="task-status">Not Started</span>
                     </div>
-                    <div class="task-item low-priority">
-                        <span class="task-title">Optimize LinkedIn profile</span>
+                    <div class="task-item low-priority" id="task-5">
+                        <div class="task-header">
+                            <span class="task-title">Optimize LinkedIn profile</span>
+                            <button class="task-complete-btn" onclick="completeTask(5)">✓ Complete</button>
+                        </div>
                         <span class="task-status">Not Started</span>
                     </div>
                 </div>
@@ -396,6 +447,7 @@
         function initDashboard() {
             updateDateTime();
             loadDashboardData();
+            loadTaskState(); // Load saved task state
             setInterval(updateDateTime, 60000); // Update every minute
         }
         
@@ -450,12 +502,114 @@
             // Tasks are already in HTML, but could be updated dynamically
         }
         
-        // Action functions
-        function markTaskComplete() {
-            const taskTitle = prompt('Enter task title to mark complete:');
-            if (taskTitle) {
-                alert(`Task "${taskTitle}" marked as complete!`);
-                loadDashboardData(); // Refresh data
+        // Task completion tracking
+        let completedTasks = new Set();
+        let totalTasks = 5;
+        
+        // Complete task function
+        function completeTask(taskId) {
+            const taskElement = document.getElementById(`task-${taskId}`);
+            const button = taskElement.querySelector('.task-complete-btn');
+            const status = taskElement.querySelector('.task-status');
+            
+            if (completedTasks.has(taskId)) {
+                // Uncomplete the task
+                completedTasks.delete(taskId);
+                taskElement.classList.remove('completed');
+                button.textContent = '✓ Complete';
+                button.disabled = false;
+                status.textContent = 'Not Started';
+            } else {
+                // Complete the task
+                completedTasks.add(taskId);
+                taskElement.classList.add('completed');
+                button.textContent = '✅ Completed';
+                button.disabled = true;
+                status.textContent = 'Completed';
+            }
+            
+            updateMetrics();
+            saveTaskState();
+        }
+        
+        // Update metrics based on completed tasks
+        function updateMetrics() {
+            const completedCount = completedTasks.size;
+            const completionRate = Math.round((completedCount / totalTasks) * 100);
+            
+            document.getElementById('total-tasks').textContent = totalTasks;
+            document.getElementById('completed-tasks').textContent = completedCount;
+            document.getElementById('completion-rate').textContent = completionRate + '%';
+            document.getElementById('completion-progress').style.width = completionRate + '%';
+            
+            // Update alerts based on completion
+            updateAlerts(completedCount, totalTasks);
+        }
+        
+        // Update alerts based on task completion
+        function updateAlerts(completed, total) {
+            const alertsContainer = document.getElementById('alerts');
+            const remaining = total - completed;
+            
+            if (remaining === 0) {
+                alertsContainer.innerHTML = `
+                    <div class="alert success">
+                        <div class="alert-title">🎉 All Tasks Completed!</div>
+                        <div>Congratulations! You've completed all priority tasks.</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Ready for Next Phase</div>
+                        <div>You're ready to scale up your outreach and investor meetings.</div>
+                    </div>
+                `;
+            } else if (remaining <= 2) {
+                alertsContainer.innerHTML = `
+                    <div class="alert success">
+                        <div class="alert-title">Almost There!</div>
+                        <div>Only ${remaining} tasks remaining. Great progress!</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Keep Going</div>
+                        <div>You're doing excellent. Keep up the momentum!</div>
+                    </div>
+                `;
+            } else {
+                alertsContainer.innerHTML = `
+                    <div class="alert warning">
+                        <div class="alert-title">${remaining} Tasks Remaining</div>
+                        <div>You have ${remaining} tasks that need attention</div>
+                    </div>
+                    <div class="alert">
+                        <div class="alert-title">Focus on High Priority</div>
+                        <div>Start with the red-highlighted tasks first</div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Save task state to localStorage
+        function saveTaskState() {
+            const taskState = {
+                completed: Array.from(completedTasks),
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('stellarLogicTasks', JSON.stringify(taskState));
+        }
+        
+        // Load task state from localStorage
+        function loadTaskState() {
+            const saved = localStorage.getItem('stellarLogicTasks');
+            if (saved) {
+                const taskState = JSON.parse(saved);
+                taskState.completed.forEach(taskId => {
+                    completeTask(taskId);
+                });
+                // Reset the completed set since completeTask toggles it
+                completedTasks.clear();
+                taskState.completed.forEach(taskId => {
+                    completedTasks.add(taskId);
+                });
+                updateMetrics();
             }
         }
         
