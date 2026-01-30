@@ -1215,7 +1215,7 @@
                 try {
                     this.addMessage('ai', '🤔 Generating personalized email...');
                     
-                    const response = await fetch('/api/email/generate', {
+                    const response = await fetch('http://localhost:5001/api/email/generate', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -1287,7 +1287,7 @@
                     // Show typing indicator
                     this.addMessage('ai', '🤔 Thinking...');
                     
-                    const response = await fetch('/api/chat', {
+                    const response = await fetch('http://localhost:5001/api/chat', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -1324,34 +1324,6 @@
             handleChatKeyPress(event) {
                 if (event.key === 'Enter') {
                     this.sendMessage();
-                }
-            }
-            
-            processMessage(message) {
-                const lowerMessage = message.toLowerCase();
-                
-                // Check for email generation requests
-                if (lowerMessage.includes('email') || lowerMessage.includes('generate')) {
-                    if (lowerMessage.includes('sarah') || lowerMessage.includes('a16z')) {
-                        this.generateEmailForInvestor('Sarah Chen (Andreessen Horowitz)');
-                    } else if (lowerMessage.includes('mike') || lowerMessage.includes('sequoia')) {
-                        this.generateEmailForInvestor('Mike Johnson (Sequoia Capital)');
-                    } else if (lowerMessage.includes('emily') || lowerMessage.includes('accel')) {
-                        this.generateEmailForInvestor('Emily Davis (Accel)');
-                    } else {
-                        this.generateEmail();
-                    }
-                }
-                // Check for meeting requests
-                else if (lowerMessage.includes('meeting') || lowerMessage.includes('schedule')) {
-                    this.addMessage('ai', 'I can help you schedule meetings! Just tell me:\n• Meeting title\n• Preferred date/time\n• Person you\'re meeting with\n\nFor example: "Schedule meeting with Sarah Chen next Tuesday at 2pm"');
-                }
-                // Check for schedule optimization
-                else if (lowerMessage.includes('optimize') || lowerMessage.includes('plan')) {
-                    this.addMessage('ai', 'Based on your work schedule and current tasks, here\'s my optimized recommendation:\n\n**Today:**\n• 17:00-18:00: Send investor emails (high priority)\n• 18:00-19:00: Update pitch deck\n• 19:00-20:00: Review partnership proposals\n• 20:00-21:00: Technical documentation\n• 21:00-22:00: Plan tomorrow\'s tasks\n\n**This week:**\n• Focus on 2-3 investor meetings\n• Complete pitch deck updates\n• Schedule follow-ups for sent emails\n\nDoes this schedule work for you?');
-                }
-                else {
-                    this.addMessage('ai', `I understand you want help with: "${message}". I can help you with:\n\n📅 **Schedule Management** - Upload your work schedule image\n📧 **Email Generation** - Create emails for VC investors\n📋 **Meeting Tracking** - Schedule and manage meetings\n⚡ **Schedule Optimization** - Plan your week efficiently\n\nWhat specific task would you like help with?`);
                 }
             }
             
@@ -1595,13 +1567,14 @@
         
         // Add time management initialization to dashboard init
         function initDashboard() {
+            // Initialize time management first
+            initTimeManagement();
+            
             // Existing initialization code...
             updateDateTime();
             loadDashboardData();
             loadTaskState();
-            
-            // Initialize time management
-            initTimeManagement();
+            setInterval(updateDateTime, 60000); // Update every minute
         }
     </script>
 </body>

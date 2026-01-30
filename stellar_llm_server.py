@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 # Ollama configuration
 OLLAMA_BASE_URL = "http://localhost:11434"
-STELLAR_MODEL = "stellar-logic-ai"  # Your custom model name
+STELLAR_MODEL = "stellar-logic-ai:latest"  # Your custom model name with tag
 
 class StellarLLM:
     def __init__(self):
@@ -250,12 +250,14 @@ if __name__ == '__main__':
         models = stellar_llm.get_available_models()
         print(f"📋 Available models: {', '.join(models)}")
         
+        # Check if Stellar Logic AI model exists
         if STELLAR_MODEL in models:
             print(f"✅ Stellar Logic AI model found: {STELLAR_MODEL}")
         else:
-            print(f"⚠️  Stellar Logic AI model not found. Available models: {', '.join(models)}")
-    else:
-        print("❌ Cannot connect to Ollama. Please ensure Ollama is running.")
-    
-    # Start Flask server
-    app.run(host='0.0.0.0', port=5000, debug=True)
+            print(f"⚠️  Stellar Logic AI model not found. Available models:")
+            for model in models:
+                print(f"  • {model}")
+            print(f"💡 Your {STELLAR_MODEL} model is already created!")
+        
+        # Start Flask server
+        app.run(host='0.0.0.0', port=5001, debug=True)
