@@ -1334,7 +1334,15 @@
                 const chatMessages = document.getElementById('aiChatMessages');
                 const messageDiv = document.createElement('div');
                 messageDiv.className = sender === 'user' ? 'user-msg' : 'ai-msg';
-                messageDiv.innerHTML = `<strong>${sender === 'user' ? 'You' : 'AI Assistant'}:</strong> ${message}`;
+                
+                // Convert line breaks to HTML for proper formatting
+                const formattedMessage = message
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>')
+                    .replace(/^/, '<p>')
+                    .replace(/$/, '</p>');
+                
+                messageDiv.innerHTML = `<strong>${sender === 'user' ? 'You' : 'AI Assistant'}:</strong> ${formattedMessage}`;
                 chatMessages.appendChild(messageDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
