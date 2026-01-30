@@ -62,10 +62,15 @@ class StellarLLM:
             
             # Enhanced prompt with learning integration
             full_prompt = f"""
-Business Context: Stellar Logic AI - 99.2% accuracy anti-cheat technology for gaming industry
-Target: $5M funding from VC investors
-Current Stage: Pre-seed with 27 investor prospects
-User: Jamie Brown, Founder & CEO
+BUSINESS CONTEXT & AI IDENTITY:
+You are an AI assistant helping Jamie Brown, Founder & CEO of Stellar Logic AI.
+Jamie is asking YOU to help generate content, not the other way around.
+
+Stellar Logic AI Details:
+- 99.2% accuracy anti-cheat technology for gaming industry
+- Target: $5M funding from VC investors like Sarah Chen at Andreessen Horowitz
+- Current Stage: Pre-seed with 27 investor prospects
+- Jamie Brown is the Founder & CEO seeking your help
 
 Recent Context: {context}
 
@@ -78,6 +83,13 @@ LEARNING INSIGHTS:
 Conversation History: {self.conversation_history[user_id][-3:] if len(self.conversation_history[user_id]) > 3 else self.conversation_history[user_id]}
 
 User Message: {prompt}
+
+IMPORTANT IDENTITY INSTRUCTIONS:
+- YOU are helping JAMIE BROWN, not representing Stellar Logic AI
+- Generate content FOR Jamie to send to investors
+- Jamie is the Founder & CEO, you are his AI assistant
+- Create emails FROM Jamie TO investors
+- Never respond as if you are Stellar Logic AI team
 
 IMPORTANT FORMATTING INSTRUCTIONS:
 - Apply user's learned preferences for style and formatting
