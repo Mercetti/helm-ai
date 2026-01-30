@@ -1,0 +1,58 @@
+# Performance Testing Requirements for Helm AI
+
+# Core performance testing framework
+locust>=2.15.0
+locust-plugins>=1.2.0
+
+# HTTP client enhancements
+requests>=2.31.0
+urllib3>=2.0.0
+certifi>=2023.7.22
+
+# Data generation and manipulation
+faker>=19.0.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Performance monitoring
+psutil>=5.9.0
+memory-profiler>=0.61.0
+py-spy>=0.3.14
+
+# Reporting and visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+jupyter>=1.0.0
+
+# Utilities
+python-dateutil>=2.8.0
+pytz>=2023.3
+click>=8.1.0
+colorama>=0.4.6
+
+# Async support (for advanced scenarios)
+aiohttp>=3.8.0
+asyncio>=3.4.3
+
+# Database performance testing
+sqlalchemy>=2.0.0
+alembic>=1.11.0
+
+# Message queue testing
+celery>=5.3.0
+redis>=4.6.0
+
+# Configuration management
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# Testing utilities
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-xdist>=3.3.0
+
+# Development tools
+black>=23.7.0
+flake8>=6.0.0
+mypy>=1.5.0

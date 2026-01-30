@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # Helm AI Application (Development)
+  helm-ai-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: helm-ai-app-dev
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+      - "5678:5678"  # Debug port
+    environment:
+      - ENVIRONMENT=development
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres-dev:5432/helm_ai_dev
+      - REDIS_URL=redis://redis-dev:6379/0
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - LOG_LEVEL=DEBUG
+      - ENABLE_RATE_LIMITING=false
+      - ENABLE_INPUT_VALIDATION=true
+      - ENABLE_REQUEST_LOGGING=true
+      - ENABLE_SECURITY_HEADERS=true
+      - ENABLE_CORS=true
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    depends_on:
+      - postgres-dev
+      - redis-dev
+    networks:
+      - helm-dev-network
+    command: python server.py --reload
+
+  # PostgreSQL Database (Development)
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: helm-ai-postgres-dev
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=helm_ai_dev
+      - POSTGRES_USER=helm_user
+      - POSTGRES_PASSWORD=helm_password
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./deployment/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    networks:
+      - helm-dev-network
+
+  # Redis Cache (Development)
+  redis-dev:
+    image: redis:7-alpine
+    container_name: helm-ai-redis-dev
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_dev_data:/data
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+    networks:
+      - helm-dev-network
+
+  # MailHog for email testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: helm-ai-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - helm-dev-network
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
+
+networks:
+  helm-dev-network:
+    driver: bridge

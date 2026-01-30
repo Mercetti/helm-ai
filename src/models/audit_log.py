@@ -6,12 +6,11 @@ SQLAlchemy model for audit logging and compliance tracking
 from datetime import datetime
 from typing import List, Optional, Dict, Any
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, JSON, Enum as SQLEnum, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 import enum
 
-Base = declarative_base()
+from . import Base
 
 class AuditAction(enum.Enum):
     """Audit action enumeration"""
@@ -341,7 +340,7 @@ class APIUsageLog(Base):
     request_id = Column(String(64), nullable=True, index=True)
     
     # Additional metadata
-    metadata = Column(JSON, default=dict)
+    request_metadata = Column(JSON, default=dict)
     
     # Relationships
     api_key = relationship("APIKey", back_populates="usage_logs")
@@ -364,5 +363,5 @@ class APIUsageLog(Base):
             "ip_address": self.ip_address,
             "user_agent": self.user_agent,
             "request_id": self.request_id,
-            "metadata": self.metadata
+            "request_metadata": self.request_metadata
         }

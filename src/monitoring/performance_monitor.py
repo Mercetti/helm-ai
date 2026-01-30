@@ -19,6 +19,12 @@ import statistics
 import redis
 from functools import wraps
 
+# Add src to path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from structured_logging import logger
+from database.database_manager import get_database_manager
+
 logger = logging.getLogger(__name__)
 
 class MetricType(Enum):

@@ -6,12 +6,11 @@ SQLAlchemy model for game session tracking and analysis
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, JSON, Enum as SQLEnum, ForeignKey, Float
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 import enum
 
-Base = declarative_base()
+from . import Base
 
 class GameSessionStatus(enum.Enum):
     """Game session status enumeration"""
@@ -131,7 +130,7 @@ class GameSession(Base):
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
     
     # Relationships
-    user = relationship("User", back_populates="game_sessions")
+    user = relationship("User", foreign_keys=[user_id], back_populates="game_sessions")
     reviewer = relationship("User", foreign_keys=[manual_review_by])
     
     def __repr__(self):

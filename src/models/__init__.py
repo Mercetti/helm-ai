@@ -3,6 +3,12 @@ Helm AI Database Models
 SQLAlchemy models for the Helm AI application
 """
 
+from sqlalchemy.ext.declarative import declarative_base
+
+# Create Base class once
+Base = declarative_base()
+
+# Import models after Base is created
 from .user import User, UserStatus, UserRole
 from .api_key import APIKey, APIKeyStatus, APIKeyScope
 from .audit_log import AuditLog, AuditAction, AuditSeverity, AuditCategory, APIUsageLog
@@ -11,6 +17,9 @@ from .game_session import GameSession, GameSessionStatus, GameType, CheatDetecti
 
 # Export all models for easy importing
 __all__ = [
+    # Base class
+    "Base",
+    
     # User models
     "User",
     "UserStatus", 
@@ -41,6 +50,3 @@ __all__ = [
     "GameType",
     "CheatDetectionStatus"
 ]
-
-# Base class for all models
-Base = User.Base  # All models share the same Base

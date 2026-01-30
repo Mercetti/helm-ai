@@ -6,12 +6,11 @@ SQLAlchemy model for user management and authentication
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, JSON, Enum as SQLEnum
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 import enum
 
-Base = declarative_base()
+from . import Base
 
 class UserStatus(enum.Enum):
     """User status enumeration"""
@@ -83,8 +82,8 @@ class User(Base):
     # Relationships
     api_keys = relationship("APIKey", back_populates="user", cascade="all, delete-orphan")
     audit_logs = relationship("AuditLog", back_populates="user", cascade="all, delete-orphan")
-    security_events = relationship("SecurityEvent", back_populates="user", cascade="all, delete-orphan")
-    game_sessions = relationship("GameSession", back_populates="user", cascade="all, delete-orphan")
+    security_events = relationship("SecurityEvent", foreign_keys="SecurityEvent.user_id", back_populates="user", cascade="all, delete-orphan")
+    game_sessions = relationship("GameSession", foreign_keys="GameSession.user_id", back_populates="user", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email}, status={self.status})>"

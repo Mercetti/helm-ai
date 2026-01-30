@@ -19,6 +19,12 @@ import redis
 from collections import defaultdict
 import re
 
+# Add src to path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from database_manager import get_database_manager
+from monitoring.structured_logging import logger
+
 logger = logging.getLogger(__name__)
 
 class QueryType(Enum):

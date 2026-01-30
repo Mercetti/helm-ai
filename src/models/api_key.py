@@ -6,14 +6,13 @@ SQLAlchemy model for API key management
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, JSON, Enum as SQLEnum, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 import enum
 import secrets
 import hashlib
 
-Base = declarative_base()
+from . import Base
 
 class APIKeyStatus(enum.Enum):
     """API key status enumeration"""

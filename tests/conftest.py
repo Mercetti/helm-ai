@@ -8,12 +8,12 @@ import sys
 import pytest
 import tempfile
 import shutil
-from typing import Generator, Dict, Any
+from typing import Generator, Dict, Any, List
 from unittest.mock import Mock, MagicMock
 import json
 import sqlite3
 import redis
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Add src directory to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -78,6 +78,33 @@ def test_database(test_config):
             expires_at TIMESTAMP,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    ''')
+    
+    # Audit logs table
+    cursor.execute('''
+        CREATE TABLE audit_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            action TEXT NOT NULL,
+            resource TEXT,
+            details TEXT,
+            ip_address TEXT,
+            user_agent TEXT,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    ''')
+    
+    # Performance metrics table
+    cursor.execute('''
+        CREATE TABLE performance_metrics (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            metric_name TEXT NOT NULL,
+            metric_value REAL,
+            metric_type TEXT,
+            labels TEXT,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
     
@@ -247,6 +274,12 @@ def mock_encryption_manager():
     """Mock encryption manager"""
     mock_manager = Mock()
     
+    # Mock encrypt method
+    mock_manager.encrypt = Mock(return_value=b'encrypted-data')
+    
+    # Mock decrypt method
+    mock_manager.decrypt = Mock(return_value=b'decrypted-data')
+    
     # Mock encrypt_data method
     mock_manager.encrypt_data = Mock(return_value={
         'success': True,
@@ -257,7 +290,7 @@ def mock_encryption_manager():
     # Mock decrypt_data method
     mock_manager.decrypt_data = Mock(return_value={
         'success': True,
-        'encrypted_data': b'decrypted-data'
+        'decrypted_data': b'decrypted-data'
     })
     
     return mock_manager
@@ -295,8 +328,8 @@ def mock_rate_limit_manager():
 def sample_request_data():
     """Sample request data for testing"""
     return {
-        'method': 'GET',
-        'url': '/api/v1/users',
+        'method': 'POST',
+        'url': 'https://api.example.com/test',
         'headers': {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer test-token'
@@ -347,11 +380,14 @@ def sample_compliance_data():
 def sample_performance_data():
     """Sample performance data for testing"""
     return {
-        'api_requests_total': 1000,
-        'avg_response_time_ms': 150.5,
-        'error_rate': 0.02,
-        'cpu_usage_percent': 45.2,
-        'memory_usage_mb': 512.3
+        'metrics': {
+            'response_time': 150.5,
+            'throughput': 1000,
+            'error_rate': 0.02,
+            'cpu_usage': 45.2,
+            'memory_usage': 512.3
+        },
+        'timestamp': datetime.now().isoformat()
     }
 
 @pytest.fixture

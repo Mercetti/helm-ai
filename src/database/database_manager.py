@@ -14,7 +14,8 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.sql import text
 
 from .connection_pool import connection_pool_manager
-from .models import Base, User, APIKey, AuditLog, SecurityEvent, GameSession, APIUsageLog
+from models import Base, User, APIKey, AuditLog, SecurityEvent, GameSession, APIUsageLog
+from models.api_key import APIKeyStatus
 
 logger = logging.getLogger(__name__)
 
@@ -525,5 +526,12 @@ class DatabaseManager:
             }
 
 
-# Global database manager instance
-database_manager = DatabaseManager()
+# Global database manager instance (created lazily)
+database_manager = None
+
+def get_database_manager(pool_name: str = "postgresql"):
+    """Get database manager instance"""
+    global database_manager
+    if database_manager is None:
+        database_manager = DatabaseManager(pool_name)
+    return database_manager

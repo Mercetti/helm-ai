@@ -648,4 +648,79 @@ class HealthEndpoint:
 
 # Global health checker instance
 health_checker = HealthChecker()
-health_endpoint = HealthEndpoint(health_checker)
+
+# Flask routes for health checks
+def register_health_routes(app):
+    """Register health check routes with Flask app"""
+    
+    @app.route('/health', methods=['GET'])
+    def health_check():
+        """Basic health check endpoint"""
+        try:
+            health = health_checker.get_health()
+            status_code = 200 if health['status'] == 'healthy' else 503
+            return jsonify(health), status_code
+        except Exception as e:
+            logger.error(f"Health check failed: {e}")
+            return jsonify({
+                'status': 'unhealthy',
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            }), 503
+    
+    @app.route('/health/detailed', methods=['GET'])
+    def detailed_health_check():
+        """Comprehensive health check endpoint"""
+        try:
+            health = health_checker.get_detailed_health()
+            status_code = 200 if health['status'] == 'healthy' else 503
+            return jsonify(health), status_code
+        except Exception as e:
+            logger.error(f"Detailed health check failed: {e}")
+            return jsonify({
+                'status': 'unhealthy',
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            }), 503
+    
+    @app.route('/health/readiness', methods=['GET'])
+    def readiness_check():
+        """Kubernetes readiness probe"""
+        try:
+            ready = health_checker.get_readiness()
+            status_code = 200 if ready['status'] == 'ready' else 503
+            return jsonify(ready), status_code
+        except Exception as e:
+            logger.error(f"Readiness check failed: {e}")
+            return jsonify({
+                'status': 'not_ready',
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            }), 503
+    
+    @app.route('/health/liveness', methods=['GET'])
+    def liveness_check():
+        """Kubernetes liveness probe"""
+        try:
+            alive = health_checker.get_liveness()
+            return jsonify(alive), 200
+        except Exception as e:
+            logger.error(f"Liveness check failed: {e}")
+            return jsonify({
+                'status': 'dead',
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            }), 500
+    
+    @app.route('/metrics', methods=['GET'])
+    def metrics():
+        """Get application metrics"""
+        try:
+            metrics = health_checker.get_metrics()
+            return jsonify(metrics), 200
+        except Exception as e:
+            logger.error(f"Metrics endpoint failed: {e}")
+            return jsonify({
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            }), 500

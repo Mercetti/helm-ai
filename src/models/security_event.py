@@ -6,12 +6,11 @@ SQLAlchemy model for security event tracking and threat detection
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, JSON, Enum as SQLEnum, ForeignKey, Float
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 import enum
 
-Base = declarative_base()
+from . import Base
 
 class SecurityEventType(enum.Enum):
     """Security event type enumeration"""
@@ -272,6 +271,23 @@ class SecurityEvent(Base):
         # Confidence score adjustment
         if self.confidence_score:
             score *= (0.5 + self.confidence_score * 0.5)  # Scale between 0.5x and 1.0x
+        
+        # Add points for multiple cheat types
+        score += len(self.cheat_types_detected) * 10  # 10 points per cheat type
+        
+        # Add points for suspicious behavior patterns
+        if self.variance_score and self.variance_score > 0.8:
+            score += 15
+        
+        if self.aggression_score and self.aggression_score > 0.9:
+            score += 10
+        
+        # Add points for unusual performance metrics
+        if self.avg_decision_time_ms and self.avg_decision_time_ms < 100:  # Too fast
+            score += 10
+        
+        if self.win_rate and self.win_rate > 0.8:  # Too high win rate
+            score += 15
         
         # Cap at 100
         return min(100.0, score)
