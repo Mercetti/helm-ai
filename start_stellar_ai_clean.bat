@@ -42,6 +42,20 @@ start /B python stellar_llm_server.py
 REM Wait for LLM server to start
 timeout /t 3 /nobreak >nul
 
+REM Start Team Chat Server in background
+echo 💬 Starting Team Chat Server...
+start /B python team_chat_server.py
+
+REM Wait for team chat server to start
+timeout /t 2 /nobreak >nul
+
+REM Start Friends System Server in background
+echo 👥 Starting Friends & Presence Server...
+start /B python friends_system_server.py
+
+REM Wait for friends system server to start
+timeout /t 2 /nobreak >nul
+
 REM Check if LLM server is ready
 echo 🔍 Checking LLM server...
 curl -s http://localhost:5001/api/health >nul 2>&1
@@ -51,8 +65,8 @@ if %errorlevel% neq 0 (
 )
 
 REM Start Dashboard Server in background
-echo 🎯 Starting Dashboard Server...
-start /B python dashboard_server.py
+echo 🎯 Starting Development Dashboard Server...
+start /B python dev_server.py
 
 REM Wait for dashboard server to start
 timeout /t 2 /nobreak >nul
