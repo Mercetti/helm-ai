@@ -262,6 +262,166 @@
         .status-indicator.red {
             background: #f56565;
         }
+        
+        /* Time Management Styles */
+        .time-management {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .time-block {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .time-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .time-category {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+        
+        .time-hours {
+            color: #718096;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .time-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .time-label {
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+        
+        .time-summary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 8px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .summary-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .summary-label {
+            font-weight: 500;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+        }
+        
+        /* AI Tasks Styles */
+        .ai-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .task-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 4px solid #e2e8f0;
+        }
+        
+        .task-item.high-priority {
+            border-left-color: #f56565;
+        }
+        
+        .task-item.medium-priority {
+            border-left-color: #ed8936;
+        }
+        
+        .task-item.low-priority {
+            border-left-color: #48bb78;
+        }
+        
+        .task-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .task-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .task-checkbox label {
+            cursor: pointer;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .task-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+        
+        .task-time {
+            color: #718096;
+        }
+        
+        .task-priority {
+            font-weight: 600;
+        }
+        
+        .ai-suggestion {
+            background: linear-gradient(135deg, #38b2ac, #319795);
+            color: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+        
+        .suggestion-header {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .suggestion-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .job-progress {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+        }
+        
+        .ai-progress {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .investor-progress {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
     </style>
 </head>
 <body>
@@ -335,6 +495,124 @@
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="meetings-progress" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Time Management & Productivity -->
+        <div class="grid">
+            <div class="card">
+                <h3>⏰ Time Management</h3>
+                <div class="time-management">
+                    <div class="time-block">
+                        <div class="time-header">
+                            <span class="time-category">💼 Full-Time Job</span>
+                            <span class="time-hours">8:00 - 17:00</span>
+                        </div>
+                        <div class="time-details">
+                            <div class="progress-bar">
+                                <div class="progress-fill job-progress" style="width: 65%;"></div>
+                            </div>
+                            <span class="time-label">5.2/8 hours completed</span>
+                        </div>
+                    </div>
+                    
+                    <div class="time-block">
+                        <div class="time-header">
+                            <span class="time-category">🚀 Stellar Logic AI</span>
+                            <span class="time-hours">17:00 - 22:00</span>
+                        </div>
+                        <div class="time-details">
+                            <div class="progress-bar">
+                                <div class="progress-fill ai-progress" style="width: 40%;"></div>
+                            </div>
+                            <span class="time-label">2/5 hours planned</span>
+                        </div>
+                    </div>
+                    
+                    <div class="time-block">
+                        <div class="time-header">
+                            <span class="time-category">🎯 Investor Outreach</span>
+                            <span class="time-hours">22:00 - 23:00</span>
+                        </div>
+                        <div class="time-details">
+                            <div class="progress-bar">
+                                <div class="progress-fill investor-progress" style="width: 0%;"></div>
+                            </div>
+                            <span class="time-label">0/1 hour completed</span>
+                        </div>
+                    </div>
+                    
+                    <div class="time-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">📊 Today's Focus:</span>
+                            <span class="summary-value">Email Templates & Pitch Deck</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">🎯 Priority:</span>
+                            <span class="summary-value">3 Investor Follow-ups</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">⚡ Energy Level:</span>
+                            <span class="summary-value">High - Optimal for Deep Work</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>📋 AI Assistant Tasks</h3>
+                <div class="ai-tasks">
+                    <div class="task-item high-priority">
+                        <div class="task-checkbox">
+                            <input type="checkbox" id="task1">
+                            <label for="task1">Send 5 investor follow-up emails</label>
+                        </div>
+                        <div class="task-meta">
+                            <span class="task-time">⏱️ 30 min</span>
+                            <span class="task-priority">🔴 High</span>
+                        </div>
+                    </div>
+                    
+                    <div class="task-item medium-priority">
+                        <div class="task-checkbox">
+                            <input type="checkbox" id="task2">
+                            <label for="task2">Update pitch deck with new metrics</label>
+                        </div>
+                        <div class="task-meta">
+                            <span class="task-time">⏱️ 45 min</span>
+                            <span class="task-priority">🟡 Medium</span>
+                        </div>
+                    </div>
+                    
+                    <div class="task-item medium-priority">
+                        <div class="task-checkbox">
+                            <input type="checkbox" id="task3">
+                            <label for="task3">Review partnership proposals</label>
+                        </div>
+                        <div class="task-meta">
+                            <span class="task-time">⏱️ 20 min</span>
+                            <span class="task-priority">🟡 Medium</span>
+                        </div>
+                    </div>
+                    
+                    <div class="task-item low-priority">
+                        <div class="task-checkbox">
+                            <input type="checkbox" id="task4">
+                            <label for="task4">Update technical documentation</label>
+                        </div>
+                        <div class="task-meta">
+                            <span class="task-time">⏱️ 15 min</span>
+                            <span class="task-priority">🟢 Low</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-suggestion">
+                        <div class="suggestion-header">🤖 AI Recommendation:</div>
+                        <div class="suggestion-text">
+                            Based on your energy patterns, tackle investor emails first when you're most focused (17:00-18:00), then work on creative tasks like pitch deck updates.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -717,6 +995,249 @@
         
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', initDashboard);
+        
+        // Time Management System
+        class TimeManagementAI {
+            constructor() {
+                this.currentTimeBlock = null;
+                this.dailySchedule = {
+                    'full-time': { start: '08:00', end: '17:00', hours: 8 },
+                    'stellar-logic': { start: '17:00', end: '22:00', hours: 5 },
+                    'investor': { start: '22:00', end: '23:00', hours: 1 }
+                };
+                this.tasks = [
+                    { id: 'task1', title: 'Send 5 investor follow-up emails', priority: 'high', estimatedTime: 30, completed: false },
+                    { id: 'task2', title: 'Update pitch deck with new metrics', priority: 'medium', estimatedTime: 45, completed: false },
+                    { id: 'task3', title: 'Review partnership proposals', priority: 'medium', estimatedTime: 20, completed: false },
+                    { id: 'task4', title: 'Update technical documentation', priority: 'low', estimatedTime: 15, completed: false }
+                ];
+                this.init();
+            }
+            
+            init() {
+                this.setupTaskListeners();
+                this.updateTimeProgress();
+                this.generateAIRecommendations();
+                this.startRealTimeUpdates();
+                this.loadTaskProgress();
+            }
+            
+            setupTaskListeners() {
+                this.tasks.forEach(task => {
+                    const checkbox = document.getElementById(task.id);
+                    if (checkbox) {
+                        checkbox.addEventListener('change', (e) => {
+                            this.handleTaskCompletion(task.id, e.target.checked);
+                        });
+                    }
+                });
+            }
+            
+            handleTaskCompletion(taskId, completed) {
+                const task = this.tasks.find(t => t.id === taskId);
+                if (task) {
+                    task.completed = completed;
+                    this.saveTaskProgress();
+                    this.updateTimeProgress();
+                    this.generateAIRecommendations();
+                    
+                    if (completed) {
+                        this.showTaskCompletionNotification(task);
+                    }
+                }
+            }
+            
+            updateTimeProgress() {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentMinute = now.getMinutes();
+                const currentTimeInMinutes = currentHour * 60 + currentMinute;
+                
+                // Update full-time job progress
+                const jobStart = 8 * 60; // 08:00
+                const jobEnd = 17 * 60; // 17:00
+                const jobProgress = this.calculateProgress(jobStart, jobEnd, currentTimeInMinutes);
+                this.updateProgressDisplay('job-progress', jobProgress, '5.2/8 hours completed');
+                
+                // Update Stellar Logic AI progress
+                const aiStart = 17 * 60; // 17:00
+                const aiEnd = 22 * 60; // 22:00
+                const aiProgress = this.calculateProgress(aiStart, aiEnd, currentTimeInMinutes);
+                const aiHoursCompleted = (aiProgress / 100 * 5).toFixed(1);
+                this.updateProgressDisplay('ai-progress', aiProgress, `${aiHoursCompleted}/5 hours planned`);
+                
+                // Update investor outreach progress
+                const investorStart = 22 * 60; // 22:00
+                const investorEnd = 23 * 60; // 23:00
+                const investorProgress = this.calculateProgress(investorStart, investorEnd, currentTimeInMinutes);
+                const investorHoursCompleted = (investorProgress / 100 * 1).toFixed(1);
+                this.updateProgressDisplay('investor-progress', investorProgress, `${investorHoursCompleted}/1 hour completed`);
+                
+                // Update current focus
+                this.updateCurrentFocus(currentHour);
+            }
+            
+            calculateProgress(startTime, endTime, currentTime) {
+                if (currentTime < startTime) return 0;
+                if (currentTime > endTime) return 100;
+                return Math.round(((currentTime - startTime) / (endTime - startTime)) * 100);
+            }
+            
+            updateProgressDisplay(className, progress, text) {
+                const element = document.querySelector(`.${className}`);
+                if (element) {
+                    element.style.width = `${progress}%`;
+                    const label = element.closest('.time-details').querySelector('.time-label');
+                    if (label) {
+                        label.textContent = text;
+                    }
+                }
+            }
+            
+            updateCurrentFocus(currentHour) {
+                let focus = '';
+                if (currentHour >= 8 && currentHour < 17) {
+                    focus = 'Full-time job - Stellar Logic AI planning for evening';
+                } else if (currentHour >= 17 && currentHour < 22) {
+                    focus = 'Stellar Logic AI development - Peak productivity time';
+                } else if (currentHour >= 22 && currentHour < 23) {
+                    focus = 'Investor outreach - Strategic communication';
+                } else {
+                    focus = 'Rest & recovery - Prepare for tomorrow';
+                }
+                
+                const focusElement = document.querySelector('.summary-value');
+                if (focusElement) {
+                    focusElement.textContent = focus;
+                }
+            }
+            
+            generateAIRecommendations() {
+                const completedTasks = this.tasks.filter(t => t.completed).length;
+                const totalTasks = this.tasks.length;
+                const completionRate = (completedTasks / totalTasks) * 100;
+                
+                let recommendation = '';
+                
+                if (completionRate === 0) {
+                    recommendation = 'Start with high-priority investor emails while your energy is highest. This creates momentum for the rest of your evening work.';
+                } else if (completionRate < 50) {
+                    recommendation = 'Great progress! Focus on completing the pitch deck updates next - this will be valuable for upcoming investor meetings.';
+                } else if (completionRate < 100) {
+                    recommendation = 'Excellent momentum! Finish the remaining tasks to complete today\'s goals. Your consistency is building investor confidence.';
+                } else {
+                    recommendation = 'Perfect execution! All tasks completed. Consider planning tomorrow\'s priorities or reaching out to one additional investor contact.';
+                }
+                
+                const suggestionElement = document.querySelector('.suggestion-text');
+                if (suggestionElement) {
+                    suggestionElement.textContent = recommendation;
+                }
+            }
+            
+            showTaskCompletionNotification(task) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #48bb78, #38a169);
+                    color: white;
+                    padding: 16px 24px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 20px rgba(72, 187, 120, 0.4);
+                    z-index: 1000;
+                    font-weight: 500;
+                `;
+                notification.textContent = `✅ Completed: ${task.title}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+            
+            startRealTimeUpdates() {
+                // Update time progress every minute
+                setInterval(() => {
+                    this.updateTimeProgress();
+                }, 60000);
+                
+                // Update energy levels based on time
+                setInterval(() => {
+                    this.updateEnergyLevels();
+                }, 300000); // Every 5 minutes
+            }
+            
+            updateEnergyLevels() {
+                const currentHour = new Date().getHours();
+                let energyLevel = '';
+                
+                if (currentHour >= 6 && currentHour < 9) {
+                    energyLevel = 'High - Morning clarity';
+                } else if (currentHour >= 9 && currentHour < 12) {
+                    energyLevel = 'High - Peak focus';
+                } else if (currentHour >= 12 && currentHour < 14) {
+                    energyLevel = 'Medium - Post-lunch dip';
+                } else if (currentHour >= 14 && currentHour < 17) {
+                    energyLevel = 'Medium - Afternoon steady';
+                } else if (currentHour >= 17 && currentHour < 20) {
+                    energyLevel = 'High - Evening prime time';
+                } else if (currentHour >= 20 && currentHour < 22) {
+                    energyLevel = 'Medium - Evening wind-down';
+                } else {
+                    energyLevel = 'Low - Rest time';
+                }
+                
+                const energyElement = document.querySelectorAll('.summary-value')[2];
+                if (energyElement) {
+                    energyElement.textContent = energyLevel;
+                }
+            }
+            
+            saveTaskProgress() {
+                const taskProgress = {
+                    tasks: this.tasks.map(t => ({ id: t.id, completed: t.completed })),
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('stellarLogicAITasks', JSON.stringify(taskProgress));
+            }
+            
+            loadTaskProgress() {
+                const saved = localStorage.getItem('stellarLogicAITasks');
+                if (saved) {
+                    const taskProgress = JSON.parse(saved);
+                    taskProgress.tasks.forEach(savedTask => {
+                        const task = this.tasks.find(t => t.id === savedTask.id);
+                        if (task) {
+                            task.completed = savedTask.completed;
+                            const checkbox = document.getElementById(task.id);
+                            if (checkbox) {
+                                checkbox.checked = task.completed;
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        
+        // Initialize Time Management AI
+        let timeManagementAI;
+        
+        function initTimeManagement() {
+            timeManagementAI = new TimeManagementAI();
+        }
+        
+        // Add time management initialization to dashboard init
+        function initDashboard() {
+            // Existing initialization code...
+            updateDateTime();
+            loadDashboardData();
+            loadTaskState();
+            
+            // Initialize time management
+            initTimeManagement();
+        }
     </script>
 </body>
 </html>

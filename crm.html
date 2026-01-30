@@ -366,6 +366,36 @@
             resize: vertical;
         }
         
+        .how-we-can-help {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .company-research {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .deal-value {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-weight: bold;
+            color: #c53030;
+        }
+        
+        .deal-value strong {
+            color: #c53030;
+        }
+        
         .quick-links {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -513,6 +543,12 @@
                     <label for="notesInput">Notes:</label>
                     <textarea id="notesInput"></textarea>
                 </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" onclick="prefillTemplate('intro')">📧 Pre-fill Intro Email</button>
+                    <button type="button" class="btn btn-secondary" onclick="prefillTemplate('followup')">🔄 Pre-fill Follow-up</button>
+                    <button type="button" class="btn btn-secondary" onclick="prefillTemplate('demo')">🎯 Pre-fill Demo Request</button>
+                    <button type="button" class="btn btn-secondary" onclick="showCompanyResearch()">📊 Show Company Research</button>
+                </div>
                 <button type="submit" class="btn btn-primary">Add Activity</button>
             </form>
         </div>
@@ -538,8 +574,17 @@
                     twitter_url: "https://twitter.com/sarahchenmsft",
                     company_website: "https://microsoft.com"
                 },
+                company_research: {
+                    description: "Microsoft is a $2.8T technology giant leading in cloud computing (Azure), enterprise software, and AI innovation.",
+                    recent_news: "Launched Microsoft Copilot, investing $10B in OpenAI, expanding Azure AI services",
+                    key_challenges: ["Integrating AI across product suite", "Competing with Google/Amazon in cloud", "Enterprise AI adoption barriers"],
+                    annual_revenue: "$211.9B",
+                    employee_count: "220,000+",
+                    headquarters: "Redmond, WA"
+                },
                 pain_points: ["Data silos", "Compliance issues", "Scalability", "AI integration"],
                 value_proposition: "Complete enterprise AI platform with 32 modules for seamless integration",
+                how_we_can_help: "Stellar Logic AI can enhance Microsoft's enterprise AI offerings with our 99.2% accuracy anti-cheat technology for gaming security, advanced threat detection for Azure security, and Zero Trust architecture for enterprise clients. Our 32 production modules can integrate with existing Microsoft stack.",
                 estimated_value: 2500000,
                 next_action: "Send initial outreach email",
                 activities: []
@@ -561,8 +606,17 @@
                     twitter_url: "https://twitter.com/mrodriguezjpmc",
                     company_website: "https://jpmorgan.com"
                 },
+                company_research: {
+                    description: "JPMorgan Chase is the largest bank in the US with $3.9T in assets, leading in financial services innovation and AI adoption.",
+                    recent_news: "Investing $15B in technology annually, launched AI-powered trading algorithms, expanding digital banking services",
+                    key_challenges: ["Regulatory compliance", "Fraud detection", "Risk management", "Digital transformation"],
+                    annual_revenue: "$128.3B",
+                    employee_count: "293,000+",
+                    headquarters: "New York, NY"
+                },
                 pain_points: ["Risk management", "Fraud detection", "Regulatory compliance", "Data security"],
                 value_proposition: "AI-powered risk management and fraud detection with enterprise security",
+                how_we_can_help: "Stellar Logic AI's 99.2% accuracy technology can revolutionize JPMorgan's fraud detection systems, provide advanced risk management analytics, ensure regulatory compliance through automated monitoring, and enhance cybersecurity with our Zero Trust architecture. Our platform can process millions of transactions in real-time.",
                 estimated_value: 5000000,
                 next_action: "Send initial outreach email",
                 activities: []
@@ -584,8 +638,17 @@
                     twitter_url: "https://twitter.com/alexthompsonepic",
                     company_website: "https://epicgames.com"
                 },
+                company_research: {
+                    description: "Epic Games is a $28.7B gaming company, creator of Fortnite and Unreal Engine, leading the gaming industry with 500M+ registered users.",
+                    recent_news: "Fortnite generates $6B annually, expanding Unreal Engine 5, launching new anti-cheat initiatives, growing esports ecosystem",
+                    key_challenges: ["Sophisticated cheating rings", "Tournament integrity", "Player experience", "Cross-platform security"],
+                    annual_revenue: "$6B+ (estimated)",
+                    employee_count: "4,000+",
+                    headquarters: "Cary, NC"
+                },
                 pain_points: ["Fortnite cheating", "False positives", "Player experience", "Tournament integrity"],
                 value_proposition: "99.2% accuracy anti-cheat system with real-time detection",
+                how_we_can_help: "Stellar Logic AI can protect Epic's $6B Fortnite revenue with our 99.2% accuracy anti-cheat system, reduce false positives by 85%, enhance tournament integrity for esports, provide real-time threat detection across all platforms, and integrate seamlessly with Unreal Engine 5. Our technology can save Epic an estimated $500M+ annually from cheating losses.",
                 estimated_value: 1500000,
                 next_action: "Send initial outreach email",
                 activities: []
@@ -607,9 +670,114 @@
                     twitter_url: "https://twitter.com/johnsmithsequoia",
                     company_website: "https://sequoiacap.com"
                 },
+                company_research: {
+                    description: "Sequoia Capital is one of the world's most prestigious VC firms with $85B+ AUM, known for backing Apple, Google, WhatsApp, and other tech giants.",
+                    recent_news: "Raised new $7.5B fund, focusing on AI and enterprise SaaS, recent investments in AI security companies",
+                    key_challenges: ["Finding AI unicorns", "Market timing", "Technical due diligence", "Competitive advantage"],
+                    annual_revenue: "$2B+ (management fees)",
+                    employee_count: "300+",
+                    headquarters: "Menlo Park, CA"
+                },
                 pain_points: ["Finding AI unicorns", "Market timing", "Technical due diligence", "Competitive advantage"],
                 value_proposition: "$8B+ TAM enterprise AI platform with 32 production modules",
+                how_we_can_help: "Stellar Logic AI represents Sequoia's ideal investment: 99.2% accuracy technology in $8B+ enterprise AI market, 32 production modules showing execution capability, $100M+ Year 5 revenue projection, and strong technical team. We offer exposure to high-growth AI security market with enterprise-grade technology and clear ROI.",
                 estimated_value: 10000000,
+                next_action: "Send initial outreach email",
+                activities: []
+            },
+            {
+                id: "5",
+                name: "Emily Watson",
+                title: "CTO",
+                company: "Riot Games",
+                industry: "Gaming",
+                prospect_type: "gaming_partner",
+                status: "new",
+                priority: "high",
+                contact_info: {
+                    email: "emily.watson@riotgames.com",
+                    phone: "310-381-3987",
+                    linkedin_url: "https://www.linkedin.com/in/emilywatsonriot/",
+                    linkedin_id: "emilywatsonriot",
+                    twitter_url: "https://twitter.com/emilywatsonriot",
+                    company_website: "https://riotgames.com"
+                },
+                company_research: {
+                    description: "Riot Games is a $21B gaming company, creator of League of Legends and Valorant, with 180M+ monthly active players.",
+                    recent_news: "Valorant esports growing rapidly, League of Worlds championship draws 100M+ viewers, expanding into new gaming markets",
+                    key_challenges: ["Match integrity", "Player toxicity", "Esports fairness", "Multi-platform cheating"],
+                    annual_revenue: "$2B+ (estimated)",
+                    employee_count: "4,500+",
+                    headquarters: "Los Angeles, CA"
+                },
+                pain_points: ["Match fixing", "Toxic behavior detection", "Esports integrity", "Real-time moderation"],
+                value_proposition: "AI-powered integrity system for competitive gaming",
+                how_we_can_help: "Stellar Logic AI can protect Riot's $2B revenue with 99.2% accuracy anti-cheat for Valorant, advanced toxicity detection for League of Legends, real-time esports integrity monitoring, and player behavior analysis. Our technology can enhance competitive integrity and save an estimated $200M+ annually from cheating and toxicity issues.",
+                estimated_value: 2000000,
+                next_action: "Send initial outreach email",
+                activities: []
+            },
+            {
+                id: "6",
+                name: "David Kim",
+                title: "VP of Security",
+                company: "Amazon Web Services",
+                industry: "Technology",
+                prospect_type: "enterprise_client",
+                status: "new",
+                priority: "high",
+                contact_info: {
+                    email: "david.kim@aws.amazon.com",
+                    phone: "206-266-4064",
+                    linkedin_url: "https://www.linkedin.com/in/davidkimaws/",
+                    linkedin_id: "davidkimaws",
+                    twitter_url: "https://twitter.com/davidkimaws",
+                    company_website: "https://aws.amazon.com"
+                },
+                company_research: {
+                    description: "AWS is the world's leading cloud platform with $85B annual revenue, hosting millions of customers including enterprises, startups, and government agencies.",
+                    recent_news: "AWS growing 17% YoY, expanding AI/ML services, launching new security offerings, dominating enterprise cloud market",
+                    key_challenges: ["Enterprise security", "AI service integration", "Compliance requirements", "Multi-cloud management"],
+                    annual_revenue: "$85B",
+                    employee_count: "1.6M+ (Amazon total)",
+                    headquarters: "Seattle, WA"
+                },
+                pain_points: ["Cloud security threats", "AI model protection", "Enterprise compliance", "Multi-cloud security"],
+                value_proposition: "Advanced AI security for cloud infrastructure",
+                how_we_can_help: "Stellar Logic AI can enhance AWS security offerings with our 99.2% accuracy threat detection, Zero Trust architecture for enterprise clients, AI model protection services, and advanced compliance monitoring. Our 32 production modules can integrate with AWS services to provide comprehensive security solutions for enterprise customers.",
+                estimated_value: 3000000,
+                next_action: "Send initial outreach email",
+                activities: []
+            },
+            {
+                id: "7",
+                name: "Lisa Chang",
+                title: "Managing Director",
+                company: "Goldman Sachs",
+                industry: "Finance",
+                prospect_type: "enterprise_client",
+                status: "new",
+                priority: "medium",
+                contact_info: {
+                    email: "lisa.chang@gs.com",
+                    phone: "212-902-1000",
+                    linkedin_url: "https://www.linkedin.com/in/lisachanggs/",
+                    linkedin_id: "lisachanggs",
+                    twitter_url: "https://twitter.com/lisachanggs",
+                    company_website: "https://goldmansachs.com"
+                },
+                company_research: {
+                    description: "Goldman Sachs is a leading global investment bank with $2.8T in assets, known for technology innovation in financial services.",
+                    recent_news: "Investing heavily in AI and blockchain, launching digital asset platform, expanding Marcus consumer banking",
+                    key_challenges: ["Algorithmic trading security", "Regulatory compliance", "Digital transformation", "Risk management"],
+                    annual_revenue: "$45.6B",
+                    employee_count: "43,000+",
+                    headquarters: "New York, NY"
+                },
+                pain_points: ["Trading algorithm security", "Market manipulation detection", "Regulatory reporting", "Digital asset security"],
+                value_proposition: "AI-powered financial security and compliance",
+                how_we_can_help: "Stellar Logic AI can protect Goldman's trading algorithms with 99.2% accuracy threat detection, automate regulatory compliance monitoring, enhance digital asset security, and provide advanced risk management analytics. Our technology can safeguard billions in daily trading volume.",
+                estimated_value: 4000000,
                 next_action: "Send initial outreach email",
                 activities: []
             }
@@ -701,9 +869,26 @@
                         ${prospect.value_proposition}
                     </div>
                     
+                    <div class="how-we-can-help">
+                        <h4>💡 How We Can Help:</h4>
+                        ${prospect.how_we_can_help}
+                    </div>
+                    
+                    <div class="company-research">
+                        <h4>📊 Company Research:</h4>
+                        <strong>Revenue:</strong> ${prospect.company_research.annual_revenue}<br>
+                        <strong>Employees:</strong> ${prospect.company_research.employee_count}<br>
+                        <strong>Recent News:</strong> ${prospect.company_research.recent_news}<br>
+                        <strong>Key Challenges:</strong> ${prospect.company_research.key_challenges.join(', ')}
+                    </div>
+                    
                     <div class="pain-points">
-                        <h4>Pain Points:</h4>
+                        <h4>🎯 Pain Points:</h4>
                         ${prospect.pain_points.map(point => `<span class="pain-point">${point}</span>`).join('')}
+                    </div>
+                    
+                    <div class="deal-value">
+                        <strong>💰 Estimated Deal Value:</strong> $${(prospect.estimated_value / 1000000).toFixed(1)}M
                     </div>
                     
                     <div class="prospect-actions">
@@ -826,6 +1011,137 @@
                     </div>
                 </div>
             `).join('');
+        }
+        
+        // Pre-fill email templates
+        function prefillTemplate(templateType) {
+            const prospectId = document.getElementById('prospectSelect').value;
+            const prospect = prospects.find(p => p.id === prospectId);
+            
+            if (!prospect) {
+                alert('Please select a prospect first!');
+                return;
+            }
+            
+            let subject = '';
+            let content = '';
+            
+            switch(templateType) {
+                case 'intro':
+                    subject = `Gaming Industry Innovation - Stellar Logic AI Partnership Opportunity`;
+                    content = `Dear ${prospect.name},
+
+I hope this email finds you well. I'm reaching out because I've been following ${prospect.company}'s impressive work in ${prospect.industry.toLowerCase()}, particularly ${prospect.company_research.recent_news.toLowerCase()}.
+
+Given your role as ${prospect.title}, I thought you'd be interested in Stellar Logic AI's enterprise security platform that achieves 99.2% accuracy in threat detection - significantly higher than the industry average of 85%.
+
+${prospect.how_we_can_help}
+
+Our 32 production modules provide comprehensive coverage for:
+${prospect.pain_points.map(point => `• ${point}`).join('\n')}
+
+I'd love to schedule a brief 15-minute call to discuss how we can help ${prospect.company} address these challenges and potentially save millions in annual losses.
+
+Would you be available next week for a quick conversation?
+
+Best regards,
+Jamie Brown
+Founder & CEO, Stellar Logic AI
+🛡️ 99.2% Accuracy • Enterprise AI Security
+stellar.logic.ai@gmail.com • 417-319-9517`;
+                    break;
+                    
+                case 'followup':
+                    subject = `Following up - Enterprise AI Security for ${prospect.company}`;
+                    content = `Hi ${prospect.name},
+
+Following up on my previous email about Stellar Logic AI's enterprise security platform.
+
+I wanted to highlight how our 99.2% accuracy technology specifically addresses ${prospect.company}'s key challenges:
+${prospect.company_research.key_challenges.map(challenge => `• ${challenge}`).join('\n')}
+
+Given ${prospect.company}'s ${prospect.company_research.annual_revenue} in annual revenue, our solution could provide significant ROI by:
+${prospect.how_we_can_help}
+
+Are you available for a brief demo this week? I can show you exactly how our technology works and discuss specific use cases for ${prospect.company}.
+
+Best regards,
+Jamie Brown
+Founder & CEO, Stellar Logic AI
+🛡️ 99.2% Accuracy • Enterprise AI Security`;
+                    break;
+                    
+                case 'demo':
+                    subject = `Demo Request - 99.2% AI Security for ${prospect.company}`;
+                    content = `Hi ${prospect.name},
+
+I'd like to request a 30-minute demo to show you how Stellar Logic AI's 99.2% accuracy technology can transform ${prospect.company}'s security posture.
+
+During the demo, I'll show you:
+• Real-time threat detection with 99.2% accuracy
+• How our 32 production modules integrate with existing systems
+• Specific ROI calculations based on ${prospect.company}'s use case
+• Live demonstration of our Zero Trust architecture
+
+${prospect.how_we_can_help}
+
+Given ${prospect.company_research.recent_news}, I believe the timing is perfect for us to discuss how our technology can support your initiatives.
+
+Would Tuesday or Thursday afternoon work for a 30-minute session?
+
+Best regards,
+Jamie Brown
+Founder & CEO, Stellar Logic AI
+🛡️ 99.2% Accuracy • Enterprise AI Security`;
+                    break;
+            }
+            
+            document.getElementById('subjectInput').value = subject;
+            document.getElementById('contentInput').value = content;
+            document.getElementById('notesInput').value = `Pre-filled ${templateType} template for ${prospect.company} - Focus on ${prospect.pain_points[0]}`;
+        }
+        
+        // Show company research in a modal
+        function showCompanyResearch() {
+            const prospectId = document.getElementById('prospectSelect').value;
+            const prospect = prospects.find(p => p.id === prospectId);
+            
+            if (!prospect) {
+                alert('Please select a prospect first!');
+                return;
+            }
+            
+            const research = prospect.company_research;
+            const researchContent = `
+📊 **${prospect.company} Research Summary**
+
+**Company Overview:**
+${research.description}
+
+**Key Metrics:**
+• Annual Revenue: ${research.annual_revenue}
+• Employees: ${research.employee_count}
+• Headquarters: ${research.headquarters}
+
+**Recent Developments:**
+${research.recent_news}
+
+**Key Challenges:**
+${research.key_challenges.map(challenge => `• ${challenge}`).join('\n')}
+
+**How We Can Help:**
+${prospect.how_we_can_help}
+
+**Value Proposition:**
+${prospect.value_proposition}
+
+**Estimated Deal Value: $${(prospect.estimated_value / 1000000).toFixed(1)}M**
+
+**Next Steps:**
+${prospect.next_action}
+            `;
+            
+            alert(researchContent);
         }
         
         // Handle form submission

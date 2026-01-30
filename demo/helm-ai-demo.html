@@ -7,7 +7,7 @@
     <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
     <link rel="icon" href="favicon_16x16.png" type="image/png" sizes="16x16">
     <link rel="apple-touch-icon" href="Stellar_Logic_AI_Logo.png">
-    <script src="helm-ai-integration.js"></script>
+    <script src="stellar-logic-ai-integration.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -160,7 +160,7 @@
         <div class="status-grid">
             <div class="status-card">
                 <h3>🤖 Stellar Logic AI</h3>
-                <p><span id="helm-status" class="status-indicator status-offline"></span> <span id="helm-status-text">Checking...</span></p>
+                <p><span id="stellar-logic-status" class="status-indicator status-offline"></span> <span id="stellar-logic-status-text">Checking...</span></p>
                 <p><strong>Anti-Cheat Accuracy:</strong> 99.2%</p>
                 <p><strong>Detection Types:</strong> 7+ methods</p>
             </div>
@@ -181,13 +181,13 @@
         </div>
         
         <div class="demo-section">
-            <h2>🧠 Test Helm AI Capabilities</h2>
+            <h2>🧠 Test Stellar Logic AI Capabilities</h2>
             <button class="button" onclick="testHealthCheck()">Health Check</button>
             <button class="button" onclick="testLLMDevelopment()">LLM Development</button>
             <button class="button" onclick="testLearningEnhancement()">Learning Enhancement</button>
             <button class="button" onclick="testSafetyGovernance()">Safety Governance</button>
             <button class="button success" onclick="testValuation()">Valuation Analysis</button>
-            <div id="helm-results" class="result-box" style="display: none;"></div>
+            <div id="stellar-logic-results" class="result-box" style="display: none;"></div>
         </div>
         
         <div class="demo-section">
@@ -251,34 +251,34 @@
     
     <script>
         let integrationStatus = {
-            helmAvailable: false,
+            stellarLogicAvailable: false,
             fallbackMode: true
         };
         
         // Update status displays
         async function updateStatus() {
-            if (window.helmAIIntegration) {
-                const status = window.helmAIIntegration.getStatus();
-                integrationStatus.helmAvailable = status.helmAvailable;
+            if (window.stellarLogicAIIntegration) {
+                const status = window.stellarLogicAIIntegration.getStatus();
+                integrationStatus.stellarLogicAvailable = status.stellarLogicAvailable;
                 integrationStatus.fallbackMode = status.fallbackMode;
                 
-                // Update Helm AI status
-                const helmStatusEl = document.getElementById('helm-status');
-                const helmStatusTextEl = document.getElementById('helm-status-text');
+                // Update Stellar Logic AI status
+                const stellarLogicStatusEl = document.getElementById('stellar-logic-status');
+                const stellarLogicStatusTextEl = document.getElementById('stellar-logic-status-text');
                 
-                if (status.helmAvailable) {
-                    helmStatusEl.className = 'status-indicator status-online';
-                    helmStatusTextEl.textContent = 'Online';
+                if (status.stellarLogicAvailable) {
+                    stellarLogicStatusEl.className = 'status-indicator status-online';
+                    stellarLogicStatusTextEl.textContent = 'Online';
                 } else {
-                    helmStatusEl.className = 'status-indicator status-offline';
-                    helmStatusTextEl.textContent = 'Offline';
+                    stellarLogicStatusEl.className = 'status-indicator status-offline';
+                    stellarLogicStatusTextEl.textContent = 'Offline';
                 }
                 
                 // Update fallback status
                 document.getElementById('fallback-status').textContent = status.fallbackMode ? 'Enabled' : 'Disabled';
                 
                 // Update analysis status
-                document.getElementById('analysis-status').textContent = status.helmAvailable ? 'Helm AI Active' : 'Fallback Mode';
+                document.getElementById('analysis-status').textContent = status.stellarLogicAvailable ? 'Stellar Logic AI Active' : 'Fallback Mode';
             }
         }
         
@@ -294,9 +294,9 @@
             try {
                 const response = await fetch('http://localhost:3001/api/health');
                 const data = await response.json();
-                showResults('helm-results', data, '✅ Helm AI Health Check');
+                showResults('stellar-logic-results', data, '✅ Stellar Logic AI Health Check');
             } catch (error) {
-                showResults('helm-results', { error: error.message }, '❌ Helm AI Health Check Failed');
+                showResults('stellar-logic-results', { error: error.message }, '❌ Stellar Logic AI Health Check Failed');
             }
         }
         
@@ -304,9 +304,9 @@
             try {
                 const response = await fetch('http://localhost:3001/api/ai/llm-development');
                 const data = await response.json();
-                showResults('helm-results', data, '🧠 LLM Development Analysis');
+                showResults('stellar-logic-results', data, '🧠 LLM Development Analysis');
             } catch (error) {
-                showResults('helm-results', { error: error.message }, '❌ LLM Development Failed');
+                showResults('stellar-logic-results', { error: error.message }, '❌ LLM Development Failed');
             }
         }
         
@@ -314,9 +314,9 @@
             try {
                 const response = await fetch('http://localhost:3001/api/ai/learning-enhancement');
                 const data = await response.json();
-                showResults('helm-results', data, '⚡ Learning Enhancement Analysis');
+                showResults('stellar-logic-results', data, '⚡ Learning Enhancement Analysis');
             } catch (error) {
-                showResults('helm-results', { error: error.message }, '❌ Learning Enhancement Failed');
+                showResults('stellar-logic-results', { error: error.message }, '❌ Learning Enhancement Failed');
             }
         }
         
@@ -324,9 +324,9 @@
             try {
                 const response = await fetch('http://localhost:3001/api/ai/safety-governance');
                 const data = await response.json();
-                showResults('helm-results', data, '🛡️ Safety Governance Analysis');
+                showResults('stellar-logic-results', data, '🛡️ Safety Governance Analysis');
             } catch (error) {
-                showResults('helm-results', { error: error.message }, '❌ Safety Governance Failed');
+                showResults('stellar-logic-results', { error: error.message }, '❌ Safety Governance Failed');
             }
         }
         
@@ -334,15 +334,15 @@
             try {
                 const response = await fetch('http://localhost:3001/api/ip/valuation');
                 const data = await response.json();
-                showResults('helm-results', data, '💎 Valuation Analysis');
+                showResults('stellar-logic-results', data, '💎 Valuation Analysis');
             } catch (error) {
-                showResults('helm-results', { error: error.message }, '❌ Valuation Analysis Failed');
+                showResults('stellar-logic-results', { error: error.message }, '❌ Valuation Analysis Failed');
             }
         }
         
         async function testPlayerBehavior() {
-            if (window.helmAIIntegration) {
-                const result = await window.helmAIIntegration.getAIAnalysis('player_behavior', {
+            if (window.stellarLogicAIIntegration) {
+                const result = await window.stellarLogicAIIntegration.getAIAnalysis('player_behavior', {
                     playerId: 'player_123',
                     action: 'raise',
                     amount: 100,
@@ -353,8 +353,8 @@
         }
         
         async function testSecurityThreat() {
-            if (window.helmAIIntegration) {
-                const result = await window.helmAIIntegration.getAIAnalysis('security_threat', {
+            if (window.stellarLogicAIIntegration) {
+                const result = await window.stellarLogicAIIntegration.getAIAnalysis('security_threat', {
                     input: 'system("rm -rf /")',
                     context: 'user_input_validation',
                     severity: 'critical'
@@ -364,8 +364,8 @@
         }
         
         async function testGameEvent() {
-            if (window.helmAIIntegration) {
-                const result = await window.helmAIIntegration.getAIAnalysis('game_event', {
+            if (window.stellarLogicAIIntegration) {
+                const result = await window.stellarLogicAIIntegration.getAIAnalysis('game_event', {
                     eventType: 'tournament_start',
                     tournamentId: 'tournament_456',
                     playerCount: 50,
@@ -477,7 +477,7 @@
         
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
-            // Wait for Helm AI integration to initialize
+            // Wait for Stellar Logic AI integration to initialize
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             // Update status
