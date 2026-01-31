@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Unified Approval Dashboard</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .main-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+        
+        .approval-queue {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .queue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .queue-header h2 {
+            font-size: 1.8em;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            background: rgba(251, 191, 36, 0.3);
+            border-color: #fbbf24;
+        }
+        
+        .filter-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .approval-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .approval-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .approval-item.expanded {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #fbbf24;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .item-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .item-type {
+            background: rgba(251, 191, 36, 0.2);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.8em;
+        }
+        
+        .item-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .item-description {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .item-details {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .item-details.show {
+            display: block;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .detail-label {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-approve:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-modify {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .btn-modify:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        .btn-reject {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .btn-reject:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+        
+        .btn-details {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-details:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .quick-actions {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .quick-actions h3 {
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .quick-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .priority-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .priority-high {
+            background: #ef4444;
+        }
+        
+        .priority-medium {
+            background: #f59e0b;
+        }
+        
+        .priority-low {
+            background: #10b981;
+        }
+        
+        .recent-activity {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .recent-activity h3 {
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .activity-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9em;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-time {
+            opacity: 0.7;
+            font-size: 0.8em;
+        }
+        
+        .notification-badge {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Unified Approval Dashboard</h1>
+            <p class="subtitle">All approvals in one place - no page bouncing required!</p>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Pending Approvals</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$284K</div>
+                <div class="stat-label">Total Revenue Impact</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">High Priority</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">94%</div>
+                <div class="stat-label">AI Accuracy</div>
+            </div>
+        </div>
+        
+        <div class="main-dashboard">
+            <div class="approval-queue">
+                <div class="queue-header">
+                    <h2>📋 Approval Queue</h2>
+                    <div>
+                        <span class="notification-badge">12</span>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <div class="filter-tab active" onclick="filterApprovals('all')">All (12)</div>
+                    <div class="filter-tab" onclick="filterApprovals('high')">High Priority (8)</div>
+                    <div class="filter-tab" onclick="filterApprovals('customer')">Customers (5)</div>
+                    <div class="filter-tab" onclick="filterApprovals('marketing')">Marketing (3)</div>
+                    <div class="filter-tab" onclick="filterApprovals('partnership')">Partnerships (2)</div>
+                    <div class="filter-tab" onclick="filterApprovals('technical')">Technical (2)</div>
+                </div>
+                
+                <div id="approvalList">
+                    <!-- Approval items will be populated here -->
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="quick-actions">
+                    <h3>⚡ Quick Actions</h3>
+                    <button class="quick-btn" onclick="approveAllHighPriority()">
+                        🚀 Approve All High Priority (8 items)
+                    </button>
+                    <button class="quick-btn" onclick="approveAllCustomers()">
+                        👥 Approve All Customers (5 items)
+                    </button>
+                    <button class="quick-btn" onclick="scheduleReview()">
+                        📅 Schedule Review for Later
+                    </button>
+                    <button class="quick-btn" onclick="exportReport()">
+                        📊 Export Approval Report
+                    </button>
+                    <button class="quick-btn" onclick="refreshQueue()">
+                        🔄 Refresh Queue
+                    </button>
+                </div>
+                
+                <div class="recent-activity">
+                    <h3>📈 Recent Activity</h3>
+                    <div class="activity-item">
+                        <div>✅ Approved GameStudio X analysis</div>
+                        <div class="activity-time">2 minutes ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div>🚀 Launched LinkedIn campaign</div>
+                        <div class="activity-time">15 minutes ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div>🤝 Approved Unity partnership</div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div>📊 Modified pricing for Studio Y</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div>❌ Rejected low-quality lead</div>
+                        <div class="activity-time">3 hours ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sample approval data
+        const approvalData = [
+            {
+                id: 1,
+                type: 'customer',
+                priority: 'high',
+                title: 'GameStudio X - System Analysis',
+                description: 'AI completed comprehensive system analysis for gaming studio with 50K monthly players. Current system score: 45/100.',
+                revenue: '$15,000',
+                time: '5 minutes ago',
+                details: {
+                    'Current System': 'Rule-based detection',
+                    'System Score': '45/100 (Poor)',
+                    'Monthly Players': '50,000',
+                    'Current Budget': '$10,000',
+                    'AI Recommendation': 'Replace with Stellar AI',
+                    'ROI': '456%',
+                    'Payback Period': '2.6 months',
+                    'Implementation Time': '8 weeks'
+                }
+            },
+            {
+                id: 2,
+                type: 'customer',
+                priority: 'high',
+                title: 'PixelForge Games - Founding Customer',
+                description: 'High-profile indie studio applying for founding customer program. 25K monthly players, strong growth trajectory.',
+                revenue: '$40,000/year',
+                time: '15 minutes ago',
+                details: {
+                    'Studio Type': 'Indie Developer',
+                    'Monthly Players': '25,000',
+                    'Growth Rate': '+15% monthly',
+                    'Current System': 'Basic anti-cheat',
+                    'Strategic Value': 'High',
+                    'Timeline': 'Ready to start',
+                    'Discount': '50% lifetime',
+                    'Contract Length': '12 months'
+                }
+            },
+            {
+                id: 3,
+                type: 'marketing',
+                priority: 'high',
+                title: 'LinkedIn Campaign Launch',
+                description: 'AI prepared targeted LinkedIn campaign for 50 gaming studios. Budget $500, expected ROI 300%.',
+                revenue: '20+ customers',
+                time: '30 minutes ago',
+                details: {
+                    'Campaign Type': 'LinkedIn outreach',
+                    'Target Audience': '50 gaming studios',
+                    'Budget': '$500',
+                    'Expected ROI': '300%',
+                    'Timeline': '2 weeks',
+                    'Content': 'AI-generated',
+                    'Follow-up': 'Automated',
+                    'Success Rate': '25% conversion'
+                }
+            },
+            {
+                id: 4,
+                type: 'partnership',
+                priority: 'high',
+                title: 'Unity Technologies Partnership',
+                description: 'Strategic partnership proposal with Unity for integration into Asset Store. Revenue sharing 30/70.',
+                revenue: '$100,000/year',
+                time: '1 hour ago',
+                details: {
+                    'Partner': 'Unity Technologies',
+                    'Integration': 'Asset Store',
+                    'Revenue Share': '30% Stellar AI',
+                    'Timeline': '3 months',
+                    'Strategic Value': 'Very High',
+                    'Market Access': '2.5M developers',
+                    'Support Required': 'Minimal',
+                    'Technical Effort': 'Low'
+                }
+            },
+            {
+                id: 5,
+                type: 'customer',
+                priority: 'medium',
+                title: 'Thunderbolt Studios - API Access',
+                description: 'Enterprise customer requesting API access for custom security solution. 100K monthly players.',
+                revenue: '$1,999/month',
+                time: '2 hours ago',
+                details: {
+                    'Customer Type': 'Enterprise',
+                    'Monthly Players': '100,000',
+                    'API Tier': 'Enterprise',
+                    'Custom Features': 'Yes',
+                    'Support Level': 'Premium',
+                    'Contract Length': '24 months',
+                    'Integration Help': 'Required',
+                    'Technical Complexity': 'Medium'
+                }
+            },
+            {
+                id: 6,
+                type: 'technical',
+                priority: 'medium',
+                title: 'System Performance Optimization',
+                description: 'AI recommends upgrading detection algorithms for 25% performance improvement. Cost: $200/month.',
+                revenue: '25% faster response',
+                time: '3 hours ago',
+                details: {
+                    'Upgrade Type': 'Algorithm optimization',
+                    'Performance Gain': '25% faster',
+                    'Cost Impact': '+$200/month',
+                    'Implementation': '2 weeks',
+                    'Risk Level': 'Low',
+                    'Testing Required': 'Yes',
+                    'Rollback Plan': 'Available',
+                    'Customer Impact': 'Positive'
+                }
+            },
+            {
+                id: 7,
+                type: 'marketing',
+                priority: 'medium',
+                title: 'Reddit Gaming Communities Campaign',
+                description: 'AI campaign targeting r/gamedev and r/indiegaming communities. Free promotion, high engagement expected.',
+                revenue: '100+ leads',
+                time: '4 hours ago',
+                details: {
+                    'Platforms': 'Reddit',
+                    'Communities': 'r/gamedev, r/indiegaming',
+                    'Cost': 'Free',
+                    'Expected Leads': '100+',
+                    'Engagement Rate': '15%',
+                    'Content Type': 'Educational',
+                    'Posting Schedule': 'Automated',
+                    'Moderation': 'AI-assisted'
+                }
+            },
+            {
+                id: 8,
+                type: 'customer',
+                priority: 'low',
+                title: 'Small Studio Package - Basic Plan',
+                description: 'Small indie studio with 5K players requesting basic security package. Standard pricing.',
+                revenue: '$199/month',
+                time: '5 hours ago',
+                details: {
+                    'Studio Size': 'Small (2 people)',
+                    'Monthly Players': '5,000',
+                    'Plan Type': 'Basic',
+                    'Support Level': 'Standard',
+                    'Customization': 'None',
+                    'Timeline': 'Immediate',
+                    'Risk Level': 'Low',
+                    'Strategic Value': 'Medium'
+                }
+            },
+            {
+                id: 9,
+                type: 'partnership',
+                priority: 'medium',
+                title: 'Discord Gaming Server Integration',
+                description: 'Partnership with major Discord gaming server for security monitoring. Revenue share 20/80.',
+                revenue: '$25,000/year',
+                time: '6 hours ago',
+                details: {
+                    'Partner': 'Discord Gaming Server',
+                    'Server Size': '50K members',
+                    'Integration Type': 'Security monitoring',
+                    'Revenue Share': '20% Stellar AI',
+                    'Implementation': '4 weeks',
+                    'Technical Effort': 'Medium',
+                    'Ongoing Support': 'Required',
+                    'Growth Potential': 'High'
+                }
+            },
+            {
+                id: 10,
+                type: 'technical',
+                priority: 'low',
+                title: 'Database Optimization',
+                description: 'AI suggests database optimization for 15% cost reduction. Implementation: 1 week.',
+                revenue: '$300/month savings',
+                time: '8 hours ago',
+                details: {
+                    'Optimization Type': 'Database tuning',
+                    'Cost Reduction': '15%',
+                    'Monthly Savings': '$300',
+                    'Implementation': '1 week',
+                    'Risk Level': 'Very Low',
+                    'Downtime': 'None',
+                    'Performance Impact': 'Positive',
+                    'Testing Required': 'Standard'
+                }
+            },
+            {
+                id: 11,
+                type: 'customer',
+                priority: 'high',
+                title: 'AAA Studio - Enterprise Package',
+                description: 'Major AAA studio requesting enterprise security solution. 1M+ monthly players, custom requirements.',
+                revenue: '$5,000/month',
+                time: '12 hours ago',
+                details: {
+                    'Studio Type': 'AAA Developer',
+                    'Monthly Players': '1,000,000+',
+                    'Plan Type': 'Enterprise Custom',
+                    'Custom Features': 'Extensive',
+                    'Support Level': 'Dedicated',
+                    'Contract Value': '$60,000/year',
+                    'Implementation': '8 weeks',
+                    'Strategic Value': 'Very High'
+                }
+            },
+            {
+                id: 12,
+                type: 'marketing',
+                priority: 'low',
+                title: 'Twitter Campaign - Gaming Security Tips',
+                description: 'AI-generated educational content campaign for Twitter. Focus on security best practices.',
+                revenue: 'Brand awareness',
+                time: '1 day ago',
+                details: {
+                    'Platform': 'Twitter',
+                    'Content Type': 'Educational tips',
+                    'Campaign Duration': '2 weeks',
+                    'Posting Frequency': 'Daily',
+                    'Expected Reach': '10K+ impressions',
+                    'Engagement Goal': '5%',
+                    'Cost': '$0 (organic)',
+                    'Hashtags': '#gamingsecurity #anticheat'
+                }
+            }
+        ];
+        
+        let currentFilter = 'all';
+        let expandedItems = new Set();
+        
+        function initializeDashboard() {
+            renderApprovals();
+            updateStats();
+        }
+        
+        function renderApprovals() {
+            const container = document.getElementById('approvalList');
+            const filteredData = filterApprovalsData(currentFilter);
+            
+            container.innerHTML = filteredData.map(item => `
+                <div class="approval-item ${expandedItems.has(item.id) ? 'expanded' : ''}" onclick="toggleDetails(${item.id})">
+                    <div class="item-header">
+                        <div class="item-title">
+                            <span class="priority-indicator priority-${item.priority}"></span>
+                            ${item.title}
+                        </div>
+                        <div class="item-type">${item.type.toUpperCase()}</div>
+                    </div>
+                    <div class="item-meta">
+                        <span>💰 ${item.revenue}</span>
+                        <span>⏰ ${item.time}</span>
+                        <span>🎯 ${item.priority.toUpperCase()} PRIORITY</span>
+                    </div>
+                    <div class="item-description">${item.description}</div>
+                    
+                    <div class="item-details ${expandedItems.has(item.id) ? 'show' : ''}" id="details-${item.id}">
+                        <div class="detail-grid">
+                            ${Object.entries(item.details).map(([key, value]) => `
+                                <div class="detail-item">
+                                    <div class="detail-label">${key}</div>
+                                    <div class="detail-value">${value}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-approve" onclick="approveItem(${item.id}, event)">✅ Approve</button>
+                            <button class="btn btn-modify" onclick="modifyItem(${item.id}, event)">🔧 Modify</button>
+                            <button class="btn btn-reject" onclick="rejectItem(${item.id}, event)">❌ Reject</button>
+                            <button class="btn btn-details" onclick="toggleDetails(${item.id}, event)">📊 Details</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function filterApprovalsData(type) {
+            if (type === 'all') return approvalData;
+            if (type === 'high') return approvalData.filter(item => item.priority === 'high');
+            return approvalData.filter(item => item.type === type);
+        }
+        
+        function filterApprovals(type) {
+            currentFilter = type;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderApprovals();
+        }
+        
+        function toggleDetails(id, event) {
+            if (event) event.stopPropagation();
+            
+            if (expandedItems.has(id)) {
+                expandedItems.delete(id);
+            } else {
+                expandedItems.add(id);
+            }
+            
+            renderApprovals();
+        }
+        
+        function approveItem(id, event) {
+            event.stopPropagation();
+            
+            const item = approvalData.find(item => item.id === id);
+            const confirmation = confirm(`Approve ${item.title}?\n\nRevenue Impact: ${item.revenue}\n\nThis action cannot be undone.`);
+            
+            if (confirmation) {
+                // Remove item from queue
+                const index = approvalData.findIndex(item => item.id === id);
+                approvalData.splice(index, 1);
+                
+                // Show success message
+                showNotification(`✅ Approved: ${item.title}`, 'success');
+                
+                // Refresh dashboard
+                renderApprovals();
+                updateStats();
+            }
+        }
+        
+        function modifyItem(id, event) {
+            event.stopPropagation();
+            
+            const item = approvalData.find(item => item.id === id);
+            showNotification(`🔧 Modification options for: ${item.title}`, 'info');
+        }
+        
+        function rejectItem(id, event) {
+            event.stopPropagation();
+            
+            const item = approvalData.find(item => item.id === id);
+            const confirmation = confirm(`Reject ${item.title}?\n\nRevenue Impact: ${item.revenue}\n\nThis action cannot be undone.`);
+            
+            if (confirmation) {
+                // Remove item from queue
+                const index = approvalData.findIndex(item => item.id === id);
+                approvalData.splice(index, 1);
+                
+                // Show success message
+                showNotification(`❌ Rejected: ${item.title}`, 'error');
+                
+                // Refresh dashboard
+                renderApprovals();
+                updateStats();
+            }
+        }
+        
+        function approveAllHighPriority() {
+            const highPriorityItems = approvalData.filter(item => item.priority === 'high');
+            const totalRevenue = highPriorityItems.reduce((sum, item) => {
+                const revenue = item.revenue.replace(/[^0-9]/g, '');
+                return sum + parseInt(revenue);
+            }, 0);
+            
+            const confirmation = confirm(`Approve all ${highPriorityItems.length} high priority items?\n\nTotal Revenue Impact: $${totalRevenue.toLocaleString()}\n\nThis action cannot be undone.`);
+            
+            if (confirmation) {
+                // Remove all high priority items
+                approvalData.splice(0, approvalData.length, ...approvalData.filter(item => item.priority !== 'high'));
+                
+                showNotification(`✅ Approved ${highPriorityItems.length} high priority items!`, 'success');
+                renderApprovals();
+                updateStats();
+            }
+        }
+        
+        function approveAllCustomers() {
+            const customerItems = approvalData.filter(item => item.type === 'customer');
+            const confirmation = confirm(`Approve all ${customerItems.length} customer items?\n\nThis action cannot be undone.`);
+            
+            if (confirmation) {
+                // Remove all customer items
+                approvalData.splice(0, approvalData.length, ...approvalData.filter(item => item.type !== 'customer'));
+                
+                showNotification(`✅ Approved ${customerItems.length} customer items!`, 'success');
+                renderApprovals();
+                updateStats();
+            }
+        }
+        
+        function scheduleReview() {
+            showNotification('📅 Review scheduled for later today', 'info');
+        }
+        
+        function exportReport() {
+            showNotification('📊 Approval report exported successfully', 'success');
+        }
+        
+        function refreshQueue() {
+            showNotification('🔄 Queue refreshed', 'info');
+            renderApprovals();
+            updateStats();
+        }
+        
+        function updateStats() {
+            // Update stats based on current data
+            const pendingCount = approvalData.length;
+            const highPriorityCount = approvalData.filter(item => item.priority === 'high').length;
+            
+            // Update DOM
+            document.querySelector('.stat-number').textContent = pendingCount;
+            document.querySelectorAll('.stat-number')[2].textContent = highPriorityCount;
+        }
+        
+        function showNotification(message, type) {
+            // Simple notification (in production, use a proper notification system)
+            console.log(`${type.toUpperCase()}: ${message}`);
+        }
+        
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+    </script>
+</body>
+</html>

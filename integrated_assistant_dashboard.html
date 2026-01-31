@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Integrated Assistant Dashboard</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+        
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .alert-badge {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+        
+        .approval-queue {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .approval-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .approval-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .approval-item.urgent {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .item-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .item-type {
+            background: rgba(251, 191, 36, 0.2);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.7em;
+        }
+        
+        .item-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .item-description {
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-approve:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-modify {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .btn-reject {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .btn-details {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .assistant-chat {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+        
+        .message.assistant {
+            background: rgba(251, 191, 36, 0.2);
+            border-left: 3px solid #fbbf24;
+            align-self: flex-start;
+        }
+        
+        .message.user {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-end;
+        }
+        
+        .message.alert {
+            background: rgba(239, 68, 68, 0.2);
+            border-left: 3px solid #ef4444;
+            animation: pulse 2s infinite;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: white;
+            font-size: 0.9em;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #fbbf24;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 10px rgba(251, 191, 36, 0.4);
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .notifications {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid #fbbf24;
+            font-size: 0.9em;
+        }
+        
+        .notification-item.urgent {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .notification-time {
+            font-size: 0.7em;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .system-status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .status-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+        }
+        
+        .status-good {
+            background: #10b981;
+        }
+        
+        .status-warning {
+            background: #f59e0b;
+        }
+        
+        .status-error {
+            background: #ef4444;
+        }
+        
+        @media (max-width: 1400px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-panel {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Integrated Assistant Dashboard</h1>
+            <p class="subtitle">AI Assistant + Approval System - Real-time alerts and decisions</p>
+        </div>
+        
+        <div class="main-layout">
+            <div class="left-panel">
+                <!-- Approval Queue Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📋 Approval Queue</h2>
+                        <div class="alert-badge">12</div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">$284K</div>
+                            <div class="stat-label">Revenue Impact</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Urgent</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">94%</div>
+                            <div class="stat-label">AI Accuracy</div>
+                        </div>
+                    </div>
+                    
+                    <div class="approval-queue" id="approvalQueue">
+                        <!-- Approval items will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- System Status Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">🔧 System Status</h2>
+                    </div>
+                    
+                    <div class="system-status">
+                        <div class="status-item">
+                            <div class="status-indicator status-good"></div>
+                            <div>AI Engine</div>
+                            <div style="font-size: 0.8em; opacity: 0.7;">99.2% accuracy</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator status-good"></div>
+                            <div>API Services</div>
+                            <div style="font-size: 0.8em; opacity: 0.7;">100% uptime</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator status-warning"></div>
+                            <div>Server Load</div>
+                            <div style="font-size: 0.8em; opacity: 0.7;">78% capacity</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator status-good"></div>
+                            <div>Security</div>
+                            <div style="font-size: 0.8em; opacity: 0.7;">All systems secure</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <!-- AI Assistant Chat -->
+                <div class="card assistant-chat">
+                    <div class="card-header">
+                        <h2 class="card-title">🤖 AI Assistant</h2>
+                        <div class="alert-badge">3</div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message assistant alert">
+                            🚨 <strong>URGENT:</strong> 8 high-priority approvals need your attention! Total revenue impact: $284K
+                        </div>
+                        <div class="message assistant">
+                            👋 Good morning! I've prepared your daily approval queue. You have 12 items totaling $284K in revenue impact.
+                        </div>
+                        <div class="message assistant">
+                            📊 <strong>AI Analysis:</strong> 3 customers are ready for founding program approval, 2 partnership opportunities, and 1 technical optimization.
+                        </div>
+                        <div class="message assistant">
+                            💡 <strong>Recommendation:</strong> Approve the Unity partnership first - $100K/year revenue with minimal technical effort.
+                        </div>
+                        <div class="message user">
+                            Show me the high-priority items first
+                        </div>
+                        <div class="message assistant">
+                            🎯 <strong>High Priority Items (8):</strong><br>
+                            • GameStudio X - $15K analysis<br>
+                            • PixelForge Games - $40K/year founding<br>
+                            • Unity Partnership - $100K/year<br>
+                            • AAA Studio - $5K/month<br>
+                            • LinkedIn Campaign - 20+ customers<br>
+                            • 3 other urgent items
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Ask me anything about approvals, business, or strategy..." onkeypress="handleChatInput(event)">
+                        <button onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">⚡ Quick Actions</h2>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <button class="quick-btn" onclick="approveAllHighPriority()">
+                            🚀 Approve All High Priority (8)
+                        </button>
+                        <button class="quick-btn" onclick="approveAllCustomers()">
+                            👥 Approve All Customers (5)
+                        </button>
+                        <button class="quick-btn" onclick="generateReport()">
+                            📊 Generate Report
+                        </button>
+                        <button class="quick-btn" onclick="scheduleReview()">
+                            📅 Schedule Review
+                        </button>
+                        <button class="quick-btn" onclick="contactSupport()">
+                            📞 Contact Support
+                        </button>
+                        <button class="quick-btn" onclick="exportData()">
+                            💾 Export Data
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Notifications -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">🔔 Notifications</h2>
+                        <div class="alert-badge">5</div>
+                    </div>
+                    
+                    <div class="notifications" id="notifications">
+                        <div class="notification-item urgent">
+                            <strong>🚨 URGENT:</strong> 8 high-priority approvals pending
+                            <div class="notification-time">2 minutes ago</div>
+                        </div>
+                        <div class="notification-item">
+                            <strong>💰 Revenue Alert:</strong> $284K total impact in queue
+                            <div class="notification-time">5 minutes ago</div>
+                        </div>
+                        <div class="notification-item">
+                            <strong>🤝 Partnership:</strong> Unity Technologies proposal ready
+                            <div class="notification-time">1 hour ago</div>
+                        </div>
+                        <div class="notification-item">
+                            <strong>📈 Growth:</strong> 3 new founding customer applications
+                            <div class="notification-time">2 hours ago</div>
+                        </div>
+                        <div class="notification-item">
+                            <strong>🔧 System:</strong> Server load at 78% capacity
+                            <div class="notification-time">3 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sample approval data
+        const approvalData = [
+            {
+                id: 1,
+                type: 'customer',
+                priority: 'high',
+                title: 'GameStudio X - System Analysis',
+                description: 'AI completed comprehensive system analysis for gaming studio with 50K monthly players.',
+                revenue: '$15,000',
+                time: '5 minutes ago',
+                urgent: true
+            },
+            {
+                id: 2,
+                type: 'customer',
+                priority: 'high',
+                title: 'PixelForge Games - Founding Customer',
+                description: 'High-profile indie studio applying for founding customer program. 25K monthly players.',
+                revenue: '$40,000/year',
+                time: '15 minutes ago',
+                urgent: true
+            },
+            {
+                id: 3,
+                type: 'marketing',
+                priority: 'high',
+                title: 'LinkedIn Campaign Launch',
+                description: 'AI prepared targeted LinkedIn campaign for 50 gaming studios. Budget $500, expected ROI 300%.',
+                revenue: '20+ customers',
+                time: '30 minutes ago',
+                urgent: true
+            },
+            {
+                id: 4,
+                type: 'partnership',
+                priority: 'high',
+                title: 'Unity Technologies Partnership',
+                description: 'Strategic partnership proposal with Unity for integration into Asset Store. Revenue sharing 30/70.',
+                revenue: '$100,000/year',
+                time: '1 hour ago',
+                urgent: true
+            },
+            {
+                id: 5,
+                type: 'customer',
+                priority: 'high',
+                title: 'AAA Studio - Enterprise Package',
+                description: 'Major AAA studio requesting enterprise security solution. 1M+ monthly players.',
+                revenue: '$5,000/month',
+                time: '12 hours ago',
+                urgent: true
+            },
+            {
+                id: 6,
+                type: 'customer',
+                priority: 'medium',
+                title: 'Thunderbolt Studios - API Access',
+                description: 'Enterprise customer requesting API access for custom security solution. 100K monthly players.',
+                revenue: '$1,999/month',
+                time: '2 hours ago',
+                urgent: false
+            },
+            {
+                id: 7,
+                type: 'technical',
+                priority: 'medium',
+                title: 'System Performance Optimization',
+                description: 'AI recommends upgrading detection algorithms for 25% performance improvement. Cost: $200/month.',
+                revenue: '25% faster response',
+                time: '3 hours ago',
+                urgent: false
+            },
+            {
+                id: 8,
+                type: 'marketing',
+                priority: 'medium',
+                title: 'Reddit Gaming Communities Campaign',
+                description: 'AI campaign targeting r/gamedev and r/indiegaming communities. Free promotion, high engagement.',
+                revenue: '100+ leads',
+                time: '4 hours ago',
+                urgent: false
+            }
+        ];
+        
+        // Initialize dashboard
+        function initializeDashboard() {
+            renderApprovalQueue();
+            startRealTimeUpdates();
+            initializeAssistant();
+        }
+        
+        function renderApprovalQueue() {
+            const container = document.getElementById('approvalQueue');
+            
+            container.innerHTML = approvalData.map(item => `
+                <div class="approval-item ${item.urgent ? 'urgent' : ''}" onclick="showApprovalDetails(${item.id})">
+                    <div class="item-header">
+                        <div class="item-title">${item.title}</div>
+                        <div class="item-type">${item.type.toUpperCase()}</div>
+                    </div>
+                    <div class="item-meta">
+                        <span>💰 ${item.revenue}</span>
+                        <span>⏰ ${item.time}</span>
+                        <span>🎯 ${item.priority.toUpperCase()}</span>
+                    </div>
+                    <div class="item-description">${item.description}</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-approve" onclick="approveItem(${item.id}, event)">✅</button>
+                        <button class="btn btn-modify" onclick="modifyItem(${item.id}, event)">🔧</button>
+                        <button class="btn btn-reject" onclick="rejectItem(${item.id}, event)">❌</button>
+                        <button class="btn btn-details" onclick="showDetails(${item.id}, event)">📊</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function approveItem(id, event) {
+            event.stopPropagation();
+            const item = approvalData.find(item => item.id === id);
+            
+            if (confirm(`Approve ${item.title}?\n\nRevenue Impact: ${item.revenue}`)) {
+                // Remove item from queue
+                const index = approvalData.findIndex(item => item.id === id);
+                approvalData.splice(index, 1);
+                
+                // Add assistant message
+                addAssistantMessage(`✅ Approved: ${item.title} - Revenue impact: ${item.revenue}`);
+                
+                // Refresh queue
+                renderApprovalQueue();
+                updateStats();
+            }
+        }
+        
+        function modifyItem(id, event) {
+            event.stopPropagation();
+            const item = approvalData.find(item => item.id === id);
+            addAssistantMessage(`🔧 Opening modification options for: ${item.title}`);
+        }
+        
+        function rejectItem(id, event) {
+            event.stopPropagation();
+            const item = approvalData.find(item => item.id === id);
+            
+            if (confirm(`Reject ${item.title}?\n\nRevenue Impact: ${item.revenue}`)) {
+                // Remove item from queue
+                const index = approvalData.findIndex(item => item.id === id);
+                approvalData.splice(index, 1);
+                
+                // Add assistant message
+                addAssistantMessage(`❌ Rejected: ${item.title}`);
+                
+                // Refresh queue
+                renderApprovalQueue();
+                updateStats();
+            }
+        }
+        
+        function showDetails(id, event) {
+            event.stopPropagation();
+            const item = approvalData.find(item => item.id === id);
+            addAssistantMessage(`📊 Showing detailed analysis for: ${item.title}\n\nRevenue Impact: ${item.revenue}\nPriority: ${item.priority}\nType: ${item.type}\n\n${item.description}`);
+        }
+        
+        function showApprovalDetails(id) {
+            const item = approvalData.find(item => item.id === id);
+            addAssistantMessage(`📋 Selected: ${item.title}\n\n💰 Revenue Impact: ${item.revenue}\n🎯 Priority: ${item.priority}\n⏰ ${item.time}\n\n${item.description}`);
+        }
+        
+        function approveAllHighPriority() {
+            const highPriorityItems = approvalData.filter(item => item.priority === 'high');
+            const totalRevenue = highPriorityItems.reduce((sum, item) => {
+                const revenue = item.revenue.replace(/[^0-9]/g, '');
+                return sum + parseInt(revenue);
+            }, 0);
+            
+            if (confirm(`Approve all ${highPriorityItems.length} high priority items?\n\nTotal Revenue Impact: $${totalRevenue.toLocaleString()}`)) {
+                // Remove high priority items
+                approvalData.splice(0, approvalData.length, ...approvalData.filter(item => item.priority !== 'high'));
+                
+                addAssistantMessage(`🚀 Approved ${highPriorityItems.length} high priority items! Total revenue impact: $${totalRevenue.toLocaleString()}`);
+                renderApprovalQueue();
+                updateStats();
+            }
+        }
+        
+        function approveAllCustomers() {
+            const customerItems = approvalData.filter(item => item.type === 'customer');
+            
+            if (confirm(`Approve all ${customerItems.length} customer items?`)) {
+                // Remove customer items
+                approvalData.splice(0, approvalData.length, ...approvalData.filter(item => item.type !== 'customer'));
+                
+                addAssistantMessage(`👥 Approved ${customerItems.length} customer items!`);
+                renderApprovalQueue();
+                updateStats();
+            }
+        }
+        
+        function generateReport() {
+            addAssistantMessage(`📊 Generating comprehensive approval report...\n\n📈 Current Queue: ${approvalData.length} items\n💰 Total Revenue Impact: $284,000\n🎯 High Priority: ${approvalData.filter(item => item.priority === 'high').length}\n👥 Customers: ${approvalData.filter(item => item.type === 'customer').length}\n🤝 Partnerships: ${approvalData.filter(item => item.type === 'partnership').length}\n📢 Marketing: ${approvalData.filter(item => item.type === 'marketing').length}\n🔧 Technical: ${approvalData.filter(item => item.type === 'technical').length}`);
+        }
+        
+        function scheduleReview() {
+            addAssistantMessage(`📅 Review scheduled for tomorrow at 9:00 AM. I'll send you a reminder with all pending items.`);
+        }
+        
+        function contactSupport() {
+            addAssistantMessage(`📞 Support team notified. Expected response time: <5 minutes for urgent issues.`);
+        }
+        
+        function exportData() {
+            addAssistantMessage(`💾 Data exported successfully! Download includes: approval history, performance metrics, and revenue reports.`);
+        }
+        
+        function updateStats() {
+            // Update stats in real-time
+            const pendingCount = approvalData.length;
+            const highPriorityCount = approvalData.filter(item => item.priority === 'high').length;
+            
+            // Update DOM (in real implementation, this would update the actual stats)
+            console.log(`Stats updated: ${pendingCount} pending, ${highPriorityCount} high priority`);
+        }
+        
+        // Assistant functions
+        function initializeAssistant() {
+            // Add welcome message
+            setTimeout(() => {
+                addAssistantMessage("🤖 I'm your AI assistant! I'll alert you to important approvals and help you make decisions. Ask me anything!");
+            }, 1000);
+        }
+        
+        function addAssistantMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message assistant';
+            if (message.includes('URGENT') || message.includes('🚨')) {
+                messageDiv.className += ' alert';
+            }
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addUserMessage(message);
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    let response = generateAIResponse(message);
+                    addAssistantMessage(response);
+                }, 1000);
+                
+                input.value = '';
+            }
+        }
+        
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('urgent') || lowerMessage.includes('priority')) {
+                return `🎯 You have ${approvalData.filter(item => item.priority === 'high').length} high-priority items needing immediate attention:\n\n${approvalData.filter(item => item.priority === 'high').map(item => `• ${item.title} - ${item.revenue}`).join('\n')}`;
+            }
+            
+            if (lowerMessage.includes('revenue') || lowerMessage.includes('money')) {
+                const totalRevenue = approvalData.reduce((sum, item) => {
+                    const revenue = item.revenue.replace(/[^0-9]/g, '');
+                    return sum + parseInt(revenue);
+                }, 0);
+                return `💰 Current revenue impact in queue: $${totalRevenue.toLocaleString()}\n\nBreakdown by type:\n• Customers: ${approvalData.filter(item => item.type === 'customer').length} items\n• Partnerships: ${approvalData.filter(item => item.type === 'partnership').length} items\n• Marketing: ${approvalData.filter(item => item.type === 'marketing').length} items\n• Technical: ${approvalData.filter(item => item.type === 'technical').length} items`;
+            }
+            
+            if (lowerMessage.includes('recommend') || lowerMessage.includes('suggest')) {
+                return `💡 My recommendations:\n\n1. 🚀 Approve Unity Partnership first - $100K/year revenue, minimal effort\n2. 👥 Accept PixelForge Games as founding customer - $40K/year, high growth potential\n3. 📊 Approve GameStudio X analysis - $15K immediate revenue\n\nThese three items alone represent $155K in revenue impact!`;
+            }
+            
+            if (lowerMessage.includes('status') || lowerMessage.includes('system')) {
+                return `🔧 System Status:\n\n✅ AI Engine: 99.2% accuracy\n✅ API Services: 100% uptime\n⚠️ Server Load: 78% capacity (monitoring)\n✅ Security: All systems secure\n✅ Database: Optimal performance\n\nEverything is running smoothly!`;
+            }
+            
+            return `🤖 I can help you with:\n\n• 📋 Approval decisions and recommendations\n• 💰 Revenue impact analysis\n• 🎯 Priority sorting and batching\n• 📊 Business insights and reports\n• 🔧 System status monitoring\n• 📈 Growth strategy suggestions\n\nWhat would you like to know?`;
+        }
+        
+        function startRealTimeUpdates() {
+            // Simulate real-time updates
+            setInterval(() => {
+                // Random chance of new approval
+                if (Math.random() > 0.8) {
+                    const newItem = {
+                        id: approvalData.length + 1,
+                        type: ['customer', 'marketing', 'partnership', 'technical'][Math.floor(Math.random() * 4)],
+                        priority: ['high', 'medium', 'low'][Math.floor(Math.random() * 3)],
+                        title: 'New approval request',
+                        description: 'AI-generated approval request',
+                        revenue: '$' + (Math.floor(Math.random() * 50) + 1) + 'K',
+                        time: 'Just now',
+                        urgent: Math.random() > 0.5
+                    };
+                    
+                    approvalData.unshift(newItem);
+                    renderApprovalQueue();
+                    
+                    if (newItem.urgent) {
+                        addAssistantMessage(`🚨 NEW URGENT: ${newItem.title} - ${newItem.revenue} revenue impact!`);
+                    }
+                }
+            }, 30000); // Every 30 seconds
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+    </script>
+</body>
+</html>

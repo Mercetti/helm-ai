@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Visual Social Media Dashboard</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .alert-badge {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        
+        .stat-label {
+            font-size: 0.7em;
+            opacity: 0.8;
+        }
+        
+        .post-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .post-item.urgent {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .post-title {
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        .post-platform {
+            background: rgba(251, 191, 36, 0.2);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.6em;
+        }
+        
+        .post-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.7em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .post-content {
+            font-size: 0.8em;
+            line-height: 1.3;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border-left: 3px solid #fbbf24;
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .post-image-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8em;
+        }
+        
+        .image-type-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(251, 191, 36, 0.9);
+            color: #1f2937;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.6em;
+            font-weight: bold;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.7em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-regenerate {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+        
+        .btn-modify {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .btn-reject {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .ai-chat {
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            font-size: 0.8em;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+        
+        .message.ai {
+            background: rgba(251, 191, 36, 0.2);
+            border-left: 3px solid #fbbf24;
+            align-self: flex-start;
+        }
+        
+        .message.user {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-end;
+        }
+        
+        .message.alert {
+            background: rgba(239, 68, 68, 0.2);
+            border-left: 3px solid #ef4444;
+            animation: pulse 2s infinite;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            font-size: 0.8em;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #fbbf24;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.8em;
+        }
+        
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .image-gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .gallery-thumbnail {
+            width: 100%;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .gallery-title {
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+        
+        .gallery-type {
+            font-size: 0.6em;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 1600px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 AI Visual Social Media Dashboard</h1>
+            <p class="subtitle">AI-Powered Image Creation & Visual Content with Your Approval</p>
+        </div>
+        
+        <div class="main-layout">
+            <!-- Visual Posts for Approval -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🎨 Visual Posts for Approval</h2>
+                    <div class="alert-badge">6</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Infographics</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Carousels</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">AI Quality</div>
+                    </div>
+                </div>
+                
+                <div id="visualPosts"></div>
+            </div>
+            
+            <!-- AI Image Creation Studio -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🎨 AI Image Creation Studio</h2>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">24</div>
+                        <div class="stat-label">Images Created</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Templates</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">Engagement Boost</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3.2x</div>
+                        <div class="stat-label">More Shares</div>
+                    </div>
+                </div>
+                
+                <div class="image-gallery" id="imageGallery">
+                    <div class="gallery-item" onclick="selectTemplate('infographic')">
+                        <div class="gallery-thumbnail">📊</div>
+                        <div class="gallery-title">Security Infographic</div>
+                        <div class="gallery-type">Data Visualization</div>
+                    </div>
+                    <div class="gallery-item" onclick="selectTemplate('carousel')">
+                        <div class="gallery-thumbnail">🎠</div>
+                        <div class="gallery-title">Tips Carousel</div>
+                        <div class="gallery-type">Multi-Slide Content</div>
+                    </div>
+                    <div class="gallery-item" onclick="selectTemplate('comparison')">
+                        <div class="gallery-thumbnail">⚖️</div>
+                        <div class="gallery-title">Before/After</div>
+                        <div class="gallery-type">Comparison Chart</div>
+                    </div>
+                    <div class="gallery-item" onclick="selectTemplate('quote')">
+                        <div class="gallery-thumbnail">💬</div>
+                        <div class="gallery-title">Customer Quote</div>
+                        <div class="gallery-type">Testimonial Graphic</div>
+                    </div>
+                </div>
+                
+                <div style="font-size: 0.8em; line-height: 1.4; margin-bottom: 15px;">
+                    <h4 style="color: #fbbf24; margin-bottom: 8px;">🎨 AI Image Capabilities:</h4>
+                    <strong>Generated Images:</strong><br>
+                    • Security infographics with real data<br>
+                    • Before/after comparison charts<br>
+                    • Customer testimonial graphics<br>
+                    • Educational carousel content<br>
+                    • Brand-aligned visual assets<br>
+                    • Platform-optimized dimensions
+                </div>
+            </div>
+            
+            <!-- AI Visual Assistant -->
+            <div class="card ai-chat">
+                <div class="card-header">
+                    <h2 class="card-title">🤖 AI Visual Assistant</h2>
+                    <div class="alert-badge">4</div>
+                </div>
+                
+                <div class="chat-messages" id="visualChatMessages">
+                    <div class="message ai alert">
+                        🎨 <strong>NEW VISUAL CONTENT:</strong> AI created 6 engaging images for today's posts!
+                    </div>
+                    <div class="message ai">
+                        📊 <strong>Performance Update:</strong> Visual posts get 3.2x more shares than text-only!
+                    </div>
+                    <div class="message ai">
+                        🎯 <strong>Strategy:</strong> Focus on infographics and carousels for maximum engagement.
+                    </div>
+                    <div class="message ai">
+                        💡 <strong>Insight:</strong> Instagram engagement up 68% with AI-generated visuals!
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="visualChatInput" placeholder="Ask about image creation, visual strategy..." onkeypress="handleVisualChatInput(event)">
+                    <button onclick="sendVisualMessage()">Send</button>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚡ Quick Actions</h2>
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="approveAllVisuals()">
+                        ✅ Approve All Visuals (6)
+                    </button>
+                    <button class="quick-btn" onclick="generateInfographics()">
+                        📊 Generate Infographics
+                    </button>
+                    <button class="quick-btn" onclick="createCarousels()">
+                        🎠 Create Carousels
+                    </button>
+                    <button class="quick-btn" onclick="optimizeVisuals()">
+                        🎨 Optimize Visuals
+                    </button>
+                    <button class="quick-btn" onclick="scheduleVisualCampaign()">
+                        📅 Schedule Visual Campaign
+                    </button>
+                    <button class="quick-btn" onclick="visualPerformance()">
+                        📊 Visual Performance
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Visual Performance Analytics -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Visual Performance Analytics</h2>
+                </div>
+                
+                <div style="font-size: 0.8em; line-height: 1.4;">
+                    <h4 style="color: #fbbf24; margin-bottom: 8px;">📈 Visual Content Performance:</h4>
+                    <strong>📊 Infographics:</strong> 45% higher engagement<br>
+                    <strong>🎠 Carousels:</strong> 68% more saves<br>
+                    <strong>📸 Before/After:</strong> 52% more shares<br>
+                    <strong>💬 Quote Graphics:</strong> 38% more comments<br><br>
+                    
+                    <strong>🎯 Platform Performance:</strong><br>
+                    • Instagram: +68% engagement with visuals<br>
+                    • LinkedIn: +45% click-through rate<br>
+                    • Twitter: +32% retweets<br>
+                    • Discord: +58% reactions<br><br>
+                    
+                    <strong>🏆 Top Performing Visual:</strong><br>
+                    "Gaming Security Statistics" infographic<br>
+                    • 15.2K reach<br>
+                    • 89% engagement rate<br>
+                    • 342 shares
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const visualPostsData = [
+            {
+                id: 1,
+                title: 'Gaming Security Statistics Infographic',
+                platform: 'Instagram',
+                content: '🎮 Gaming Security by the Numbers:\n\n• 78% of gamers experienced security issues\n• AI reduces incidents by 78%\n• Average cost per breach: $45K\n• 92% of players prioritize security\n\nProtect your players with Stellar Logic AI! 🛡️',
+                imageType: 'infographic',
+                scheduledTime: 'Today 6:00 PM',
+                estimatedReach: '18K',
+                engagementScore: '95%',
+                hasImage: true
+            },
+            {
+                id: 2,
+                title: '5 Security Tips Carousel',
+                platform: 'Instagram',
+                content: '🎮 5 Essential Gaming Security Tips\n\nSwipe through to learn how to protect your gaming community!\n\n1. Real-time threat detection\n2. AI-powered monitoring\n3. Regular security audits\n4. Player education\n5. Expert partnership\n\n#gamingsecurity #gametips',
+                imageType: 'carousel',
+                scheduledTime: 'Today 2:00 PM',
+                estimatedReach: '15K',
+                engagementScore: '92%',
+                hasImage: true
+            },
+            {
+                id: 3,
+                title: 'Before/After Security Comparison',
+                platform: 'LinkedIn',
+                content: '📊 Before/After: GameStudio X Security Transformation\n\nBEFORE:\n• 15+ security incidents monthly\n• 4-hour average response time\n• $45K average breach cost\n\nAFTER Stellar Logic AI:\n• 78% fewer incidents\n• 45-minute response time\n• 300% ROI in 6 months\n\nTransform your security today! 🚀',
+                imageType: 'comparison',
+                scheduledTime: 'Today 10:00 AM',
+                estimatedReach: '12K',
+                engagementScore: '88%',
+                hasImage: true
+            },
+            {
+                id: 4,
+                title: 'Customer Success Quote Graphic',
+                platform: 'LinkedIn',
+                content: '💬 "Stellar Logic AI transformed our security posture completely. We reduced incidents by 78% and our players feel safer than ever."\n\n- CTO, GameStudio X\n\n🎮 50K monthly players protected\n📈 300% ROI in 6 months\n🛡️ 99.9% uptime achieved\n\n#customersuccess #gamingsecurity',
+                imageType: 'quote',
+                scheduledTime: 'Tomorrow 9:00 AM',
+                estimatedReach: '10K',
+                engagementScore: '85%',
+                hasImage: true
+            },
+            {
+                id: 5,
+                title: 'Security ROI Calculator',
+                platform: 'Twitter/X',
+                content: '💰 Gaming Security ROI Calculator:\n\n📊 Current breach cost: $45K\n🛡️ Our solution: $15K/year\n💡 Annual savings: $30K\n📈 3-year ROI: 600%\n\nProtect your players AND your bottom line! 🎮\n\nCalculate your ROI: [Link]\n\n#gamingsecurity #ROI #gamedev',
+                imageType: 'calculator',
+                scheduledTime: 'Tomorrow 12:00 PM',
+                estimatedReach: '8K',
+                engagementScore: '82%',
+                hasImage: true
+            },
+            {
+                id: 6,
+                title: 'AI Technology Stack Diagram',
+                platform: 'LinkedIn',
+                content: '🔧 Our AI Security Technology Stack:\n\n🧠 Machine Learning Core\n⚡ Real-time Processing Engine\n📊 Advanced Analytics Dashboard\n🛡️ Multi-layer Protection System\n📱 Cross-platform Integration\n\nPowering 1M+ gamers worldwide with 99.9% uptime! 🚀\n\n#AI #technology #gamingsecurity',
+                imageType: 'diagram',
+                scheduledTime: 'Tomorrow 3:00 PM',
+                estimatedReach: '9K',
+                engagementScore: '80%',
+                hasImage: true
+            }
+        ];
+        
+        function initializeDashboard() {
+            renderVisualPosts();
+        }
+        
+        function renderVisualPosts() {
+            const container = document.getElementById('visualPosts');
+            
+            container.innerHTML = visualPostsData.map(post => `
+                <div class="post-item ${post.urgency === 'urgent' ? 'urgent' : ''}" onclick="showVisualPostDetails(${post.id})">
+                    <div class="post-header">
+                        <div class="post-title">${post.title}</div>
+                        <div class="post-platform">${post.platform}</div>
+                    </div>
+                    <div class="post-meta">
+                        <span>⏰ ${post.scheduledTime}</span>
+                        <span>👁️ ${post.estimatedReach} reach</span>
+                        <span>📊 ${post.engagementScore} engagement</span>
+                        <span>🎨 ${post.imageType}</span>
+                    </div>
+                    
+                    <div class="post-image">
+                        ${post.hasImage ? `
+                            <div class="post-image-placeholder">
+                                🎨 AI-Generated ${post.imageType.charAt(0).toUpperCase() + post.imageType.slice(1)} Image
+                            </div>
+                            <div class="image-type-badge">${post.imageType.toUpperCase()}</div>
+                        ` : `
+                            <div class="post-image-placeholder">📝 Text Only</div>
+                        `}
+                    </div>
+                    
+                    <div class="post-content">${post.content}</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-approve" onclick="approveVisualPost(${post.id}, event)">✅ Approve</button>
+                        <button class="btn btn-regenerate" onclick="regenerateImage(${post.id}, event)">🎨 Regenerate</button>
+                        <button class="btn btn-modify" onclick="modifyVisualPost(${post.id}, event)">🔧 Modify</button>
+                        <button class="btn btn-reject" onclick="rejectVisualPost(${post.id}, event)">❌ Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function approveVisualPost(id, event) {
+            event.stopPropagation();
+            const post = visualPostsData.find(p => p.id === id);
+            
+            if (confirm(`Approve "${post.title}" with AI-generated ${post.imageType}?\n\nPlatform: ${post.platform}\nScheduled: ${post.scheduledTime}\nEstimated Reach: ${post.estimatedReach}`)) {
+                addVisualMessage(`✅ Approved: "${post.title}" with AI-generated ${post.imageType}\n\n📱 ${post.platform}\n📅 ${post.scheduledTime}\n👁️ ${post.estimatedReach} reach\n📊 ${post.engagementScore} engagement\n🎨 Visual content optimized for maximum impact!`);
+                
+                const index = visualPostsData.findIndex(p => p.id === id);
+                visualPostsData.splice(index, 1);
+                
+                renderVisualPosts();
+            }
+        }
+        
+        function regenerateImage(id, event) {
+            event.stopPropagation();
+            const post = visualPostsData.find(p => p.id === id);
+            addVisualMessage(`🎨 Regenerating ${post.imageType} for: "${post.title}"\n\nAI is creating a new visual with:\n• Updated design elements\n• Fresh color scheme\n• Optimized layout\n• Enhanced engagement factors\n\nNew image ready in 30 seconds!`);
+        }
+        
+        function modifyVisualPost(id, event) {
+            event.stopPropagation();
+            const post = visualPostsData.find(p => p.id === id);
+            addVisualMessage(`🔧 Opening modification options for: "${post.title}"\n\n🎨 Visual Options:\n• Change color scheme\n• Adjust layout\n• Modify text overlay\n• Alternative image style\n\nWhat would you like to modify?`);
+        }
+        
+        function rejectVisualPost(id, event) {
+            event.stopPropagation();
+            const post = visualPostsData.find(p => p.id === id);
+            
+            if (confirm(`Reject "${post.title}" and its ${post.imageType}?`)) {
+                addVisualMessage(`❌ Rejected: "${post.title}" with ${post.imageType}`);
+                
+                const index = visualPostsData.findIndex(p => p.id === id);
+                visualPostsData.splice(index, 1);
+                
+                renderVisualPosts();
+            }
+        }
+        
+        function showVisualPostDetails(id, event) {
+            event.stopPropagation();
+            const post = visualPostsData.find(p => p.id === id);
+            addVisualMessage(`📊 Visual Post Details: "${post.title}"\n\n📱 Platform: ${post.platform}\n🎨 Type: ${post.imageType}\n📅 Scheduled: ${post.scheduledTime}\n👁️ Estimated Reach: ${post.estimatedReach}\n📊 Engagement Score: ${post.engagementScore}\n\n🎨 AI Visual Features:\n• Platform-optimized dimensions\n• Brand-aligned color scheme\n• High engagement design elements\n• Professional typography\n• Strategic visual hierarchy`);
+        }
+        
+        function approveAllVisuals() {
+            if (confirm(`Approve all ${visualPostsData.length} visual posts?`)) {
+                const totalReach = visualPostsData.reduce((sum, post) => {
+                    const reach = post.estimatedReach.replace(/[^0-9]/g, '');
+                    return sum + parseInt(reach);
+                }, 0);
+                
+                addVisualMessage(`🚀 Approved all ${visualPostsData.length} visual posts!\n\n👁️ Total Estimated Reach: ${totalReach.toLocaleString()}\n🎨 Visual Types: Infographics, Carousels, Comparisons, Quotes\n📱 All platforms optimized for visual engagement`);
+                
+                visualPostsData.splice(0, visualPostsData.length);
+                renderVisualPosts();
+            }
+        }
+        
+        function generateInfographics() {
+            addVisualMessage(`📊 AI generating new infographics...\n\nCreating:\n• Gaming security statistics\n• Industry trend analysis\n• ROI comparison charts\n• Technology stack diagrams\n\nExpected: 3 new infographics in 2 minutes`);
+        }
+        
+        function createCarousels() {
+            addVisualMessage(`🎠 AI creating carousel content...\n\nDesigning:\n• 5-slide security tips\n• Before/after transformations\n• Customer success stories\n• Educational series\n\nExpected: 2 new carousels in 3 minutes`);
+        }
+        
+        function optimizeVisuals() {
+            addVisualMessage(`🎨 AI optimizing visual strategy...\n\nAnalyzing:\n• Color psychology for engagement\n• Layout optimization per platform\n• Typography for readability\n• Visual hierarchy for impact\n\nExpected: Strategy update in 2 minutes`);
+        }
+        
+        function scheduleVisualCampaign() {
+            addVisualMessage(`📅 AI scheduling visual campaign: "Visual Security Week"\n\nDuration: 7 days\nVisual Posts: 21 total\nContent Mix:\n• 8 infographics\n• 6 carousels\n• 4 comparison charts\n• 3 quote graphics\n\nAll optimized for maximum visual engagement!`);
+        }
+        
+        function visualPerformance() {
+            addVisualMessage(`📊 AI Visual Performance Report:\n\n📈 Visual Content Impact:\n• 3.2x more shares than text-only\n• 68% higher engagement rate\n• 45% increase in saves\n• 52% boost in comments\n\n🏆 Top Performing Visuals:\n• Infographics: 45% higher engagement\n• Carousels: 68% more saves\n• Before/After: 52% more shares\n• Quote Graphics: 38% more comments\n\n💡 AI Recommendation: Increase visual content to 70% of posts`);
+        }
+        
+        function selectTemplate(type) {
+            addVisualMessage(`🎨 Selected template: ${type}\n\nAI will create content using this template style.\n\nFeatures:\n• Brand-aligned design\n• Platform optimization\n• High engagement elements\n• Professional quality\n\nGenerating new content now...`);
+        }
+        
+        function sendVisualMessage() {
+            const input = document.getElementById('visualChatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addVisualMessage(message, 'user');
+                
+                setTimeout(() => {
+                    let response = generateVisualAIResponse(message);
+                    addVisualMessage(response, 'ai');
+                }, 1000);
+                
+                input.value = '';
+            }
+        }
+        
+        function handleVisualChatInput(event) {
+            if (event.key === 'Enter') {
+                sendVisualMessage();
+            }
+        }
+        
+        function addVisualMessage(message, sender = 'ai') {
+            const chatMessages = document.getElementById('visualChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            if (sender === 'ai' && (message.includes('NEW') || message.includes('🎨'))) {
+                messageDiv.className += ' alert';
+            }
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function generateVisualAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('image') || lowerMessage.includes('visual')) {
+                return `🎨 <strong>AI Visual Creation Capabilities:</strong><br><br>
+AI generates professional visuals including:<br><br>
+📊 <strong>Infographics:</strong> Data visualization with real statistics<br>
+🎠 <strong>Carousels:</strong> Multi-slide educational content<br>
+⚖️ <strong>Comparisons:</strong> Before/after transformation charts<br>
+💬 <strong>Quotes:</strong> Customer testimonial graphics<br>
+🧮 <strong>Calculators:</strong> Interactive ROI tools<br>
+🔧 <strong>Diagrams:</strong> Technology stack illustrations<br><br>
+🎯 <strong>Performance Impact:</strong><br>
+• 3.2x more shares than text-only<br>
+• 68% higher engagement rate<br>
+• 45% increase in saves<br>
+• 52% boost in comments`;
+            }
+            
+            if (lowerMessage.includes('infographic') || lowerMessage.includes('chart')) {
+                return `📊 <strong>AI Infographic Creation:</strong><br><br>
+AI creates data-driven infographics with:<br><br>
+📈 Real gaming security statistics<br>
+🎯 Industry trend analysis<br>
+💰 ROI comparison charts<br>
+🛡️ Security impact metrics<br>
+📊 Performance benchmarks<br><br>
+🎨 <strong>Design Features:</strong><br>
+• Brand-aligned color schemes<br>
+• Professional typography<br>
+• Platform-optimized dimensions<br>
+• High engagement visual hierarchy<br>
+• Mobile-responsive layouts`;
+            }
+            
+            if (lowerMessage.includes('performance') || lowerMessage.includes('engagement')) {
+                return `📊 <strong>Visual Content Performance:</strong><br><br>
+🏆 <strong>Top Performing Visual Types:</strong><br>
+• Infographics: 45% higher engagement<br>
+• Carousels: 68% more saves<br>
+• Before/After: 52% more shares<br>
+• Quote Graphics: 38% more comments<br><br>
+📱 <strong>Platform Performance:</strong><br>
+• Instagram: +68% engagement with visuals<br>
+• LinkedIn: +45% click-through rate<br>
+• Twitter: +32% retweets<br>
+• Discord: +58% reactions<br><br>
+💡 <strong>AI Recommendation:</strong> Increase visual content to 70% of posts`;
+            }
+            
+            return `🤖 I can help you with:<br><br>
+• 🎨 AI image creation and design<br>
+• 📊 Infographic and chart generation<br>
+• 🎠 Carousel content creation<br>
+• 📈 Visual performance analysis<br>
+• 🎯 Platform optimization<br>
+• 💡 Engagement strategy<br><br>
+What visual content would you like to create?`;
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+    </script>
+</body>
+</html>

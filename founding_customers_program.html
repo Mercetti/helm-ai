@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Founding Customers Program</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero .subtitle {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .hero .highlight {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: inline-block;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .benefit-card .icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .benefit-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            width: 45%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .timeline-date {
+            width: 45%;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .requirements {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .requirements h3 {
+            color: #fbbf24;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .requirements ul {
+            list-style: none;
+        }
+        
+        .requirements li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .requirements li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(251, 191, 36, 0.6);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .testimonial {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            text-align: right;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        
+        .urgency {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+            font-weight: bold;
+            font-size: 1.2em;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                flex-direction: column !important;
+            }
+            
+            .timeline-content,
+            .timeline-date {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>🚀 Founding Customers Program</h1>
+            <p class="subtitle">Be among the first 10 gaming studios to revolutionize your security with Stellar Logic AI</p>
+            <div class="highlight">🎯 1-Month FREE Trial + 50% Lifetime Discount</div>
+            <p>Join our exclusive founding program and help shape the future of gaming security</p>
+        </div>
+        
+        <div class="section">
+            <h2>🎮 Why Join Our Founding Program?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="icon">🎯</div>
+                    <h3>Exclusive Access</h3>
+                    <p>Be among the first 10 studios to deploy our 99.2% accuracy AI anti-cheat technology</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">💰</div>
+                    <h3>Incredible Value</h3>
+                    <p>1-month free trial + 50% lifetime discount on your subscription</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🤝</div>
+                    <h3>Partnership Status</h3>
+                    <p>Direct influence on product development and priority support</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🚀</div>
+                    <h3>First-Mover Advantage</h3>
+                    <p>Get ahead of competitors with cutting-edge AI security technology</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">📊</div>
+                    <h3>Advanced Analytics</h3>
+                    <p>Access comprehensive security insights and threat intelligence</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🔒</div>
+                    <h3>Enterprise Security</h3>
+                    <p>Bank-grade security with compliance and audit trails</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📅 Your 1-Month Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Week 1: Onboarding & Setup</h3>
+                        <p>Personalized setup, API integration, and team training</p>
+                    </div>
+                    <div class="timeline-date">
+                        <div>📅 Week 1</div>
+                        <p>Setup & Integration</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Week 2: Full Deployment</h3>
+                        <p>Complete system deployment across all your games</p>
+                    </div>
+                    <div class="timeline-date">
+                        <div>📅 Week 2</div>
+                        <p>Go Live</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Week 3: Optimization</h3>
+                        <p>Fine-tune AI models, customize rules, and optimize performance</p>
+                    </div>
+                    <div class="timeline-date">
+                        <div>📅 Week 3</div>
+                        <p>Optimize</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Week 4: Results & Planning</h3>
+                        <p>Review performance metrics, plan long-term strategy</p>
+                    </div>
+                    <div class="timeline-date">
+                        <div>📅 Week 4</div>
+                        <p>Results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 What You Get</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">99.2%</div>
+                    <div>Detection Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div>Protection</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">&lt;100ms</div>
+                    <div>Response Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">∞</div>
+                    <div>Scalability</div>
+                </div>
+            </div>
+            
+            <div class="requirements">
+                <h3>🎯 Program Requirements</h3>
+                <ul>
+                    <li>Gaming studio with at least 1 active game</li>
+                    <li>Minimum 1,000 monthly active players</li>
+                    <li>Technical team available for integration</li>
+                    <li>Willingness to provide feedback and testimonials</li>
+                    <li>Commitment to 1-month trial period</li>
+                    <li>Ready to make decision after trial (with discount)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎮 What Our Demo Users Say</h2>
+            <div class="testimonial">
+                <p>"The 99.2% accuracy is game-changing. We've seen a 40% reduction in cheating incidents and our players are happier than ever."</p>
+                <div class="testimonial-author">- Gaming Studio Alpha (Demo Participant)</div>
+            </div>
+            <div class="testimonial">
+                <p>"The real-time detection is incredible. We catch cheaters before they can impact gameplay, and the false positive rate is nearly zero."</p>
+                <div class="testimonial-author">- Indie Developer Beta (Demo Participant)</div>
+            </div>
+            <div class="testimonial">
+                <p>"The analytics dashboard gives us insights we never had before. We can see patterns and prevent issues before they become problems."</p>
+                <div class="testimonial-author">- Mobile Studio Gamma (Demo Participant)</div>
+            </div>
+        </div>
+        
+        <div class="urgency">
+            ⚡ LIMITED TIME: Only 3 spots remaining in our founding program!
+        </div>
+        
+        <div class="cta-section">
+            <h2>🚀 Ready to Join the Future?</h2>
+            <p>Secure your spot among the first 10 founding customers and revolutionize your gaming security</p>
+            
+            <div class="cta-buttons">
+                <a href="#apply" class="btn btn-primary" onclick="showApplication()">🎯 Apply Now</a>
+                <a href="#demo" class="btn btn-secondary" onclick="requestDemo()">🎮 Request Demo</a>
+                <a href="#contact" class="btn btn-secondary" onclick="contactSales()">💬 Talk to Sales</a>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <h3>📞 Questions? Contact Us</h3>
+                <p>Email: <a href="mailto:founding@stellarlogic.ai" style="color: #fbbf24;">founding@stellarlogic.ai</a></p>
+                <p>Phone: <a href="tel:+1-555-123-4567" style="color: #fbbf24;">+1-555-123-4567</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showApplication() {
+            alert('🎯 Application form would open here!\n\nIn a real implementation, this would open a comprehensive application form where you can:\n\n• Provide studio details\n• Describe your games and player base\n• Explain your current security challenges\n• Share your technical requirements\n• Upload relevant documentation\n\nOur team will review your application within 48 hours and get back to you with next steps!');
+        }
+        
+        function requestDemo() {
+            alert('🎮 Demo request received!\n\nWe\'ll contact you within 24 hours to schedule a personalized demo showing:\n\n• Real-time cheating detection\n• Analytics dashboard\n• Integration process\n• Performance metrics\n• Custom rule creation\n\nGet ready to see the future of gaming security!');
+        }
+        
+        function contactSales() {
+            alert('💬 Sales team ready to help!\n\nOur founding program specialists will contact you within 24 hours to discuss:\n\n• Your specific security needs\n• Integration timeline\n• Pricing and discounts\n• Technical requirements\n• Success metrics\n\nWe\'re excited to partner with you!');
+        }
+        
+        // Add countdown timer for urgency
+        function updateCountdown() {
+            // This would show real countdown in production
+            console.log('Countdown timer would update here');
+        }
+        
+        // Track application submissions
+        function trackApplication() {
+            // This would send analytics in production
+            console.log('Application tracked');
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Founding Customers Program page loaded');
+        });
+    </script>
+</body>
+</html>

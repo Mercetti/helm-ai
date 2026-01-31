@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Free Security Scanner</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero .subtitle {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .scanner-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .scanner-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .scanner-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .result-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #fbbf24;
+        }
+        
+        .result-item h3 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        
+        .risk-level {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .risk-low {
+            background: #10b981;
+            color: white;
+        }
+        
+        .risk-medium {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .risk-high {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card .icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fbbf24;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>🔍 Free Gaming Security Scanner</h1>
+            <p class="subtitle">Get instant insights into your game's security vulnerabilities</p>
+            <p>Scan your game for cheating vulnerabilities, security gaps, and optimization opportunities</p>
+        </div>
+        
+        <div class="scanner-section">
+            <h2>🎮 Quick Security Assessment</h2>
+            
+            <div class="scanner-form">
+                <div class="form-group">
+                    <label for="gameName">Game Name</label>
+                    <input type="text" id="gameName" placeholder="Enter your game name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gameType">Game Type</label>
+                    <select id="gameType" required>
+                        <option value="">Select game type</option>
+                        <option value="fps">First-Person Shooter</option>
+                        <option value="moba">MOBA</option>
+                        <option value="rpg">RPG</option>
+                        <option value="strategy">Strategy</option>
+                        <option value="racing">Racing</option>
+                        <option value="sports">Sports</option>
+                        <option value="puzzle">Puzzle</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="playerCount">Monthly Active Players</label>
+                    <select id="playerCount" required>
+                        <option value="">Select player count</option>
+                        <option value="1k-10k">1K - 10K</option>
+                        <option value="10k-50k">10K - 50K</option>
+                        <option value="50k-100k">50K - 100K</option>
+                        <option value="100k-500k">100K - 500K</option>
+                        <option value="500k+">500K+</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="platform">Platform</label>
+                    <select id="platform" required>
+                        <option value="">Select platform</option>
+                        <option value="pc">PC</option>
+                        <option value="mobile">Mobile</option>
+                        <option value="console">Console</option>
+                        <option value="web">Web</option>
+                        <option value="multi">Multi-platform</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="concerns">Primary Security Concerns</label>
+                    <select id="concerns" multiple>
+                        <option value="aimbot">Aimbot cheating</option>
+                        <option value="wallhack">Wallhacks</option>
+                        <option value="speedhack">Speed hacks</option>
+                        <option value="botting">Botting/Automation</option>
+                        <option value="exploits">Exploits/Glitches</option>
+                        <option value="account">Account security</option>
+                        <option value="server">Server security</option>
+                        <option value="data">Data protection</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="runSecurityScan()">🔍 Run Security Scan</button>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing your game's security profile...</p>
+            </div>
+            
+            <div class="results" id="results">
+                <h3>🎯 Your Security Assessment Results</h3>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">🎯</div>
+                <h3>Instant Analysis</h3>
+                <p>Get immediate insights into your game's security vulnerabilities and risk factors</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Risk Assessment</h3>
+                <p>Comprehensive evaluation of cheating risks and security gaps in your game</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">💡</div>
+                <h3>Recommendations</h3>
+                <p>Actionable suggestions to improve your game's security and player experience</p>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">99.2%</div>
+                <div>Detection Accuracy</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">&lt;100ms</div>
+                <div>Scan Time</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1,000+</div>
+                <div>Games Scanned</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div>Free Access</div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <h2>🚀 Ready for Professional Protection?</h2>
+            <p>Upgrade to Stellar Logic AI for comprehensive, real-time security protection</p>
+            
+            <div class="cta-buttons">
+                <a href="#founding" class="btn" onclick="showFoundingProgram()">🎯 Founding Program</a>
+                <a href="#demo" class="btn btn-secondary" onclick="requestDemo()">🎮 Request Demo</a>
+                <a href="#contact" class="btn btn-secondary" onclick="contactSales()">💬 Talk to Sales</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function runSecurityScan() {
+            const gameName = document.getElementById('gameName').value;
+            const gameType = document.getElementById('gameType').value;
+            const playerCount = document.getElementById('playerCount').value;
+            const platform = document.getElementById('platform').value;
+            const concerns = Array.from(document.getElementById('concerns').selectedOptions).map(option => option.value);
+            
+            if (!gameName || !gameType || !playerCount || !platform) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('results').classList.remove('show');
+            
+            // Simulate security scan
+            setTimeout(() => {
+                const results = generateSecurityResults(gameName, gameType, playerCount, platform, concerns);
+                displayResults(results);
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('results').classList.add('show');
+            }, 2000);
+        }
+        
+        function generateSecurityResults(gameName, gameType, playerCount, platform, concerns) {
+            const riskFactors = [];
+            const recommendations = [];
+            
+            // Analyze based on game type
+            if (gameType === 'fps') {
+                riskFactors.push({
+                    title: 'Aimbot Vulnerability',
+                    risk: 'high',
+                    description: 'FPS games are highly susceptible to aimbot cheating. Your game type has a 78% higher risk of aimbot incidents.'
+                });
+                recommendations.push('Implement advanced mouse movement analysis and pattern detection');
+            }
+            
+            if (gameType === 'moba') {
+                riskFactors.push({
+                    title: 'Map Hacking Risk',
+                    risk: 'medium',
+                    description: 'MOBA games often face map hacking and vision cheats. Your game type has a 45% risk of vision-related cheating.'
+                });
+                recommendations.push('Add server-side fog of war validation and vision system checks');
+            }
+            
+            // Analyze based on player count
+            if (playerCount === '1k-10k') {
+                riskFactors.push({
+                    title: 'Limited Protection',
+                    risk: 'medium',
+                    description: 'Smaller games often lack comprehensive security infrastructure, making them attractive targets for cheaters.'
+                });
+                recommendations.push('Start with basic anti-cheat measures and scale as you grow');
+            }
+            
+            if (playerCount === '500k+') {
+                riskFactors.push({
+                    title: 'High-Value Target',
+                    risk: 'high',
+                    description: 'Large player bases make your game an attractive target for organized cheating operations.'
+                });
+                recommendations.push('Implement enterprise-grade security with real-time monitoring');
+            }
+            
+            // Analyze based on platform
+            if (platform === 'pc') {
+                riskFactors.push({
+                    title: 'PC Platform Vulnerability',
+                    risk: 'high',
+                    description: 'PC games face the highest cheating risk due to open architecture and easy access to cheating tools.'
+                });
+                recommendations.push('Implement client-side and server-side detection systems');
+            }
+            
+            if (platform === 'mobile') {
+                riskFactors.push({
+                    title: 'Mobile Security Gaps',
+                    risk: 'medium',
+                    description: 'Mobile games face unique challenges including rooted devices and emulator usage.'
+                });
+                recommendations.push('Add device integrity checks and emulator detection');
+            }
+            
+            // Analyze specific concerns
+            concerns.forEach(concern => {
+                switch(concern) {
+                    case 'aimbot':
+                        riskFactors.push({
+                            title: 'Aimbot Detection Gap',
+                            risk: 'high',
+                            description: 'Your game lacks advanced aimbot detection mechanisms.'
+                        });
+                        recommendations.push('Implement machine learning-based aim detection');
+                        break;
+                    case 'wallhack':
+                        riskFactors.push({
+                            title: 'Wallhack Vulnerability',
+                            risk: 'medium',
+                            description: 'Your game may be vulnerable to wallhack cheats.'
+                        });
+                        recommendations.push('Add server-side visibility validation');
+                        break;
+                    case 'botting':
+                        riskFactors.push({
+                            title: 'Botting Risk',
+                            risk: 'medium',
+                            description: 'Your game may be vulnerable to automation and botting.'
+                        });
+                        recommendations.push('Implement behavioral analysis and CAPTCHA systems');
+                        break;
+                }
+            });
+            
+            // Add general recommendations
+            recommendations.push('Implement comprehensive logging and monitoring systems');
+            recommendations.push('Regular security audits and penetration testing');
+            recommendations.push('Player behavior analysis and anomaly detection');
+            
+            return {
+                gameName,
+                overallRisk: calculateOverallRisk(riskFactors),
+                riskFactors,
+                recommendations
+            };
+        }
+        
+        function calculateOverallRisk(riskFactors) {
+            const riskScores = { low: 1, medium: 2, high: 3 };
+            const totalScore = riskFactors.reduce((sum, factor) => sum + riskScores[factor.risk], 0);
+            const averageScore = totalScore / riskFactors.length;
+            
+            if (averageScore <= 1.5) return 'low';
+            if (averageScore <= 2.5) return 'medium';
+            return 'high';
+        }
+        
+        function displayResults(results) {
+            const resultsContent = document.getElementById('resultsContent');
+            
+            let html = `
+                <div class="result-item">
+                    <h3>Overall Risk Assessment: ${results.overallRisk.toUpperCase()} 
+                        <span class="risk-level risk-${results.overallRisk}">${results.overallRisk}</span>
+                    </h3>
+                    <p>Your game "${results.gameName}" has been analyzed for security vulnerabilities and cheating risks.</p>
+                </div>
+            `;
+            
+            results.riskFactors.forEach(factor => {
+                html += `
+                    <div class="result-item">
+                        <h3>${factor.title} 
+                            <span class="risk-level risk-${factor.risk}">${factor.risk}</span>
+                        </h3>
+                        <p>${factor.description}</p>
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="result-item">
+                    <h3>🛡️ Recommended Actions</h3>
+                    <ul>
+            `;
+            
+            results.recommendations.forEach(rec => {
+                html += `<li>${rec}</li>`;
+            });
+            
+            html += `
+                    </ul>
+                </div>
+            `;
+            
+            html += `
+                <div class="result-item">
+                    <h3>🚀 Next Steps</h3>
+                    <p>Based on your security assessment, we recommend upgrading to Stellar Logic AI for comprehensive protection.</p>
+                    <div style="margin-top: 20px;">
+                        <button class="btn" onclick="showFoundingProgram()">Get Professional Protection</button>
+                    </div>
+                </div>
+            `;
+            
+            resultsContent.innerHTML = html;
+        }
+        
+        function showFoundingProgram() {
+            alert('🎯 Founding Customers Program!\n\nAs a security scanner user, you qualify for special consideration in our founding program:\n\n• 1-Month FREE trial of our complete AI system\n• 50% lifetime discount\n• Priority onboarding\n• Direct influence on product development\n\nApply now: stellarlogic.ai/founding');
+        }
+        
+        function requestDemo() {
+            alert('🎮 Request Personalized Demo!\n\nWe\'ll show you how Stellar Logic AI can protect your game with:\n\n• Real-time cheating detection\n• 99.2% accuracy rate\n• Advanced analytics dashboard\n• Custom rule creation\n\nWe\'ll contact you within 24 hours to schedule your demo!');
+        }
+        
+        function contactSales() {
+            alert('💬 Talk to Our Security Experts!\n\nOur team is ready to help you:\n\n• Discuss your specific security needs\n• Create a customized protection plan\n• Answer your technical questions\n• Provide pricing options\n\nContact us at: sales@stellarlogic.ai\nCall: +1-555-123-4567');
+        }
+        
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Security Scanner loaded');
+        });
+    </script>
+</body>
+</html>

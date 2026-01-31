@@ -1,0 +1,25 @@
+STELLAR LOGIC AI - DETECTION RATE PROOF REPORT
+============================================================
+
+EXECUTIVE SUMMARY:
+Detection Rate: 0.9535 (95.35%)
+Target Rate: 98.5%
+Sample Size: 12,500
+False Positive Rate: 0.000000
+
+STATISTICAL ANALYSIS:
+95% Confidence Interval: ±0.0037
+Lower Bound: 0.9498 (94.98%)
+Upper Bound: 0.9572 (95.72%)
+Statistically Significant: True
+Meets 98.5% Target: False
+
+TEST BREAKDOWN:
+known_threats: 0.9890 (98.90%)
+benign_cases: 1.0000 (100.00%)
+ai_threats: 1.0000 (100.00%)
+edge_cases: 0.4740 (47.40%)
+zero_day: 1.0000 (100.00%)
+
+CONCLUSION:
+RESULT: Target not achieved - Current rate: 95.35%

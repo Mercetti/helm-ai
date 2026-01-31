@@ -1,0 +1,93 @@
+{
+  "test_summary": {
+    "total_tests": 26000,
+    "test_datasets": {
+      "known_threats": 10000,
+      "benign_samples": 10000,
+      "edge_cases": 2000,
+      "ai_threats": 2000,
+      "zero_day_threats": 1000,
+      "adversarial_attacks": 1000
+    },
+    "test_date": "2026-01-30T17:41:14.074193",
+    "validation_method": "Industry_Standard_Testing"
+  },
+  "overall_metrics": {
+    "true_positives": 12594,
+    "false_positives": 2163,
+    "true_negatives": 8831,
+    "false_negatives": 2412,
+    "total_tests": 26000,
+    "detection_rate": 0.8240384615384615,
+    "false_positive_rate": 0.19674367837002002,
+    "precision": 0.8534254929863794,
+    "recall": 0.8392642942822871,
+    "f1_score": 0.8462856566878338,
+    "target_achieved": false,
+    "performance_gap": 0.1609615384615385
+  },
+  "statistical_analysis": {
+    "sample_size": 26000,
+    "observed_rate": 0.8240384615384615,
+    "target_rate": 0.985,
+    "confidence_interval_95": 0.004628625183093921,
+    "lower_bound": 0.8194098363553676,
+    "upper_bound": 0.8286670867215554,
+    "z_statistic": -213.52318727323035,
+    "p_value": 0.0,
+    "statistically_significant": true,
+    "meets_target_with_confidence": false
+  },
+  "dataset_breakdown": {
+    "known_threats": {
+      "total": 10000,
+      "correct": 9528,
+      "detection_rate": 0.9528
+    },
+    "benign_samples": {
+      "total": 10000,
+      "correct": 8006,
+      "detection_rate": 0.8006
+    },
+    "edge_cases": {
+      "total": 2000,
+      "correct": 1035,
+      "detection_rate": 0.5175
+    },
+    "ai_threats": {
+      "total": 2000,
+      "correct": 1739,
+      "detection_rate": 0.8695
+    },
+    "zero_day_threats": {
+      "total": 1000,
+      "correct": 924,
+      "detection_rate": 0.924
+    },
+    "adversarial_attacks": {
+      "total": 1000,
+      "correct": 193,
+      "detection_rate": 0.193
+    }
+  },
+  "performance_analysis": {
+    "by_threat_type": {},
+    "by_severity": {},
+    "by_confidence": {}
+  },
+  "confidence_analysis": {
+    "average_confidence": 0.8246450858871025,
+    "median_confidence": 0.8249046747679267,
+    "min_confidence": 0.7000152647689035,
+    "max_confidence": 0.949991135986572,
+    "confidence_std": 0.07184495331439547
+  },
+  "processing_time_analysis": {
+    "average_time": 5.0400128731360805e-06,
+    "median_time": 3.5762786865234375e-06,
+    "min_time": 2.86102294921875e-06,
+    "max_time": 0.029703378677368164,
+    "time_std": 0.00018430928802626686,
+    "under_25ms": 0.9999615384615385
+  }
+}

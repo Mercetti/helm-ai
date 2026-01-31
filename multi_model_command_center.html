@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Multi-Model Command Center</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 2200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .alert-badge {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .model-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .model-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .model-item.active {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .model-item.busy {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .model-item.offline {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            opacity: 0.7;
+        }
+        
+        .model-name {
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .model-status {
+            font-size: 0.7em;
+            margin-bottom: 5px;
+        }
+        
+        .model-metrics {
+            font-size: 0.6em;
+            opacity: 0.8;
+        }
+        
+        .task-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .task-item.urgent {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .task-title {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .task-model {
+            background: rgba(251, 191, 36, 0.2);
+            border-radius: 20px;
+            padding: 4px 8px;
+            font-size: 0.6em;
+        }
+        
+        .task-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 0.7em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .task-description {
+            font-size: 0.8em;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            border: none;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.6em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-reassign {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+        
+        .btn-details {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .ai-chat {
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            font-size: 0.8em;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+        
+        .message.ai {
+            background: rgba(251, 191, 36, 0.2);
+            border-left: 3px solid #fbbf24;
+            align-self: flex-start;
+        }
+        
+        .message.user {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-end;
+        }
+        
+        .message.model {
+            background: rgba(139, 92, 246, 0.2);
+            border-left: 3px solid #8b5cf6;
+            align-self: flex-start;
+        }
+        
+        .message.alert {
+            background: rgba(239, 68, 68, 0.2);
+            border-left: 3px solid #ef4444;
+            animation: pulse 2s infinite;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            font-size: 0.8em;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #fbbf24;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.7em;
+        }
+        
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .performance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .perf-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .perf-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        
+        .perf-label {
+            font-size: 0.6em;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 1800px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 1400px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 1000px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Multi-Model AI Command Center</h1>
+            <p class="subtitle">Intelligent Model Orchestration & Task Distribution System</p>
+        </div>
+        
+        <div class="main-layout">
+            <!-- AI Model Status -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🤖 AI Model Fleet</h2>
+                    <div class="alert-badge">2</div>
+                </div>
+                
+                <div class="model-grid" id="modelGrid">
+                    <!-- Models will be populated here -->
+                </div>
+                
+                <div style="font-size: 0.8em; line-height: 1.4; margin-bottom: 15px;">
+                    <h4 style="color: #fbbf24; margin-bottom: 8px;">🧠 Current Model Capabilities:</h4>
+                    <strong>Stellar Logic AI:</strong> Core business logic, approvals + LEARNING HUB<br>
+                    <strong>Llama 3.1 3B:</strong> Advanced reasoning, analysis (teacher model)<br>
+                    <strong>CodeLlama 3B:</strong> Code generation, technical tasks (teacher model)<br>
+                    <strong>Mistral 3B:</strong> Creative content, marketing (teacher model)<br>
+                    <strong>Qwen 3B:</strong> Multilingual, data processing (teacher model)<br>
+                    <strong>Nous-Hermes 3B:</strong> Complex problem solving (teacher model)<br><br>
+                    
+                    <strong>🚀 Ultra-Lightweight Backup Models:</strong><br>
+                    <strong>Phi-2 2.7B:</strong> Quick reasoning, lightweight analysis (teacher model)<br>
+                    <strong>TinyLlama 1.1B:</strong> Fast responses, basic tasks (teacher model)<br>
+                    <strong>Gemma 2B:</strong> Efficient reasoning, multilingual (teacher model)<br>
+                    <strong>StableLM-3B:</strong> Quick content generation (teacher model)<br><br>
+                    
+                    <strong>🧠 Stellar Logic AI Learning System:</strong><br>
+                    • Learns reasoning patterns from Llama 3.1<br>
+                    • Learns code generation from CodeLlama<br>
+                    • Learns creativity from Mistral<br>
+                    • Learns multilingual from Qwen & Gemma<br>
+                    • Learns problem-solving from Nous-Hermes<br>
+                    • Becomes unified AI system over time<br><br>
+                    
+                    <strong>💡 Hardware Optimized:</strong> All models sized for 16GB RAM + GTX 1080
+                </div>
+            </div>
+            
+            <!-- Active Task Distribution -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚡ Active Task Distribution</h2>
+                    <div class="alert-badge">8</div>
+                </div>
+                
+                <div id="taskList">
+                    <!-- Tasks will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Model Performance Analytics -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Model Performance</h2>
+                </div>
+                
+                <div class="performance-grid">
+                    <div class="perf-item">
+                        <div class="perf-value">94%</div>
+                        <div class="perf-label">Overall Accuracy</div>
+                    </div>
+                    <div class="perf-item">
+                        <div class="perf-value">1.2s</div>
+                        <div class="perf-label">Avg Response Time</div>
+                    </div>
+                    <div class="perf-item">
+                        <div class="perf-value">847</div>
+                        <div class="perf-label">Tasks Completed</div>
+                    </div>
+                    <div class="perf-item">
+                        <div class="perf-value">98%</div>
+                        <div class="perf-label">Uptime</div>
+                    </div>
+                </div>
+                
+                <div style="font-size: 0.8em; line-height: 1.4;">
+                    <h4 style="color: #fbbf24; margin-bottom: 8px;">🏆 Top Performers:</h4>
+                    <strong>1. Stellar Logic AI:</strong> 97% accuracy, approvals<br>
+                    <strong>2. Llama 3.1:</strong> 95% accuracy, analysis<br>
+                    <strong>3. Mistral:</strong> 93% accuracy, creative<br><br>
+                    
+                    <strong>📈 Efficiency Gains:</strong><br>
+                    • 40% faster task completion<br>
+                    • 25% better quality output<br>
+                    • 60% reduced manual intervention
+                </div>
+            </div>
+            
+            <!-- Multi-Model Assistant -->
+            <div class="card ai-chat">
+                <div class="card-header">
+                    <h2 class="card-title">🧠 Multi-Model Assistant</h2>
+                    <div class="alert-badge">5</div>
+                </div>
+                
+                <div class="chat-messages" id="multiChatMessages">
+                    <div class="message ai alert">
+                        🧠 <strong>MODEL ALERT:</strong> Llama 3.1 handling complex pricing analysis, Mistral creating visual content!
+                    </div>
+                    <div class="message model">
+                        🦙 <strong>Llama 3.1:</strong> "Completed GameStudio X pricing analysis. Recommend 15% discount with 3-month support package. Confidence: 94%"
+                    </div>
+                    <div class="message model">
+                        🎨 <strong>Mistral:</strong> "Created 3 new infographics for Instagram. Optimized for maximum engagement. Ready for approval."
+                    </div>
+                    <div class="message ai">
+                        ⚡ <strong>Task Distribution:</strong> 8 active tasks across 4 models. All systems operating at optimal capacity.
+                    </div>
+                    <div class="message model">
+                        💻 <strong>CodeLlama:</strong> "Generated API integration code for Thunderbolt Studios. Testing shows 99.9% uptime compatibility."
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="multiChatInput" placeholder="Ask models about tasks, performance, or capabilities..." onkeypress="handleMultiChatInput(event)">
+                    <button onclick="sendMultiMessage()">Send</button>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚡ Quick Actions</h2>
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="optimizeDistribution()">
+                        🎯 Optimize Distribution
+                    </button>
+                    <button class="quick-btn" onclick="upgradeModels()">
+                        🚀 Upgrade Models
+                    </button>
+                    <button class="quick-btn" onclick="reassignTasks()">
+                        🔄 Reassign Tasks
+                    </button>
+                    <button class="quick-btn" onclick="modelHealth()">
+                        🏥 Model Health Check
+                    </button>
+                    <button class="quick-btn" onclick="performanceReport()">
+                        📊 Performance Report
+                    </button>
+                    <button class="quick-btn" onclick="scaleModels()">
+                        📈 Scale Models
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Ollama Integration -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🦙 Ollama Integration</h2>
+                </div>
+                
+                <div style="font-size: 0.8em; line-height: 1.4;">
+                    <h4 style="color: #fbbf24; margin-bottom: 8px;">🚀 Current Hardware Optimization:</h4>
+                    <strong>✅ Primary Models (Optimized for 16GB RAM):</strong><br>
+                    • Llama 3.1 3B → Llama 3.2 3B (same size, better performance)<br>
+                    • Mistral 3B → Mistral 7B (if RAM allows)<br>
+                    • Qwen 3B → Qwen 7B (if RAM allows)<br>
+                    • CodeLlama 3B → CodeLlama 7B (if RAM allows)<br><br>
+                    
+                    <strong>� Ultra-Lightweight Backup Models:</strong><br>
+                    • Phi-2 2.7B: Quick reasoning when 3B models are busy<br>
+                    • TinyLlama 1.1B: Fast responses for basic tasks<br>
+                    • Gemma 2B: Efficient reasoning, multilingual support<br>
+                    • StableLM-3B: Quick content generation<br><br>
+                    
+                    <strong>��️ Current Hardware:</strong><br>
+                    • 16GB RAM (current constraint)<br>
+                    • GTX 1080 (8GB VRAM)<br>
+                    • Can run 2-3 small models simultaneously<br>
+                    • Model switching: 3-5 seconds (lightweight models)<br><br>
+                    
+                    <strong>📈 Bottleneck Prevention:</strong><br>
+                    • Auto-switch to lightweight models when 3B models are busy<br>
+                    • Priority-based model selection (3B → 2.7B → 1.1B)<br>
+                    • Multi-model parallel processing (2-3 models at once)<br>
+                    • Smart load balancing across available RAM<br>
+                    • Model caching for frequently used lightweight models
+                </div>
+            </div>
+            
+            <!-- System Integration -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🔗 System Integration</h2>
+                </div>
+                
+                <div style="font-size: 0.8em; line-height: 1.4;">
+                    <h4 style="color: #fbbf24; margin-bottom: 8px;">🌐 Integrated Dashboards:</h4>
+                    <strong>🌐 Integrated Dashboards:</strong><br>
+                    • 🤖 Integrated Assistant Dashboard → Learning Hub<br>
+                    • 💼 Advanced Sales & Pricing → Teacher models + Learning Hub<br>
+                    • 📱 Visual Social Media → Creative models + Learning Hub<br>
+                    • 📋 Unified Approval System → Core approvals + Learning Hub<br>
+                    • 🔧 Technical Operations → Code models + Learning Hub<br>
+                    • 📊 Analytics & Reporting → All models feed into Learning Hub<br><br>
+                    
+                    <strong>🔄 Learning Data Flow:</strong><br>
+                    • All dashboard activities → Learning Hub analysis<br>
+                    • Teacher model decisions → Stellar Logic AI learns patterns<br>
+                    • User approvals → Learning Hub refines understanding<br>
+                    • Performance metrics → Learning Hub optimizes integration<br>
+                    • User feedback → Learning Hub adapts behavior<br><br>
+                    
+                    <strong>🎯 Unified Experience:</strong><br>
+                    • Single dashboard controls all AI operations<br>
+                    • Learning Hub learns from all dashboard activities<br>
+                    • Stellar Logic AI becomes unified AI system<br>
+                    • No page bouncing - everything integrated!<br><br>
+                    
+                    <strong>🔄 Model Assignment Logic:</strong><br>
+                    • <strong>Stellar Logic AI:</strong> Core decisions, approvals + Learning Hub<br>
+                    • <strong>Llama 3.1:</strong> Complex analysis, pricing (teacher)<br>
+                    • <strong>Mistral:</strong> Creative content, visuals (teacher)<br>
+                    • <strong>CodeLlama:</strong> Technical tasks, code (teacher)<br>
+                    • <strong>Qwen:</strong> Data processing, multilingual (teacher)<br>
+                    • <strong>Nous-Hermes:</strong> Problem solving (teacher)<br><br>
+                    
+                    <strong>🎯 Auto-Failover:</strong> If model fails → auto-reassign to next best model
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const modelsData = [
+            {
+                id: 'stellar-logic',
+                name: 'Stellar Logic AI',
+                status: 'active',
+                accuracy: '94%',
+                load: '65%',
+                tasks: 18,
+                specialty: 'Core Business Logic + Learning Hub',
+                size: '3B',
+                learningProgress: '67%'
+            },
+            {
+                id: 'llama-31',
+                name: 'Llama 3.1 3B',
+                status: 'active',
+                accuracy: '89%',
+                load: '88%',
+                tasks: 12,
+                specialty: 'Advanced Reasoning (Teacher Model)',
+                size: '3B',
+                teachingProgress: '82%'
+            },
+            {
+                id: 'codellama',
+                name: 'CodeLlama 3B',
+                status: 'busy',
+                accuracy: '87%',
+                load: '95%',
+                tasks: 6,
+                specialty: 'Code Generation (Teacher Model)',
+                size: '3B',
+                teachingProgress: '74%'
+            },
+            {
+                id: 'mistral',
+                name: 'Mistral 3B',
+                status: 'active',
+                accuracy: '85%',
+                load: '45%',
+                tasks: 8,
+                specialty: 'Creative Content (Teacher Model)',
+                size: '3B',
+                teachingProgress: '68%'
+            },
+            {
+                id: 'qwen',
+                name: 'Qwen 3B',
+                status: 'active',
+                accuracy: '83%',
+                load: '30%',
+                tasks: 4,
+                specialty: 'Multilingual (Teacher Model)',
+                size: '3B',
+                teachingProgress: '71%'
+            },
+            {
+                id: 'nous-hermes',
+                name: 'Nous-Hermes 3B',
+                status: 'offline',
+                accuracy: '81%',
+                load: '0%',
+                tasks: 0,
+                specialty: 'Problem Solving (Teacher Model)',
+                size: '3B',
+                teachingProgress: '65%'
+            },
+            {
+                id: 'phi-2',
+                name: 'Phi-2 2.7B',
+                status: 'standby',
+                accuracy: '78%',
+                load: '0%',
+                tasks: 0,
+                specialty: 'Quick Reasoning (Teacher Model)',
+                size: '2.7B',
+                teachingProgress: '58%'
+            },
+            {
+                id: 'tinyllama',
+                name: 'TinyLlama 1.1B',
+                status: 'standby',
+                accuracy: '72%',
+                load: '0%',
+                tasks: 0,
+                specialty: 'Fast Responses (Teacher Model)',
+                size: '1.1B',
+                teachingProgress: '52%'
+            },
+            {
+                id: 'gemma',
+                name: 'Gemma 2B',
+                status: 'standby',
+                accuracy: '76%',
+                load: '0%',
+                tasks: 0,
+                specialty: 'Efficient Reasoning (Teacher Model)',
+                size: '2B',
+                teachingProgress: '61%'
+            },
+            {
+                id: 'stablelm',
+                name: 'StableLM-3B',
+                status: 'standby',
+                accuracy: '74%',
+                load: '0%',
+                tasks: 0,
+                specialty: 'Quick Content (Teacher Model)',
+                size: '3B',
+                teachingProgress: '55%'
+            }
+        ];
+        
+        const tasksData = [
+            {
+                id: 1,
+                title: 'GameStudio X Pricing Analysis',
+                model: 'Llama 3.1 3B',
+                priority: 'high',
+                status: 'processing',
+                description: 'Complex pricing negotiation with 30% discount request',
+                progress: '85%',
+                timeLeft: '2 minutes'
+            },
+            {
+                id: 2,
+                title: 'Instagram Infographic Creation',
+                model: 'Mistral 3B',
+                priority: 'medium',
+                status: 'processing',
+                description: 'Creating gaming security statistics visual',
+                progress: '60%',
+                timeLeft: '5 minutes'
+            },
+            {
+                id: 3,
+                title: 'API Integration Code',
+                model: 'CodeLlama 3B',
+                priority: 'high',
+                status: 'processing',
+                description: 'Thunderbolt Studios custom API integration',
+                progress: '95%',
+                timeLeft: '1 minute'
+            },
+            {
+                id: 4,
+                title: 'Social Media Campaign',
+                model: 'Mistral 3B',
+                priority: 'medium',
+                status: 'queued',
+                description: 'Weekly content creation for all platforms',
+                progress: '0%',
+                timeLeft: '10 minutes'
+            },
+            {
+                id: 5,
+                title: 'Customer Support Response',
+                model: 'Stellar Logic AI',
+                priority: 'urgent',
+                status: 'processing',
+                description: 'Urgent technical issue resolution needed',
+                progress: '40%',
+                timeLeft: '3 minutes'
+            }
+        ];
+        
+        function initializeDashboard() {
+            renderModels();
+            renderTasks();
+            startRealTimeUpdates();
+        }
+        
+        function renderModels() {
+            const container = document.getElementById('modelGrid');
+            
+            container.innerHTML = modelsData.map(model => `
+                <div class="model-item ${model.status}" onclick="selectModel('${model.id}')">
+                    <div class="model-name">${model.name}</div>
+                    <div class="model-status">${model.status.toUpperCase()}</div>
+                    <div class="model-metrics">
+                        Accuracy: ${model.accuracy}<br>
+                        Load: ${model.load}<br>
+                        Tasks: ${model.tasks}<br>
+                        Size: ${model.size}<br>
+                        ${model.specialty}<br>
+                        ${model.teachingProgress ? `Teaching: ${model.teachingProgress}` : ''}
+                        ${model.learningProgress ? `Learning: ${model.learningProgress}` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderTasks() {
+            const container = document.getElementById('taskList');
+            
+            container.innerHTML = tasksData.map(task => `
+                <div class="task-item ${task.priority === 'urgent' ? 'urgent' : ''}" onclick="showTaskDetails(${task.id})">
+                    <div class="task-header">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-model">${task.model}</div>
+                    </div>
+                    <div class="task-meta">
+                        <span>🎯 ${task.priority.toUpperCase()}</span>
+                        <span>📊 ${task.progress}</span>
+                        <span>⏰ ${task.timeLeft}</span>
+                        <span>🔄 ${task.status}</span>
+                    </div>
+                    <div class="task-description">${task.description}</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-approve" onclick="approveTask(${task.id}, event)">✅</button>
+                        <button class="btn btn-reassign" onclick="reassignTask(${task.id}, event)">🔄</button>
+                        <button class="btn btn-details" onclick="showTaskDetails(${task.id}, event)">📊</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function selectModel(modelId) {
+            const model = modelsData.find(m => m.id === modelId);
+            addMultiMessage(`🧠 Selected: ${model.name}\n\nStatus: ${model.status}\nAccuracy: ${model.accuracy}\nLoad: ${model.load}\nActive Tasks: ${model.tasks}\nSpecialty: ${model.specialty}`, 'ai');
+        }
+        
+        function approveTask(id, event) {
+            event.stopPropagation();
+            const task = tasksData.find(t => t.id === id);
+            addMultiMessage(`✅ Approved task: "${task.title}"\n\nModel: ${task.model}\nProgress: ${task.progress}\nPriority: ${task.priority}`, 'ai');
+            
+            const index = tasksData.findIndex(t => t.id === id);
+            tasksData.splice(index, 1);
+            renderTasks();
+        }
+        
+        function reassignTask(id, event) {
+            event.stopPropagation();
+            const task = tasksData.find(t => t.id === id);
+            const availableModels = modelsData.filter(m => m.status === 'active' && m.name !== task.model);
+            
+            addMultiMessage(`🔄 Reassigning task: "${task.title}"\n\nCurrent: ${task.model}\nAvailable models: ${availableModels.map(m => m.name).join(', ')}\n\nSelect new model:`, 'ai');
+        }
+        
+        function showTaskDetails(id, event) {
+            event.stopPropagation();
+            const task = tasksData.find(t => t.id === id);
+            addMultiMessage(`📊 Task Details: "${task.title}"\n\nModel: ${task.model}\nPriority: ${task.priority}\nStatus: ${task.status}\nProgress: ${task.progress}\nTime Remaining: ${task.timeLeft}\n\nDescription: ${task.description}`, 'ai');
+        }
+        
+        function optimizeDistribution() {
+            addMultiMessage(`🎯 Optimizing task distribution...\n\nAnalyzing model loads and capabilities\nRebalancing tasks for maximum efficiency\nExpected improvement: 25% faster completion`, 'ai');
+        }
+        
+        function upgradeModels() {
+            addMultiMessage(`🚀 Initiating model upgrade sequence...\n\nTarget upgrades:\n• Llama 3.1 → Llama 3.2 70B\n• Mistral → Mixtral 8x7B\n• Qwen → Qwen 72B\n\nHardware upgrade required: 128GB RAM, 2x RTX 4090\nEstimated cost: $8,000\nPerformance gain: 300-500%`, 'ai');
+        }
+        
+        function reassignTasks() {
+            addMultiMessage(`🔄 Reassigning tasks for optimal performance...\n\nMoving tasks from overloaded models\nBalancing workload across available models\nExpected completion time: 2 minutes`, 'ai');
+        }
+        
+        function modelHealth() {
+            addMultiMessage(`🏥 Running comprehensive model health check...\n\n✅ Stellar Logic AI: Optimal\n✅ Llama 3.1: Healthy\n⚠️ CodeLlama: High load (92%)\n✅ Mistral: Optimal\n✅ Qwen: Optimal\n❌ Nous-Hermes: Offline\n\nRecommendation: Restart CodeLlama, bring Nous-Hermes online`, 'ai');
+        }
+        
+        function performanceReport() {
+            addMultiMessage(`📊 Multi-Model Performance Report:\n\n🏆 Top Performers:\n1. Stellar Logic AI: 97% accuracy\n2. Llama 3.1: 95% accuracy\n3. Mistral: 93% accuracy\n\n📈 System Metrics:\n• Total tasks: 847 completed\n• Average response: 1.2 seconds\n• System uptime: 98%\n• Error rate: <1%\n\n💡 Optimization: Consider upgrading CodeLlama to handle technical load`, 'ai');
+        }
+        
+        function scaleModels() {
+            addMultiMessage(`📈 Scaling model infrastructure...\n\nCurrent capacity: 6 models\nTarget capacity: 12 models\nScaling strategy:\n• Add specialized models for each task type\n• Implement load balancing\n• Enable auto-scaling based on demand\n\nExpected improvement: 200% capacity increase`, 'ai');
+        }
+        
+        function sendMultiMessage() {
+            const input = document.getElementById('multiChatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMultiMessage(message, 'user');
+                
+                setTimeout(() => {
+                    let response = generateMultiModelResponse(message);
+                    addMultiMessage(response, 'model');
+                }, 1000);
+                
+                input.value = '';
+            }
+        }
+        
+        function handleMultiChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMultiMessage();
+            }
+        }
+        
+        function addMultiMessage(message, sender = 'ai') {
+            const chatMessages = document.getElementById('multiChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            if (sender === 'ai' && (message.includes('ALERT') || message.includes('🧠'))) {
+                messageDiv.className += ' alert';
+            }
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function generateMultiModelResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('model') || lowerMessage.includes('which')) {
+                return `🧠 <strong>Current Model Fleet Status:</strong><br><br>
+🤖 <strong>Stellar Logic AI:</strong> Active, 97% accuracy, Core business logic<br>
+🦙 <strong>Llama 3.1:</strong> Active, 95% accuracy, Advanced reasoning<br>
+💻 <strong>CodeLlama:</strong> Busy, 94% accuracy, Code generation<br>
+🎨 <strong>Mistral:</strong> Active, 93% accuracy, Creative content<br>
+🌍 <strong>Qwen:</strong> Active, 91% accuracy, Multilingual<br>
+🧠 <strong>Nous-Hermes:</strong> Offline, 89% accuracy, Problem solving<br><br>
+Total active models: 5/6<br>
+System efficiency: 94%`;
+            }
+            
+            if (lowerMessage.includes('task') || lowerMessage.includes('distribution')) {
+                return `⚡ <strong>Task Distribution Analysis:</strong><br><br>
+🎯 <strong>Active Tasks:</strong> 8 total<br>
+🦙 <strong>Llama 3.1:</strong> 3 tasks (complex analysis)<br>
+🎨 <strong>Mistral:</strong> 2 tasks (creative content)<br>
+💻 <strong>CodeLlama:</strong> 1 task (technical)<br>
+🤖 <strong>Stellar Logic AI:</strong> 1 task (approvals)<br>
+🌍 <strong>Qwen:</strong> 1 task (data processing)<br><br>
+📊 <strong>Load Distribution:</strong><br>
+• CodeLlama: 92% load (consider reassigning)<br>
+• Llama 3.1: 78% load (optimal)<br>
+• Other models: <50% load (available)`;
+            }
+            
+            if (lowerMessage.includes('upgrade') || lowerMessage.includes('ollama')) {
+                return `🚀 <strong>Ollama Upgrade Path:</strong><br><br>
+📈 <strong>Recommended Upgrades:</strong><br>
+• Llama 3.1 8B → Llama 3.2 70B (5x performance)<br>
+• Mistral 7B → Mixtral 8x7B (3x performance)<br>
+• Qwen 7B → Qwen 72B (4x performance)<br>
+• CodeLlama 13B → CodeLlama 34B (2.5x performance)<br><br>
+🛠️ <strong>Hardware Requirements:</strong><br>
+• Current: 32GB RAM, RTX 4090<br>
+• Upgraded: 128GB RAM, 2x RTX 4090<br>
+• Cost: ~$8,000<br>
+• Timeline: 2-3 weeks<br><br>
+💰 <strong>ROI:</strong> 300-500% performance gain, faster task completion`;
+            }
+            
+            return `🧠 I can help you with:<br><br>
+• 🤖 Model status and performance<br>
+• ⚡ Task distribution and optimization<br>
+• 🚀 Model upgrades and scaling<br>
+• 📊 Performance analytics<br>
+• 🔗 System integration status<br>
+• 🛠️ Troubleshooting and health checks<br><br>
+What would you like to know about the multi-model system?`;
+        }
+        
+        function startRealTimeUpdates() {
+            // Simulate real-time updates
+            setInterval(() => {
+                // Update model loads
+                modelsData.forEach(model => {
+                    if (model.status === 'active') {
+                        const loadChange = Math.floor(Math.random() * 10) - 5;
+                        model.load = Math.max(0, Math.min(100, parseInt(model.load) + loadChange)) + '%';
+                    }
+                });
+                
+                // Update task progress
+                tasksData.forEach(task => {
+                    if (task.status === 'processing') {
+                        const progressIncrease = Math.floor(Math.random() * 15);
+                        task.progress = Math.min(100, parseInt(task.progress) + progressIncrease) + '%';
+                        
+                        if (task.progress === '100%') {
+                            task.status = 'completed';
+                        }
+                    }
+                });
+                
+                renderModels();
+                renderTasks();
+            }, 5000); // Every 5 seconds
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+    </script>
+</body>
+</html>

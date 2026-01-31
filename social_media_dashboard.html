@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Social Media Management Dashboard</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .alert-badge {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        
+        .stat-label {
+            font-size: 0.7em;
+            opacity: 0.8;
+        }
+        
+        .post-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .post-item.urgent {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .post-title {
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        .post-platform {
+            background: rgba(251, 191, 36, 0.2);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.6em;
+        }
+        
+        .post-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.7em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .post-content {
+            font-size: 0.8em;
+            line-height: 1.3;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border-left: 3px solid #fbbf24;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.7em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-schedule {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        
+        .btn-modify {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .btn-reject {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .ai-chat {
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            font-size: 0.8em;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+        
+        .message.ai {
+            background: rgba(251, 191, 36, 0.2);
+            border-left: 3px solid #fbbf24;
+            align-self: flex-start;
+        }
+        
+        .message.user {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-end;
+        }
+        
+        .message.alert {
+            background: rgba(239, 68, 68, 0.2);
+            border-left: 3px solid #ef4444;
+            animation: pulse 2s infinite;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            font-size: 0.8em;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #fbbf24;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.8em;
+        }
+        
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 1600px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 AI Social Media Management Dashboard</h1>
+            <p class="subtitle">AI-Powered Content Creation with Your Approval System</p>
+        </div>
+        
+        <div class="main-layout">
+            <!-- Pending Posts for Approval -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📝 Pending Posts for Approval</h2>
+                    <div class="alert-badge">8</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Urgent</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">AI Quality</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24.5K</div>
+                        <div class="stat-label">Total Reach</div>
+                    </div>
+                </div>
+                
+                <div id="pendingPosts"></div>
+            </div>
+            
+            <!-- AI Content Assistant -->
+            <div class="card ai-chat">
+                <div class="card-header">
+                    <h2 class="card-title">🤖 AI Content Assistant</h2>
+                    <div class="alert-badge">4</div>
+                </div>
+                
+                <div class="chat-messages" id="socialChatMessages">
+                    <div class="message ai alert">
+                        🚨 <strong>URGENT:</strong> 3 posts need approval for today's gaming security campaign!
+                    </div>
+                    <div class="message ai">
+                        📱 <strong>Content Update:</strong> AI created 8 new posts across all platforms.
+                    </div>
+                    <div class="message ai">
+                        📊 <strong>Performance:</strong> Twitter engagement up 45%, LinkedIn leads up 22%.
+                    </div>
+                    <div class="message ai">
+                        💡 <strong>Strategy:</strong> Focus on gaming security tips and customer success stories.
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="socialChatInput" placeholder="Ask about content strategy, post ideas..." onkeypress="handleSocialChatInput(event)">
+                    <button onclick="sendSocialMessage()">Send</button>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚡ Quick Actions</h2>
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="approveAllPosts()">
+                        ✅ Approve All Posts (8)
+                    </button>
+                    <button class="quick-btn" onclick="approveUrgentPosts()">
+                        🚨 Approve Urgent (3)
+                    </button>
+                    <button class="quick-btn" onclick="generateContent()">
+                        📝 Generate New Content
+                    </button>
+                    <button class="quick-btn" onclick="optimizeStrategy()">
+                        🎯 Optimize Strategy
+                    </button>
+                    <button class="quick-btn" onclick="scheduleCampaign()">
+                        📅 Schedule Campaign
+                    </button>
+                    <button class="quick-btn" onclick="performanceReport()">
+                        📊 Performance Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const postsData = [
+            {
+                id: 1,
+                title: '5 Gaming Security Tips Every Developer Needs',
+                platform: 'Twitter/X',
+                content: '🎮 5 Gaming Security Tips Every Developer Needs:\n\n1. Implement real-time threat detection\n2. Use AI-powered monitoring systems\n3. Regular security audits (monthly)\n4. Educate players on security best practices\n5. Partner with security experts like us!\n\n#gamingsecurity #gamedev #cybersecurity',
+                urgency: 'urgent',
+                scheduledTime: 'Today 2:00 PM',
+                estimatedReach: '15K',
+                engagementScore: '92%'
+            },
+            {
+                id: 2,
+                title: 'Customer Success: GameStudio X Security Transformation',
+                platform: 'LinkedIn',
+                content: '🚀 CUSTOMER SUCCESS: How GameStudio X Reduced Security Incidents by 78%\n\nChallenge: 50K monthly players, increasing security threats\nSolution: Stellar Logic AI implementation\nResults: 78% reduction in incidents, 45% faster response time\nROI: 300% in first 6 months\n\n#gamingsecurity #AI #customersuccess #ROI',
+                urgency: 'urgent',
+                scheduledTime: 'Today 10:00 AM',
+                estimatedReach: '8K',
+                engagementScore: '88%'
+            },
+            {
+                id: 3,
+                title: 'Behind the Scenes: AI Security Monitoring',
+                platform: 'Instagram',
+                content: '🔐 Behind the scenes of AI-powered gaming security!\n\nOur AI monitors millions of security events daily:\n• Real-time threat detection\n• Automatic response systems\n• Player protection 24/7\n• Performance optimization\n\nSwipe to see how we protect 1M+ gamers daily! 🎮\n\n#gamingsecurity #AI #technology',
+                urgency: 'urgent',
+                scheduledTime: 'Today 6:00 PM',
+                estimatedReach: '12K',
+                engagementScore: '85%'
+            },
+            {
+                id: 4,
+                title: 'Gaming Industry Security Report 2024',
+                platform: 'LinkedIn',
+                content: '📊 GAMING INDUSTRY SECURITY REPORT 2024\n\nKey findings:\n• 67% of studios experienced security incidents\n• Average cost per incident: $45K\n• AI-powered solutions reduce incidents by 78%\n• 92% of players prioritize security\n\nDownload our free report!\n\n#gamingsecurity #cybersecurity #industryreport',
+                urgency: 'normal',
+                scheduledTime: 'Tomorrow 9:00 AM',
+                estimatedReach: '10K',
+                engagementScore: '79%'
+            }
+        ];
+        
+        function initializeDashboard() {
+            renderPendingPosts();
+        }
+        
+        function renderPendingPosts() {
+            const container = document.getElementById('pendingPosts');
+            
+            container.innerHTML = postsData.map(post => `
+                <div class="post-item ${post.urgency === 'urgent' ? 'urgent' : ''}" onclick="showPostDetails(${post.id})">
+                    <div class="post-header">
+                        <div class="post-title">${post.title}</div>
+                        <div class="post-platform">${post.platform}</div>
+                    </div>
+                    <div class="post-meta">
+                        <span>⏰ ${post.scheduledTime}</span>
+                        <span>👁️ ${post.estimatedReach} reach</span>
+                        <span>📊 ${post.engagementScore} engagement</span>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-approve" onclick="approvePost(${post.id}, event)">✅ Approve</button>
+                        <button class="btn btn-schedule" onclick="schedulePost(${post.id}, event)">📅 Schedule</button>
+                        <button class="btn btn-modify" onclick="modifyPost(${post.id}, event)">🔧 Modify</button>
+                        <button class="btn btn-reject" onclick="rejectPost(${post.id}, event)">❌ Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function approvePost(id, event) {
+            event.stopPropagation();
+            const post = postsData.find(p => p.id === id);
+            
+            if (confirm(`Approve "${post.title}" for ${post.platform}?\n\nScheduled: ${post.scheduledTime}\nEstimated Reach: ${post.estimatedReach}`)) {
+                addSocialMessage(`✅ Approved: "${post.title}" for ${post.platform}\n\n📅 ${post.scheduledTime}\n👁️ ${post.estimatedReach} reach\n📊 ${post.engagementScore} engagement`);
+                
+                const index = postsData.findIndex(p => p.id === id);
+                postsData.splice(index, 1);
+                
+                renderPendingPosts();
+            }
+        }
+        
+        function schedulePost(id, event) {
+            event.stopPropagation();
+            const post = postsData.find(p => p.id === id);
+            addSocialMessage(`📅 Scheduling: "${post.title}"\n\nPlatform: ${post.platform}\nCurrent time: ${post.scheduledTime}\n\nWhat time would you like to schedule it for?`);
+        }
+        
+        function modifyPost(id, event) {
+            event.stopPropagation();
+            const post = postsData.find(p => p.id === id);
+            addSocialMessage(`🔧 Opening modification for: "${post.title}"\n\nPlatform: ${post.platform}\n\nWhat would you like to modify?`);
+        }
+        
+        function rejectPost(id, event) {
+            event.stopPropagation();
+            const post = postsData.find(p => p.id === id);
+            
+            if (confirm(`Reject "${post.title}"?`)) {
+                addSocialMessage(`❌ Rejected: "${post.title}" for ${post.platform}`);
+                
+                const index = postsData.findIndex(p => p.id === id);
+                postsData.splice(index, 1);
+                
+                renderPendingPosts();
+            }
+        }
+        
+        function showPostDetails(id, event) {
+            event.stopPropagation();
+            const post = postsData.find(p => p.id === id);
+            addSocialMessage(`📊 Post: "${post.title}"\n\n📱 ${post.platform}\n📅 ${post.scheduledTime}\n👁️ ${post.estimatedReach} reach\n📊 ${post.engagementScore} engagement\n🎯 ${post.urgency}`);
+        }
+        
+        function approveAllPosts() {
+            if (confirm(`Approve all ${postsData.length} pending posts?`)) {
+                const totalReach = postsData.reduce((sum, post) => {
+                    const reach = post.estimatedReach.replace(/[^0-9]/g, '');
+                    return sum + parseInt(reach);
+                }, 0);
+                
+                addSocialMessage(`🚀 Approved all ${postsData.length} posts!\n\n👁️ Total Reach: ${totalReach.toLocaleString()}\n📱 All platforms optimized`);
+                
+                postsData.splice(0, postsData.length);
+                renderPendingPosts();
+            }
+        }
+        
+        function approveUrgentPosts() {
+            const urgentPosts = postsData.filter(post => post.urgency === 'urgent');
+            
+            if (confirm(`Approve all ${urgentPosts.length} urgent posts?`)) {
+                addSocialMessage(`🚨 Approved ${urgentPosts.length} urgent posts for today!\n\nScheduled for optimal engagement times.`);
+                
+                postsData.splice(0, postsData.length, ...postsData.filter(post => post.urgency !== 'urgent'));
+                renderPendingPosts();
+            }
+        }
+        
+        function generateContent() {
+            addSocialMessage(`📝 AI generating new content...\n\nAnalyzing trends, engagement data, and audience preferences.\nExpected: 5 new posts in 2 minutes`);
+        }
+        
+        function optimizeStrategy() {
+            addSocialMessage(`🎯 AI optimizing content strategy...\n\nAnalyzing performance metrics and engagement patterns.\nExpected: Strategy update in 3 minutes`);
+        }
+        
+        function scheduleCampaign() {
+            addSocialMessage(`📅 AI scheduling campaign: "Gaming Security Awareness Week"\n\nDuration: 7 days\nPosts: 21 total\nAll platforms optimized for peak times`);
+        }
+        
+        function performanceReport() {
+            addSocialMessage(`📊 AI Performance Report:\n\n📈 This Week:\n• Total Reach: 124.5K (+23%)\n• Engagement Rate: 8.7% (+15%)\n• New Followers: 542 (+18%)\n• Leads Generated: 47 (+32%)\n\n💡 Continue security education content!`);
+        }
+        
+        function sendSocialMessage() {
+            const input = document.getElementById('socialChatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addSocialMessage(message, 'user');
+                
+                setTimeout(() => {
+                    let response = generateSocialAIResponse(message);
+                    addSocialMessage(response, 'ai');
+                }, 1000);
+                
+                input.value = '';
+            }
+        }
+        
+        function handleSocialChatInput(event) {
+            if (event.key === 'Enter') {
+                sendSocialMessage();
+            }
+        }
+        
+        function addSocialMessage(message, sender = 'ai') {
+            const chatMessages = document.getElementById('socialChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            if (sender === 'ai' && (message.includes('URGENT') || message.includes('🚨'))) {
+                messageDiv.className += ' alert';
+            }
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function generateSocialAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('urgent') || lowerMessage.includes('approve')) {
+                return `🚨 <strong>Urgent Posts Need Approval:</strong><br><br>
+3 posts scheduled for today:<br><br>
+🐦 <strong>Twitter:</strong> "5 Gaming Security Tips"<br>
+• Scheduled: 2:00 PM • Reach: 15K<br><br>
+💼 <strong>LinkedIn:</strong> "GameStudio X Success Story"<br>
+• Scheduled: 10:00 AM • Reach: 8K<br><br>
+📷 <strong>Instagram:</strong> "Behind the Scenes"<br>
+• Scheduled: 6:00 PM • Reach: 12K<br><br>
+All optimized for peak engagement!`;
+            }
+            
+            if (lowerMessage.includes('content') || lowerMessage.includes('create')) {
+                return `📝 <strong>AI Content Creation:</strong><br><br>
+AI creates content based on:<br>
+• Trending gaming security topics<br>
+• Audience engagement data<br>
+• Competitor analysis<br>
+• Industry news and events<br>
+• Brand voice consistency<br><br>
+🎯 <strong>Content Types:</strong><br>
+• Educational posts (40%)<br>
+• Customer stories (25%)<br>
+• Industry insights (20%)<br>
+• Behind-the-scenes (15%)`;
+            }
+            
+            if (lowerMessage.includes('performance') || lowerMessage.includes('metrics')) {
+                return `📊 <strong>Performance Metrics:</strong><br><br>
+🐦 <strong>Twitter/X:</strong> 15.2K followers, +12% this week<br>
+💼 <strong>LinkedIn:</strong> 8.7K followers, +18% this week<br>
+📷 <strong>Instagram:</strong> 12.1K followers, +8% this week<br>
+🎮 <strong>Discord:</strong> 3.2K members, +25% this week<br><br>
+📈 <strong>Today's Performance:</strong><br>
+• Total Reach: 24.5K<br>
+• Engagements: 3.2K<br>
+• New Followers: 142<br>
+• Sentiment: 89% positive`;
+            }
+            
+            return `🤖 I can help you with:<br><br>
+• 📝 Content creation and strategy<br>
+• 📊 Performance analysis and metrics<br>
+• 🎯 Platform optimization<br>
+• 📅 Campaign scheduling<br>
+• 💡 Audience engagement tactics<br><br>
+What would you like to know?`;
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+    </script>
+</body>
+</html>

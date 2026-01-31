@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Advanced Sales & Pricing Dashboard</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .alert-badge {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        
+        .stat-label {
+            font-size: 0.7em;
+            opacity: 0.8;
+        }
+        
+        .deal-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .deal-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .deal-item.negotiation {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .deal-item.urgent {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .deal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .deal-title {
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        .deal-stage {
+            background: rgba(251, 191, 36, 0.2);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.6em;
+        }
+        
+        .deal-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.7em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .deal-description {
+            font-size: 0.8em;
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.7em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-negotiate {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .btn-reject {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .btn-details {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .pricing-module {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .pricing-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .pricing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-title {
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        .pricing-amount {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+        
+        .ai-chat {
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            font-size: 0.8em;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+        
+        .message.ai {
+            background: rgba(251, 191, 36, 0.2);
+            border-left: 3px solid #fbbf24;
+            align-self: flex-start;
+        }
+        
+        .message.user {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-end;
+        }
+        
+        .message.alert {
+            background: rgba(239, 68, 68, 0.2);
+            border-left: 3px solid #ef4444;
+            animation: pulse 2s infinite;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            font-size: 0.8em;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #fbbf24;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.8em;
+        }
+        
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .negotiation-panel {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .negotiation-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fbbf24;
+        }
+        
+        .negotiation-options {
+            display: grid;
+            gap: 8px;
+        }
+        
+        .negotiation-option {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .negotiation-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .option-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .option-details {
+            font-size: 0.7em;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 1600px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Advanced Sales & Pricing Dashboard</h1>
+            <p class="subtitle">AI-Powered Pricing, Negotiation, and Automated Outreach</p>
+        </div>
+        
+        <div class="main-layout">
+            <!-- Active Deals & Negotiations -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">💼 Active Deals & Negotiations</h2>
+                    <div class="alert-badge">8</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">$2.4M</div>
+                        <div class="stat-label">Pipeline Value</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Negotiating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Ready to Close</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">87%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                </div>
+                
+                <div id="dealsList"></div>
+            </div>
+            
+            <!-- AI Pricing Module -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">💰 AI Pricing Module</h2>
+                    <div class="alert-badge">2</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">94%</div>
+                        <div class="stat-label">Pricing Accuracy</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">23%</div>
+                        <div class="stat-label">Avg Discount</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">$4.2K</div>
+                        <div class="stat-label">Avg Deal Size</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">18%</div>
+                        <div class="stat-label">Margin Protection</div>
+                    </div>
+                </div>
+                
+                <div class="pricing-module" id="pricingModule"></div>
+            </div>
+            
+            <!-- AI Sales Assistant -->
+            <div class="card ai-chat">
+                <div class="card-header">
+                    <h2 class="card-title">🤖 AI Sales Assistant</h2>
+                    <div class="alert-badge">5</div>
+                </div>
+                
+                <div class="chat-messages" id="salesChatMessages">
+                    <div class="message ai alert">
+                        🚨 <strong>URGENT:</strong> GameStudio X wants 30% discount. AI recommends 15% + extra support.
+                    </div>
+                    <div class="message ai">
+                        💼 <strong>Deals Update:</strong> 3 negotiating, 5 ready to close. Pipeline: $2.4M
+                    </div>
+                    <div class="message ai">
+                        📧 <strong>Outreach:</strong> 247 contacts, 42 responses (17%), 8 meetings booked
+                    </div>
+                    <div class="message ai">
+                        💡 <strong>Strategy:</strong> Focus on Unity partnership ($100K) and PixelForge ($40K)
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="salesChatInput" placeholder="Ask about pricing, negotiations, deals..." onkeypress="handleSalesChatInput(event)">
+                    <button onclick="sendSalesMessage()">Send</button>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚡ Quick Actions</h2>
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="approveAllDeals()">
+                        ✅ Approve All Deals (5)
+                    </button>
+                    <button class="quick-btn" onclick="handleNegotiations()">
+                        💼 Handle Negotiations (3)
+                    </button>
+                    <button class="quick-btn" onclick="launchOutreach()">
+                        📧 Launch Outreach Campaign
+                    </button>
+                    <button class="quick-btn" onclick="optimizePricing()">
+                        🎯 Optimize Pricing
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Negotiation Center -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🤝 Active Negotiations</h2>
+                    <div class="alert-badge">3</div>
+                </div>
+                
+                <div id="negotiationCenter"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const dealsData = [
+            {
+                id: 1,
+                title: 'GameStudio X - Enterprise Security',
+                stage: 'negotiation',
+                value: '$15,000',
+                customer: 'GameStudio X',
+                description: '50K monthly players, requesting 30% discount',
+                urgent: true,
+                discount: '30%',
+                timeline: 'Close this week'
+            },
+            {
+                id: 2,
+                title: 'PixelForge Games - Founding Customer',
+                stage: 'ready_to_close',
+                value: '$40,000/year',
+                customer: 'PixelForge Games',
+                description: '25K monthly players, approved for founding program',
+                urgent: true,
+                discount: '50%',
+                timeline: 'Ready to sign'
+            },
+            {
+                id: 3,
+                title: 'Unity Technologies - Partnership',
+                stage: 'ready_to_close',
+                value: '$100,000/year',
+                customer: 'Unity Technologies',
+                description: 'Asset Store integration partnership',
+                urgent: true,
+                discount: '0%',
+                timeline: 'Contract ready'
+            }
+        ];
+        
+        const pricingData = [
+            {
+                id: 1,
+                customer: 'GameStudio X',
+                originalPrice: '$18,000',
+                requestedPrice: '$12,600',
+                aiRecommended: '$15,300',
+                discount: '15%',
+                reasoning: 'Medium-sized studio, price-sensitive but high reference value',
+                confidence: '92%'
+            },
+            {
+                id: 2,
+                customer: 'Thunderbolt Studios',
+                originalPrice: '$2,499/month',
+                requestedPrice: '$1,999/month',
+                aiRecommended: '$2,124/month',
+                discount: '15%',
+                reasoning: 'Large enterprise, 3-year commitment justifies volume discount',
+                confidence: '88%'
+            }
+        ];
+        
+        function initializeDashboard() {
+            renderDeals();
+            renderPricing();
+            renderNegotiations();
+        }
+        
+        function renderDeals() {
+            const container = document.getElementById('dealsList');
+            
+            container.innerHTML = dealsData.map(deal => `
+                <div class="deal-item ${deal.stage === 'negotiation' ? 'negotiation' : ''} ${deal.urgent ? 'urgent' : ''}" onclick="showDealDetails(${deal.id})">
+                    <div class="deal-header">
+                        <div class="deal-title">${deal.title}</div>
+                        <div class="deal-stage">${deal.stage.replace('_', ' ').toUpperCase()}</div>
+                    </div>
+                    <div class="deal-meta">
+                        <span>💰 ${deal.value}</span>
+                        <span>👥 ${deal.customer}</span>
+                        <span>🎯 ${deal.discount} discount</span>
+                        <span>⏰ ${deal.timeline}</span>
+                    </div>
+                    <div class="deal-description">${deal.description}</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-approve" onclick="approveDeal(${deal.id}, event)">✅</button>
+                        ${deal.stage === 'negotiation' ? `<button class="btn btn-negotiate" onclick="handleNegotiation(${deal.id}, event)">💼</button>` : ''}
+                        <button class="btn btn-details" onclick="showDealDetails(${deal.id}, event)">📊</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderPricing() {
+            const container = document.getElementById('pricingModule');
+            
+            container.innerHTML = pricingData.map(pricing => `
+                <div class="pricing-item">
+                    <div class="pricing-header">
+                        <div class="pricing-title">${pricing.customer}</div>
+                        <div class="pricing-amount">${pricing.aiRecommended}</div>
+                    </div>
+                    <div style="font-size: 0.7em; margin-bottom: 10px;">
+                        <strong>Original:</strong> ${pricing.originalPrice} | 
+                        <strong>Requested:</strong> ${pricing.requestedPrice} | 
+                        <strong>AI Recommended:</strong> ${pricing.aiRecommended}
+                    </div>
+                    <div style="font-size: 0.7em; margin-bottom: 10px;">
+                        <strong>Reasoning:</strong> ${pricing.reasoning}
+                    </div>
+                    <div style="font-size: 0.7em; margin-bottom: 10px;">
+                        <strong>AI Confidence:</strong> ${pricing.confidence}
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-approve" onclick="approvePricing(${pricing.id}, event)">✅ Use AI Price</button>
+                        <button class="btn btn-negotiate" onclick="adjustPricing(${pricing.id}, event)">🔧 Adjust</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderNegotiations() {
+            const container = document.getElementById('negotiationCenter');
+            const negotiations = dealsData.filter(deal => deal.stage === 'negotiation');
+            
+            container.innerHTML = negotiations.map(negotiation => `
+                <div class="negotiation-panel">
+                    <div class="negotiation-header">🤝 ${negotiation.customer} - Negotiation Strategy</div>
+                    <div class="negotiation-options">
+                        <div class="negotiation-option" onclick="selectNegotiationOption(${negotiation.id}, 'ai_recommended')">
+                            <div class="option-header">
+                                <span>🤖 AI Recommended</span>
+                                <span>$15,300</span>
+                            </div>
+                            <div class="option-details">15% discount + 3 months free support</div>
+                        </div>
+                        <div class="negotiation-option" onclick="selectNegotiationOption(${negotiation.id}, 'meet_halfway')">
+                            <div class="option-header">
+                                <span>🤝 Meet Halfway</span>
+                                <span>$13,950</span>
+                            </div>
+                            <div class="option-details">22.5% discount, compromise position</div>
+                        </div>
+                        <div class="negotiation-option" onclick="selectNegotiationOption(${negotiation.id}, 'hold_firm')">
+                            <div class="option-header">
+                                <span>💪 Hold Firm</span>
+                                <span>$16,200</span>
+                            </div>
+                            <div class="option-details">10% discount only, premium positioning</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function approveDeal(id, event) {
+            event.stopPropagation();
+            const deal = dealsData.find(d => d.id === id);
+            addSalesMessage(`✅ Approved: ${deal.title} - ${deal.value}`);
+            
+            const index = dealsData.findIndex(d => d.id === id);
+            dealsData.splice(index, 1);
+            
+            renderDeals();
+            renderNegotiations();
+        }
+        
+        function handleNegotiation(id, event) {
+            event.stopPropagation();
+            const deal = dealsData.find(d => d.id === id);
+            addSalesMessage(`💼 Opening negotiation strategy for: ${deal.title}`);
+        }
+        
+        function showDealDetails(id, event) {
+            event.stopPropagation();
+            const deal = dealsData.find(d => d.id === id);
+            addSalesMessage(`📊 Deal Details: ${deal.title}\n\n💰 Value: ${deal.value}\n👥 Customer: ${deal.customer}\n🎯 Stage: ${deal.stage}\n💸 Discount: ${deal.discount}\n⏰ Timeline: ${deal.timeline}`);
+        }
+        
+        function approvePricing(id, event) {
+            event.stopPropagation();
+            const pricing = pricingData.find(p => p.id === id);
+            addSalesMessage(`✅ Approved AI pricing for ${pricing.customer}: ${pricing.aiRecommended}\n\nReasoning: ${pricing.reasoning}\nConfidence: ${pricing.confidence}`);
+        }
+        
+        function adjustPricing(id, event) {
+            event.stopPropagation();
+            const pricing = pricingData.find(p => p.id === id);
+            addSalesMessage(`🔧 Opening pricing adjustment for ${pricing.customer}\n\nOriginal: ${pricing.originalPrice}\nRequested: ${pricing.requestedPrice}\nAI Recommended: ${pricing.aiRecommended}`);
+        }
+        
+        function selectNegotiationOption(dealId, option) {
+            const deal = dealsData.find(d => d.id === dealId);
+            const optionDetails = {
+                ai_recommended: '$15,300 (15% discount + support)',
+                meet_halfway: '$13,950 (22.5% discount)',
+                hold_firm: '$16,200 (10% discount)'
+            };
+            
+            addSalesMessage(`🤝 Negotiation strategy selected for ${deal.customer}: ${option}\n\n💰 Offer: ${optionDetails[option]}\n🎯 AI Confidence: High\n📈 Success Probability: ${option === 'ai_recommended' ? '85%' : option === 'meet_halfway' ? '75%' : '60%'}`);
+        }
+        
+        function approveAllDeals() {
+            const readyDeals = dealsData.filter(deal => deal.stage === 'ready_to_close');
+            const totalValue = readyDeals.reduce((sum, deal) => {
+                const value = deal.value.replace(/[^0-9]/g, '');
+                return sum + parseInt(value);
+            }, 0);
+            
+            if (confirm(`Approve all ${readyDeals.length} ready deals?\n\nTotal Value: $${totalValue.toLocaleString()}`)) {
+                addSalesMessage(`🚀 Approved ${readyDeals.length} deals! Total value: $${totalValue.toLocaleString()}`);
+                
+                // Remove ready deals
+                dealsData.splice(0, dealsData.length, ...dealsData.filter(deal => deal.stage !== 'ready_to_close'));
+                
+                renderDeals();
+                renderNegotiations();
+            }
+        }
+        
+        function handleNegotiations() {
+            addSalesMessage(`💼 AI is handling all ${dealsData.filter(deal => deal.stage === 'negotiation').length} negotiations with optimal pricing strategies...`);
+        }
+        
+        function launchOutreach() {
+            addSalesMessage(`📧 AI is launching automated outreach campaign...\n\nTarget: 500 gaming studios\nExpected: 85 responses (17% rate)\nGoal: 15 meetings booked\nTimeline: 7 days`);
+        }
+        
+        function optimizePricing() {
+            addSalesMessage(`🎯 AI is optimizing pricing strategy...\n\nAnalyzing: Market rates, customer segments, deal history\nExpected: 12% margin improvement\nFocus: High-value enterprise clients\nTimeline: Optimization complete in 5 minutes`);
+        }
+        
+        function sendSalesMessage() {
+            const input = document.getElementById('salesChatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addSalesMessage(message, 'user');
+                
+                setTimeout(() => {
+                    let response = generateAIResponse(message);
+                    addSalesMessage(response, 'ai');
+                }, 1000);
+                
+                input.value = '';
+            }
+        }
+        
+        function handleSalesChatInput(event) {
+            if (event.key === 'Enter') {
+                sendSalesMessage();
+            }
+        }
+        
+        function addSalesMessage(message, sender = 'ai') {
+            const chatMessages = document.getElementById('salesChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            if (sender === 'ai' && (message.includes('URGENT') || message.includes('🚨'))) {
+                messageDiv.className += ' alert';
+            }
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('pricing') || lowerMessage.includes('discount')) {
+                return `💰 <strong>Pricing Strategy:</strong><br><br>
+AI analyzes each customer based on:<br>
+• Company size and revenue<br>
+• Player count and growth<br>
+• Market position and competition<br>
+• Reference value potential<br>
+• Long-term partnership potential<br><br>
+Current negotiations:<br>
+• GameStudio X: AI recommends 15% discount (vs 30% requested)<br>
+• Thunderbolt Studios: AI recommends 15% discount for 3-year commitment<br><br>
+AI protects margins while maximizing win rate!`;
+            }
+            
+            if (lowerMessage.includes('outreach') || lowerMessage.includes('contact')) {
+                return `📧 <strong>Automated Outreach:</strong><br><br>
+AI handles all prospecting and communication:<br><br>
+🎯 <strong>Daily Outreach:</strong><br>
+• 247 contacts today (fully automated)<br>
+• 42 responses (17% response rate)<br>
+• 8 meetings booked<br><br>
+🤖 <strong>AI Personalization:</strong><br>
+• Researches each prospect<br>
+• Crafts personalized messages<br>
+• Follows up automatically<br>
+• Schedules meetings<br><br>
+📈 <strong>Target Segments:</strong><br>
+• AAA studios (50 contacts)<br>
+• Indie developers (150 contacts)<br>
+• Enterprise clients (47 contacts)<br><br>
+You only review and approve final deals!`;
+            }
+            
+            if (lowerMessage.includes('negotiation') || lowerMessage.includes('deal')) {
+                return `🤝 <strong>Negotiation Strategy:</strong><br><br>
+AI handles negotiations with these strategies:<br><br>
+🎯 <strong>Data-Driven Pricing:</strong><br>
+• Market analysis and competitive pricing<br>
+• Customer value assessment<br>
+• Historical deal patterns<br>
+• ROI calculations<br><br>
+💼 <strong>Negotiation Tactics:</strong><br>
+• AI Recommended: 85% success rate<br>
+• Meet Halfway: 75% success rate<br>
+• Hold Firm: 60% success rate<br><br>
+📊 <strong>Current Negotiations:</strong><br>
+• GameStudio X: 30% discount requested<br>
+• Thunderbolt Studios: 20% discount requested<br>
+• 1 additional negotiation in progress<br><br>
+AI recommends optimal pricing based on data!`;
+            }
+            
+            return `🤖 I can help you with:<br><br>
+• 💰 Pricing strategy and discount optimization<br>
+• 🤝 Negotiation tactics and deal management<br>
+• 📧 Automated outreach and prospecting<br>
+• 📊 Sales analytics and performance metrics<br>
+• 🎯 Customer segmentation and targeting<br><br>
+What would you like to know?`;
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+    </script>
+</body>
+</html>

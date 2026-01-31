@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Customer Portal</title>
+    <link rel="icon" href="favicon_32x32.png" type="image/png" sizes="32x32">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .portal-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .portal-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .portal-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .portal-header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .portal-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            height: fit-content;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+        
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .sidebar-nav a.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .main-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            margin-bottom: 30px;
+        }
+        
+        .section-header h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .section-header p {
+            opacity: 0.9;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            opacity: 0.8;
+        }
+        
+        .subscription-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .tier-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        
+        .tier-card.featured {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+        
+        .tier-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .tier-card .price {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .tier-card .features {
+            list-style: none;
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .tier-card .features li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tier-card .features li::before {
+            content: "✓";
+            color: #4ade80;
+        }
+        
+        .billing-history {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .billing-history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .billing-history th,
+        .billing-history td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .billing-history th {
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .status-badge.active {
+            background: #4ade80;
+        }
+        
+        .status-badge.inactive {
+            background: #f87171;
+        }
+        
+        .status-badge.trial {
+            background: #fbbf24;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .alert.success {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid #4ade80;
+        }
+        
+        .alert.error {
+            background: rgba(248, 113, 113, 0.2);
+            border: 1px solid #f87171;
+        }
+        
+        .alert.info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+        }
+        
+        @media (max-width: 768px) {
+            .portal-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .subscription-tiers {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <div class="portal-header">
+            <h1>👥 Customer Portal</h1>
+            <p>Manage your Stellar Logic AI account and subscription</p>
+        </div>
+        
+        <div class="portal-content">
+            <div class="sidebar">
+                <ul class="sidebar-nav">
+                    <li><a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">📊 Dashboard</a></li>
+                    <li><a href="#profile" class="nav-link" onclick="showSection('profile')">👤 Profile</a></li>
+                    <li><a href="#subscription" class="nav-link" onclick="showSection('subscription')">💳 Subscription</a></li>
+                    <li><a href="#billing" class="nav-link" onclick="showSection('billing')">💳 Billing</a></li>
+                    <li><a href="#security" class="nav-link" onclick="showSection('security')">🔒 Security</a></li>
+                    <li><a href="#support" class="nav-link" onclick="showSection('support')">🎧 Support</a></li>
+                    <li><a href="#logout" class="nav-link" onclick="logout()">🚪 Logout</a></li>
+                </ul>
+            </div>
+            
+            <div class="main-content">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="content-section active">
+                    <div class="section-header">
+                        <h2>📊 Dashboard</h2>
+                        <p>Welcome back! Here's your account overview.</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>1,247</h3>
+                            <p>Games Protected</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>99.2%</h3>
+                            <p>Detection Rate</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>24/7</h3>
+                            <p>Protection</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>0</h3>
+                            <p>Incidents</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert info">
+                        <strong>📈 Usage Stats:</strong> Your account is performing excellently with 99.2% detection rate and zero security incidents in the last 30 days.
+                    </div>
+                </div>
+                
+                <!-- Profile Section -->
+                <div id="profile" class="content-section">
+                    <div class="section-header">
+                        <h2>👤 Profile Settings</h2>
+                        <p>Manage your account information and preferences.</p>
+                    </div>
+                    
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="companyName">Company Name</label>
+                            <input type="text" id="companyName" name="companyName" value="Gaming Studio Inc." required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactName">Contact Name</label>
+                            <input type="text" id="contactName" name="contactName" value="John Doe" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" value="john@studio.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" value="+1-555-123-4567">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="timezone">Timezone</label>
+                            <select id="timezone" name="timezone">
+                                <option value="UTC">UTC</option>
+                                <option value="EST">Eastern Time</option>
+                                <option value="PST">Pacific Time</option>
+                                <option value="CST">Central Time</option>
+                                <option value="MST">Mountain Time</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notifications">Email Notifications</label>
+                            <select id="notifications" name="notifications">
+                                <option value="all">All Notifications</option>
+                                <option value="important">Important Only</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn">Save Profile</button>
+                    </form>
+                </div>
+                
+                <!-- Subscription Section -->
+                <div id="subscription" class="content-section">
+                    <div class="section-header">
+                        <h2>💳 Subscription Management</h2>
+                        <p>Choose the plan that best fits your needs.</p>
+                    </div>
+                    
+                    <div class="subscription-tiers">
+                        <div class="tier-card">
+                            <h3>Starter</h3>
+                            <div class="price">$99/mo</div>
+                            <ul class="features">
+                                <li>Up to 1,000 games</li>
+                                <li>99.2% detection rate</li>
+                                <li>24/7 protection</li>
+                                <li>Email support</li>
+                                <li>Basic analytics</li>
+                            </ul>
+                            <button class="btn btn-secondary">Current Plan</button>
+                        </div>
+                        
+                        <div class="tier-card featured">
+                            <h3>Professional</h3>
+                            <div class="price">$299/mo</div>
+                            <ul class="features">
+                                <li>Up to 10,000 games</li>
+                                <li>99.2% detection rate</li>
+                                <li>24/7 protection</li>
+                                <li>Priority support</li>
+                                <li>Advanced analytics</li>
+                                <li>API access</li>
+                                <li>Custom rules</li>
+                            </ul>
+                            <button class="btn">Upgrade Plan</button>
+                        </div>
+                        
+                        <div class="tier-card">
+                            <h3>Enterprise</h3>
+                            <div class="price">$999/mo</div>
+                            <ul class="features">
+                                <li>Unlimited games</li>
+                                <li>99.2% detection rate</li>
+                                <li>24/7 protection</li>
+                                <li>Dedicated support</li>
+                                <li>Enterprise analytics</li>
+                                <li>API access</li>
+                                <li>Custom rules</li>
+                                <li>White-label options</li>
+                                <li>SLA guarantee</li>
+                            </ul>
+                            <button class="btn btn-secondary">Contact Sales</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Billing Section -->
+                <div id="billing" class="content-section">
+                    <div class="section-header">
+                        <h2>💳 Billing & Payments</h2>
+                        <p>Manage your payment methods and view billing history.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod" name="paymentMethod">
+                            <option value="card">Credit Card</option>
+                            <option value="bank">Bank Transfer</option>
+                            <option value="paypal">PayPal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" name="cardNumber" placeholder="••••• ••••• ••••">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardExpiry">Expiry Date</label>
+                        <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardCVC">CVC</label>
+                        <input type="text" id="cardCVC" name="cardCVC" placeholder="•••">
+                    </div>
+                    
+                    <button type="submit" class="btn">Update Payment Method</button>
+                    
+                    <h3>Billing History</h3>
+                    <div class="billing-history">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2024-01-15</td>
+                                    <td>Professional Plan</td>
+                                    <td>$299.00</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2024-01-01</td>
+                                    <td>Professional Plan</td>
+                                    <td>$299.00</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-15</td>
+                                    <td>Starter Plan</td>
+                                    <td>$99.00</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Security Section -->
+                <div id="security" class="content-section">
+                    <div class="section-header">
+                        <h2>🔒 Security Settings</h2>
+                        <p>Manage your account security and access controls.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" name="currentPassword">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword">
+                    </div>
+                    
+                    <button type="submit" class="btn">Update Password</button>
+                    
+                    <h3>Two-Factor Authentication</h3>
+                    <div class="alert info">
+                        <strong>🔒 2FA Status:</strong> Two-factor authentication is currently disabled. We recommend enabling it for enhanced security.
+                    </div>
+                    
+                    <button class="btn btn-secondary">Enable 2FA</button>
+                    
+                    <h3>API Keys</h3>
+                    <div class="form-group">
+                        <label for="apiKey">API Key</label>
+                        <input type="text" id="apiKey" name="apiKey" value="sk_live_1234567890abcdef" readonly>
+                    </div>
+                    
+                    <button class="btn btn-secondary">Generate New Key</button>
+                    
+                    <h3>Login History</h3>
+                    <div class="billing-history">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>IP Address</th>
+                                    <th>Device</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2024-01-15 14:30</td>
+                                    <td>192.168.1.100</td>
+                                    <td>Chrome / Windows</td>
+                                    <td><span class="status-badge active">Success</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2024-01-15 09:15</td>
+                                    <td>192.168.1.100</td>
+                                    <td>Chrome / Windows</td>
+                                    <td><span class="status-badge active">Success</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2024-01-14 16:45</td>
+                                    <td>192.168.1.100</td>
+                                    <td>Chrome / Windows</td>
+                                    <td><span class="status-badge active">Success</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Support Section -->
+                <div id="support" class="content-section">
+                    <div class="section-header">
+                        <h2>🎧 Support Center</h2>
+                        <p>Get help and access support resources.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="supportType">Support Type</label>
+                        <select id="supportType" name="supportType">
+                            <option value="technical">Technical Issue</option>
+                            <option value="billing">Billing Question</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="general">General Inquiry</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Brief description of your issue">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Describe your issue in detail..." rows="5"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Submit Support Request</button>
+                    
+                    <h3>Support Resources</h3>
+                    <ul>
+                        <li>📚 <a href="#" style="color: #4ade80;">Documentation</a></li>
+                        <li>🎥 <a href="#" style="color: #4ade80;">API Reference</a></li>
+                        <li>📹 <a href="#" style="color: #4ade80;">Knowledge Base</a></li>
+                        <li>📞 <a href="#" style="color: #4ade80;">Community Forum</a></li>
+                        <li>📧 <a href="#" style="color: #4ade80;">Contact Support</a></li>
+                    </ul>
+                    
+                    <h3>FAQ</h3>
+                    <div class="billing-history">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Question</th>
+                                    <th>Answer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>How do I upgrade my plan?</td>
+                                    <td>Go to Subscription section and click "Upgrade Plan".</td>
+                                </tr>
+                                <tr>
+                                    <td>Can I cancel anytime?</td>
+                                    <td>Yes, you can cancel anytime with no penalties.</td>
+                                </tr>
+                                <tr>
+                                    <td>What's included in Professional plan?</td>
+                                    <td>Up to 10,000 games, priority support, API access, and custom rules.</td>
+                                </tr>
+                                <tr>
+                                    <td>Do you offer refunds?</td>
+                                    <td>30-day money-back guarantee for new customers.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+            }
+            
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            const activeLink = document.querySelector(`[href="#${sectionId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+        
+        // Form submissions
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Profile updated successfully!');
+        });
+        
+        // Logout functionality
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear session and redirect
+                window.location.href = '/login.html';
+            }
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user data
+            loadUserData();
+        });
+        
+        function loadUserData() {
+            // Simulate loading user data
+            // In a real application, this would fetch from an API
+            console.log('Loading user data...');
+        }
+    </script>
+</body>
+</html>
