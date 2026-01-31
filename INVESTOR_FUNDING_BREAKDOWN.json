@@ -1,0 +1,47 @@
+{
+  "total_funding_needed": 3000000,
+  "use_of_funds": {
+    "product_development": {
+      "amount": 1200000,
+      "percentage": 40,
+      "breakdown": {
+        "enhanced_features_completion": 400000,
+        "mobile_app_development": 300000,
+        "advanced_analytics_platform": 250000,
+        "integration_marketplace": 250000
+      }
+    },
+    "sales_marketing": {
+      "amount": 900000,
+      "percentage": 30,
+      "breakdown": {
+        "sales_team_expansion": 400000,
+        "marketing_campaigns": 300000,
+        "partner_development": 200000
+      }
+    },
+    "operations": {
+      "amount": 600000,
+      "percentage": 20,
+      "breakdown": {
+        "infrastructure_scaling": 250000,
+        "compliance_certifications": 200000,
+        "customer_support": 150000
+      }
+    },
+    "working_capital": {
+      "amount": 300000,
+      "percentage": 10,
+      "breakdown": {
+        "operational_runway": 200000,
+        "cash_reserves": 100000
+      }
+    }
+  },
+  "runway": {
+    "monthly_burn_rate": 250000,
+    "runway_months": 12,
+    "revenue_start_month": 6,
+    "break_even_month": 18
+  }
+}

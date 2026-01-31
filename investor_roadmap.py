@@ -14,6 +14,18 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
 
+# Financial and business constants
+MIN_MARKET_SIZE = 0.1  # Minimum market size in billions
+MIN_REVENUE = 0.1  # Minimum revenue in millions
+MAX_PROFIT_MARGIN_NEGATIVE = -200.0  # Maximum negative profit margin
+MAX_PROFIT_MARGIN_POSITIVE = 100.0  # Maximum positive profit margin
+MIN_TEAM_SIZE = 1
+MAX_TEAM_SIZE = 10000
+MIN_CUSTOMERS = 0
+MAX_CUSTOMERS = 1000000
+MIN_MARKET_SHARE = 0.0
+MAX_MARKET_SHARE = 100.0
+
 class MarketPhase(Enum):
     """Market expansion phases"""
     FOUNDATION = "foundation"
@@ -61,6 +73,18 @@ class FinancialProjection:
     market_share: float
     key_achievements: List[str]
 
+@dataclass
+class RoadmapMilestone:
+    """Roadmap milestone data"""
+    quarter: str
+    year: int
+    markets_launched: List[str]
+    total_revenue: float
+    total_customers: int
+    team_size: int
+    market_share: float
+    key_achievements: List[str]
+
 class InvestorRoadmap:
     """
     Comprehensive investor roadmap for multi-market domination
@@ -79,13 +103,94 @@ class InvestorRoadmap:
         self._initialize_financial_projections()
         self._initialize_investment_requirements()
         
+        # Validate all data after initialization
+        self._validate_all_data()
+        
         print("🗺️ Investor Roadmap Initialized")
         print("🎯 Purpose: Showcase $400B+ market opportunity")
         print("📊 Scope: Multi-market domination strategy")
         print("🚀 Goal: Maximum investor ROI with controlled risk")
+    
+    def _validate_financial_data(self, value: float, name: str, min_val: float = None, max_val: float = None) -> float:
+        """Validate financial data with bounds checking"""
+        if not isinstance(value, (int, float)):
+            raise ValueError(f"{name} must be numeric, got {type(value).__name__}")
+        
+        if value != value:  # Check for NaN
+            raise ValueError(f"{name} cannot be NaN")
+        
+        if value in (float('inf'), float('-inf')):
+            raise ValueError(f"{name} cannot be infinite")
+        
+        if min_val is not None and value < min_val:
+            raise ValueError(f"{name} ({value}) must be >= {min_val}")
+        
+        if max_val is not None and value > max_val:
+            raise ValueError(f"{name} ({value}) must be <= {max_val}")
+        
+        return float(value)
+    
+    def _validate_all_data(self):
+        """Validate all data structures for consistency and correctness"""
+        # Validate markets
+        for market_key, market in self.markets.items():
+            self._validate_financial_data(market.market_size, f"markets[{market_key}].market_size", MIN_MARKET_SIZE)
+            self._validate_financial_data(market.revenue_potential, f"markets[{market_key}].revenue_potential", MIN_REVENUE)
+            self._validate_financial_data(market.competitive_advantage, f"markets[{market_key}].competitive_advantage", 0.0, 100.0)
+            self._validate_financial_data(market.investment_required, f"markets[{market_key}].investment_required", 0.0)
+            self._validate_financial_data(market.year5_projection, f"markets[{market_key}].year5_projection", 0.0)
+            self._validate_financial_data(market.year10_projection, f"markets[{market_key}].year10_projection", 0.0)
+            
+            if not isinstance(market.team_size_required, int) or market.team_size_required < MIN_TEAM_SIZE:
+                raise ValueError(f"markets[{market_key}].team_size_required must be >= {MIN_TEAM_SIZE}")
+        
+        # Validate financial projections
+        for year, projection in self.financial_projections.items():
+            if isinstance(year, int):  # Only validate yearly projections, not summary data
+                self._validate_financial_data(projection.revenue, f"financial_projections[{year}].revenue", 0.0)
+                self._validate_financial_data(projection.costs, f"financial_projections[{year}].costs", 0.0)
+                self._validate_financial_data(projection.profit_margin, f"financial_projections[{year}].profit_margin", 
+                                            MAX_PROFIT_MARGIN_NEGATIVE, MAX_PROFIT_MARGIN_POSITIVE)
+                self._validate_financial_data(projection.cumulative_investment, f"financial_projections[{year}].cumulative_investment", 0.0)
+                self._validate_financial_data(projection.total_revenue, f"financial_projections[{year}].total_revenue", 0.0)
+                self._validate_financial_data(projection.market_share, f"financial_projections[{year}].market_share", 
+                                            MIN_MARKET_SHARE, MAX_MARKET_SHARE)
+                
+                if not isinstance(projection.total_customers, int) or projection.total_customers < MIN_CUSTOMERS:
+                    raise ValueError(f"financial_projections[{year}].total_customers must be >= {MIN_CUSTOMERS}")
+                
+                if not isinstance(projection.team_size, int) or projection.team_size < MIN_TEAM_SIZE or projection.team_size > MAX_TEAM_SIZE:
+                    raise ValueError(f"financial_projections[{year}].team_size must be between {MIN_TEAM_SIZE} and {MAX_TEAM_SIZE}")
+        
+        # Validate roadmap timeline
+        for quarter_key, milestone in self.roadmap_timeline.items():
+            self._validate_financial_data(milestone.total_revenue, f"roadmap_timeline[{quarter_key}].total_revenue", 0.0)
+            self._validate_financial_data(milestone.market_share, f"roadmap_timeline[{quarter_key}].market_share", 
+                                        MIN_MARKET_SHARE, MAX_MARKET_SHARE)
+            
+            if not isinstance(milestone.total_customers, int) or milestone.total_customers < MIN_CUSTOMERS:
+                raise ValueError(f"roadmap_timeline[{quarter_key}].total_customers must be >= {MIN_CUSTOMERS}")
+            
+            if not isinstance(milestone.team_size, int) or milestone.team_size < MIN_TEAM_SIZE or milestone.team_size > MAX_TEAM_SIZE:
+                raise ValueError(f"roadmap_timeline[{quarter_key}].team_size must be between {MIN_TEAM_SIZE} and {MAX_TEAM_SIZE}")
+        
+        print("✅ All data validation passed")
         
     def _initialize_markets(self):
-        """Initialize all target markets - REALISTIC PROJECTIONS"""
+        """Initialize all target markets with realistic projections.
+        
+        Creates market definitions for 14 target markets across 5 phases:
+        - Foundation (Years 1-2): Core gaming, cybersecurity, financial services
+        - Growth (Years 3-5): Healthcare, manufacturing, automotive
+        - Leadership (Years 6-8): Retail, energy
+        - Legacy (Years 9-10): Education, agriculture
+        
+        Each market includes:
+        - Realistic market size and revenue projections
+        - Competitive advantage percentages
+        - Investment requirements and team sizes
+        - 5-year and 10-year revenue projections
+        """
         self.markets = {
             # Phase 1: Foundation Markets (Years 1-2) - FOCUS ON CORE STRENGTHS
             'gaming_anti_cheat': Market(
@@ -236,7 +341,15 @@ class InvestorRoadmap:
         }
         
     def _initialize_roadmap_timeline(self):
-        """Initialize roadmap timeline with milestones"""
+        """Initialize quarterly roadmap timeline with milestones.
+        
+        Creates quarterly milestones from Q1 2026 to Q4 2030 showing:
+        - Market launches and expansion
+        - Revenue and customer growth
+        - Team scaling
+        - Market share development
+        - Key achievements and funding rounds
+        """
         self.roadmap_timeline = {
             'Q1_2026': RoadmapMilestone(
                 quarter='Q1 2026',
@@ -391,7 +504,16 @@ class InvestorRoadmap:
         }
         
     def _initialize_financial_projections(self):
-        """Initialize 10-year financial projections with break-even analysis"""
+        """Initialize comprehensive 10-year financial projections.
+        
+        Creates detailed financial model including:
+        - Yearly revenue, costs, and profit projections
+        - Break-even analysis (achieved in Year 2)
+        - Cumulative investment tracking
+        - Market share and customer growth
+        - Team scaling projections
+        - Additional data structures for reporting (revenue_growth, profitability)
+        """
         self.financial_projections = {
             # Year 1: Foundation Phase - Heavy Investment
             1: FinancialProjection(
@@ -551,11 +673,49 @@ class InvestorRoadmap:
                 team_size=300,
                 market_share=19.2,
                 key_achievements=['$3B+ cumulative revenue', 'Global AI leader', 'Vision achieved']
-            )
+            ),
+            
+            # Additional data structures for reporting
+            'revenue_growth': {
+                1: {'revenue': 19.0, 'growth_rate': 1.0, 'markets': 3},
+                2: {'revenue': 45.0, 'growth_rate': 2.37, 'markets': 3},
+                3: {'revenue': 85.0, 'growth_rate': 1.89, 'markets': 5},
+                4: {'revenue': 140.0, 'growth_rate': 1.65, 'markets': 5},
+                5: {'revenue': 220.0, 'growth_rate': 1.57, 'markets': 7},
+                6: {'revenue': 310.0, 'growth_rate': 1.41, 'markets': 7},
+                7: {'revenue': 420.0, 'growth_rate': 1.35, 'markets': 9},
+                8: {'revenue': 550.0, 'growth_rate': 1.31, 'markets': 11},
+                9: {'revenue': 680.0, 'growth_rate': 1.24, 'markets': 13},
+                10: {'revenue': 800.0, 'growth_rate': 1.18, 'markets': 14}
+            },
+            
+            'profitability': {
+                1: {'revenue': 19.0, 'costs': 45.0, 'profit': -26.0, 'margin': -136.8},
+                2: {'revenue': 45.0, 'costs': 35.0, 'profit': 10.0, 'margin': 22.2},
+                3: {'revenue': 85.0, 'costs': 55.0, 'profit': 30.0, 'margin': 35.3},
+                4: {'revenue': 140.0, 'costs': 75.0, 'profit': 65.0, 'margin': 46.4},
+                5: {'revenue': 220.0, 'costs': 95.0, 'profit': 125.0, 'margin': 56.8},
+                6: {'revenue': 310.0, 'costs': 120.0, 'profit': 190.0, 'margin': 61.3},
+                7: {'revenue': 420.0, 'costs': 150.0, 'profit': 270.0, 'margin': 64.3},
+                8: {'revenue': 550.0, 'costs': 185.0, 'profit': 365.0, 'margin': 66.4},
+                9: {'revenue': 680.0, 'costs': 220.0, 'profit': 460.0, 'margin': 67.6},
+                10: {'revenue': 800.0, 'costs': 250.0, 'profit': 550.0, 'margin': 68.8}
+            }
         }
         
-    def get_break_even_analysis(self):
-        """Get break-even analysis"""
+    def get_break_even_analysis(self) -> Dict[str, Any]:
+        """Calculate and return break-even analysis.
+        
+        Returns:
+            Dict containing:
+            - break_even_year: Year when break-even is achieved
+            - break_even_revenue: Total revenue at break-even
+            - time_to_profitability: Years to profitability
+            - initial_investment: Total investment required
+            - roi_at_break_even: ROI percentage at break-even
+            
+        Returns None if break-even is not achieved in projections.
+        """
         for year, projection in self.financial_projections.items():
             if projection.break_even_achieved:
                 return {
@@ -567,8 +727,17 @@ class InvestorRoadmap:
                 }
         return None
     
-    def get_10_year_summary(self):
-        """Get 10-year summary"""
+    def get_10_year_summary(self) -> Dict[str, Any]:
+        """Generate comprehensive 10-year summary metrics.
+        
+        Returns:
+            Dict containing key 10-year metrics:
+            - Total revenue and investment
+            - Total profit and final year metrics
+            - Customer and team growth
+            - Market share achievement
+            - Overall ROI calculation
+        """
         year10 = self.financial_projections[10]
         return {
             'total_revenue_10_years': year10.total_revenue,
@@ -584,7 +753,16 @@ class InvestorRoadmap:
         }
         
     def _initialize_investment_requirements(self):
-        """Initialize investment requirements"""
+        """Initialize detailed investment requirements across funding rounds.
+        
+        Defines funding strategy:
+        - Series A: $25M for foundation phase
+        - Series B: $75M for growth phase  
+        - Series C: $150M for leadership phase
+        - IPO: $500M for domination phase
+        - Use of funds breakdown for each round
+        - ROI projections for investors
+        """
         self.investment_requirements = {
             'total_investment': {
                 'series_a': 25.0,  # $25M for foundation phase
@@ -628,7 +806,20 @@ class InvestorRoadmap:
         }
         
     def generate_investor_roadmap(self) -> str:
-        """Generate comprehensive investor roadmap"""
+        """Generate comprehensive investor roadmap document.
+        
+        Creates detailed markdown document including:
+        - Executive summary with key metrics
+        - Market opportunity analysis by phase
+        - Quarterly roadmap timeline
+        - Financial projections and profitability
+        - Investment requirements and ROI
+        - Competitive advantages and risk mitigation
+        - Call to action for investors
+        
+        Returns:
+            Formatted markdown string suitable for investor presentations
+        """
         lines = []
         lines.append("# 🗺️ STELLAR LOGIC AI - INVESTOR ROADMAP")
         lines.append("=" * 70)

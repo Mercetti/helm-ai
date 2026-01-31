@@ -16,6 +16,12 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 
+# Statistical constants
+DEFAULT_COEFFICIENT_OF_VARIATION = 0.1
+MIN_SAMPLE_SIZE = 2
+CONFIDENCE_LEVEL_DEFAULT = 99.9
+P_VALUE_THRESHOLD = 0.001
+
 class ValidationMethod(Enum):
     """Validation methods for performance claims"""
     STATISTICAL_ANALYSIS = "statistical_analysis"
@@ -246,19 +252,35 @@ class PerformanceValidationSystem:
         
     def calculate_confidence_interval(self, sample_mean: float, sample_size: int, confidence_level: float) -> Tuple[float, float]:
         """Calculate confidence interval for statistical validation"""
+        # Input validation
+        if sample_size <= 0:
+            raise ValueError(f"Sample size must be positive, got {sample_size}")
+        
+        if sample_size < MIN_SAMPLE_SIZE:
+            raise ValueError(f"Sample size must be at least {MIN_SAMPLE_SIZE} for statistical calculations")
+        
+        if confidence_level <= 0 or confidence_level >= 100:
+            raise ValueError(f"Confidence level must be between 0 and 100, got {confidence_level}")
+        
         # Handle different metric types appropriately
         if sample_mean > 1.0:  # Response time in milliseconds
             # Use standard deviation calculation for continuous data
-            # Assume coefficient of variation of 0.1 (10% variance)
-            std_dev = sample_mean * 0.1
+            # Use configurable coefficient of variation
+            std_dev = sample_mean * DEFAULT_COEFFICIENT_OF_VARIATION
             standard_error = std_dev / math.sqrt(sample_size)
         else:  # Percentage or rate (0-1)
             # Use binomial proportion confidence interval
             sample_mean = max(0.0001, min(0.9999, sample_mean))  # Clamp to valid range
-            standard_error = math.sqrt((sample_mean * (1 - sample_mean)) / sample_size)
+            if sample_size == 0:
+                raise ValueError("Sample size cannot be zero for binomial calculations")
+            variance = (sample_mean * (1 - sample_mean)) / sample_size
+            if variance < 0:
+                variance = 0
+            standard_error = math.sqrt(variance)
         
         # Z-score for confidence level
         z_scores = {
+            90.0: 1.645,
             95.0: 1.96,
             99.0: 2.576,
             99.9: 3.291,
@@ -279,24 +301,63 @@ class PerformanceValidationSystem:
         
     def perform_statistical_validation(self, metric_name: str, claimed_value: float, sample_data: List[float]) -> ValidationResult:
         """Perform statistical validation of performance claim"""
+        # Input validation
+        if not sample_data or len(sample_data) == 0:
+            raise ValueError("Sample data cannot be empty")
+        
+        if len(sample_data) < MIN_SAMPLE_SIZE:
+            raise ValueError(f"Sample size must be at least {MIN_SAMPLE_SIZE} for statistical validation")
+        
+        if any(not isinstance(x, (int, float)) for x in sample_data):
+            raise ValueError("All sample data points must be numeric")
+        
         sample_size = len(sample_data)
         sample_mean = statistics.mean(sample_data)
-        sample_std = statistics.stdev(sample_data) if sample_size > 1 else 0
+        
+        # Handle standard deviation calculation safely
+        try:
+            sample_std = statistics.stdev(sample_data) if sample_size > 1 else 0
+        except statistics.StatisticsError:
+            sample_std = 0
         
         # Calculate confidence interval
-        confidence_level = 99.9
-        confidence_interval = self.calculate_confidence_interval(sample_mean, sample_size, confidence_level)
+        confidence_level = CONFIDENCE_LEVEL_DEFAULT
+        try:
+            confidence_interval = self.calculate_confidence_interval(sample_mean, sample_size, confidence_level)
+        except ValueError as e:
+            raise ValueError(f"Error calculating confidence interval: {e}")
         
-        # Perform hypothesis test
+        # Perform hypothesis test with proper error handling
         null_hypothesis = "Claimed value is correct"
-        t_statistic = (sample_mean - claimed_value) / (sample_std / math.sqrt(sample_size))
         
-        # Calculate p-value (simplified)
-        p_value = 2 * (1 - abs(t_statistic) / math.sqrt(sample_size))
-        p_value = max(0, min(1, p_value))
+        # Safe t-statistic calculation
+        if sample_std == 0:
+            # If standard deviation is zero, use simplified test
+            t_statistic = 0.0 if abs(sample_mean - claimed_value) < 0.001 else float('inf')
+        else:
+            try:
+                t_statistic = (sample_mean - claimed_value) / (sample_std / math.sqrt(sample_size))
+            except ZeroDivisionError:
+                t_statistic = float('inf')
+        
+        # Simplified p-value calculation (for demonstration - in production use scipy.stats)
+        # This is a conservative approximation
+        abs_t = abs(t_statistic)
+        if abs_t > 3:
+            p_value = 0.001
+        elif abs_t > 2:
+            p_value = 0.01
+        elif abs_t > 1:
+            p_value = 0.1
+        else:
+            p_value = 0.5
+        
+        # Ensure p_value is in valid range
+        p_value = max(0.0001, min(1.0, p_value))
         
         # Determine statistical significance
-        statistical_significance = p_value < 0.001 and claimed_value >= confidence_interval[0] and claimed_value <= confidence_interval[1]
+        claimed_in_interval = confidence_interval[0] <= claimed_value <= confidence_interval[1]
+        statistical_significance = p_value < P_VALUE_THRESHOLD and claimed_in_interval
         
         return ValidationResult(
             metric_name=metric_name,

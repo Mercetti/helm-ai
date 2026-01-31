@@ -1,0 +1,45 @@
+{
+  "investment": {
+    "seed_round": 3000000,
+    "equity_percentage": 10,
+    "pre_money_valuation": 27000000,
+    "post_money_valuation": 30000000
+  },
+  "returns": {
+    "year_1_exit": {
+      "valuation": 75000000,
+      "investor_value": 7500000,
+      "roi": "2.5x",
+      "irr": "150%"
+    },
+    "year_3_exit": {
+      "valuation": 500000000,
+      "investor_value": 50000000,
+      "roi": "16.7x",
+      "irr": "120%"
+    },
+    "year_5_exit": {
+      "valuation": 1500000000,
+      "investor_value": 150000000,
+      "roi": "50x",
+      "irr": "100%"
+    }
+  },
+  "comparable_exits": {
+    "crowdstrike": {
+      "revenue_multiple": "25x",
+      "valuation": "$30B",
+      "timeline": "6 years"
+    },
+    "zscaler": {
+      "revenue_multiple": "20x",
+      "valuation": "$25B",
+      "timeline": "8 years"
+    },
+    "cloudflare": {
+      "revenue_multiple": "18x",
+      "valuation": "$20B",
+      "timeline": "7 years"
+    }
+  }
+}

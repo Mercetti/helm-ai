@@ -1,0 +1,68 @@
+{
+  "current_team": {
+    "total_employees": 6,
+    "annual_cost": 510000,
+    "breakdown": {
+      "ceo_founder": 150000,
+      "cto_technical_lead": 140000,
+      "customer_success_lead": 90000,
+      "sales_executive": 80000,
+      "support_specialist": 30000,
+      "operations_manager": 20000
+    }
+  },
+  "traditional_team_comparison": {
+    "total_employees": 13,
+    "annual_cost": 975000,
+    "breakdown": {
+      "level_1_support": 250000,
+      "level_2_support": 225000,
+      "team_lead": 120000,
+      "customer_success_managers": 320000,
+      "operations": 60000
+    }
+  },
+  "cost_savings": {
+    "staff_reduction": 7,
+    "annual_savings": 465000,
+    "percentage_reduction": "46%"
+  },
+  "hiring_plan": {
+    "year_1": {
+      "new_hires": 8,
+      "total_cost": 800000,
+      "positions": [
+        "2 senior developers",
+        "2 sales executives",
+        "1 marketing manager",
+        "1 customer success manager",
+        "1 devops engineer",
+        "1 security engineer"
+      ]
+    },
+    "year_2": {
+      "new_hires": 12,
+      "total_cost": 1200000,
+      "positions": [
+        "4 senior developers",
+        "3 sales executives",
+        "2 customer success managers",
+        "1 marketing director",
+        "1 product manager",
+        "1 data scientist"
+      ]
+    },
+    "year_3": {
+      "new_hires": 20,
+      "total_cost": 2500000,
+      "positions": [
+        "8 senior developers",
+        "5 sales executives",
+        "3 customer success managers",
+        "2 marketing specialists",
+        "1 cfo",
+        "1 vp_engineering"
+      ]
+    }
+  }
+}

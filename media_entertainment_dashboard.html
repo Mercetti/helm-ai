@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media & Entertainment Security Dashboard - Stellar Logic AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-header p {
+            font-size: 1.2em;
+            color: #e0e7ff;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .overview-card {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .overview-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #e0e7ff;
+            font-weight: 400;
+        }
+
+        .overview-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .overview-change {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .overview-change.positive {
+            color: #34d399;
+        }
+
+        .overview-change.negative {
+            color: #f87171;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #e0e7ff;
+            font-weight: 400;
+        }
+
+        .alerts-section {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        .alerts-section h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #e0e7ff;
+            font-weight: 400;
+        }
+
+        .alert-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #e0e7ff;
+            transition: background 0.3s ease;
+        }
+
+        .alert-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .alert-item.critical {
+            border-left-color: #dc2626;
+        }
+
+        .alert-item.high {
+            border-left-color: #f59e0b;
+        }
+
+        .alert-item.medium {
+            border-left-color: #eab308;
+        }
+
+        .alert-item.low {
+            border-left-color: #22c55e;
+        }
+
+        .alert-item.informational {
+            border-left-color: #3b82f6;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-id {
+            font-weight: 600;
+            color: #e0e7ff;
+        }
+
+        .alert-time {
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+
+        .alert-description {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .alert-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .alert-detail {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .alert-detail-label {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .alert-detail-value {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .refresh-button:hover {
+            background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2em;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>🎬 Media & Entertainment Security Dashboard</h1>
+        <p>Real-time Content Protection & Piracy Prevention Monitoring</p>
+    </div>
+
+    <div class="container">
+        <button class="refresh-button" onclick="refreshDashboard()">🔄 Refresh Dashboard</button>
+        
+        <div class="overview-grid">
+            <div class="overview-card">
+                <h3>🎭 Content Analyzed</h3>
+                <div class="overview-value" id="content-analyzed">2,847</div>
+                <div class="overview-change positive">+18% this month</div>
+                <div>Active monitoring</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>🛡️ Piracy Detection Rate</h3>
+                <div class="overview-value" id="piracy-detection-rate">3.2%</div>
+                <div class="overview-change positive">Industry average: 4.5%</div>
+                <div>Below industry average</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>⚠️ Violations Detected</h3>
+                <div class="overview-value" id="violations-detected">42</div>
+                <div class="overview-change positive">+12 this week</div>
+                <div>Real-time monitoring</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>💰 Average Content Value</h3>
+                <div class="overview-value" id="avg-content-value">$2.5M</div>
+                <div class="overview-change positive">+8.7% YTD</div>
+                <div>Market analysis</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>🎯 High Risk Content</h3>
+                <div class="overview-value" id="high-risk-content">28</div>
+                <div class="overview-change negative">+5 this month</div>
+                <div>Enhanced monitoring</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>📊 Processing Capacity</h3>
+                <div class="overview-value" id="processing-capacity">1,200</div>
+                <div class="overview-change positive">Content items/sec</div>
+                <div>System performance</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>📈 Threat Type Distribution</h3>
+                <canvas id="threatTypeChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🎭 Content Type Analysis</h3>
+                <canvas id="contentTypeChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🌍 Regional Piracy Analysis</h3>
+                <canvas id="regionalPiracyChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>📊 Market Trends</h3>
+                <canvas id="marketTrendsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3>🚨 Recent Security Alerts</h3>
+            <div id="alerts-container">
+                <div class="loading">Loading media security alerts...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        let threatTypeChart, contentTypeChart, regionalPiracyChart, marketTrendsChart;
+
+        function initializeCharts() {
+            // Threat Type Distribution Chart
+            const threatCtx = document.getElementById('threatTypeChart').getContext('2d');
+            threatTypeChart = new Chart(threatCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Content Piracy', 'Copyright Infringement', 'Illegal Streaming', 'DRM Violation', 'License Violation', 'Brand Abuse'],
+                    datasets: [{
+                        label: 'Threat Cases',
+                        data: [15, 12, 8, 6, 4, 3],
+                        backgroundColor: 'rgba(139, 92, 246, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Content Type Analysis Chart
+            const contentCtx = document.getElementById('contentTypeChart').getContext('2d');
+            contentTypeChart = new Chart(contentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Movies', 'Music', 'TV Shows', 'Games', 'Podcasts', 'Books'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 3, 2],
+                        backgroundColor: [
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(20, 184, 166, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(34, 197, 94, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+
+            // Regional Piracy Analysis Chart
+            const regionalCtx = document.getElementById('regionalPiracyChart').getContext('2d');
+            regionalPiracyChart = new Chart(regionalCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Africa', 'Middle East'],
+                    datasets: [{
+                        label: 'Piracy Rate (%)',
+                        data: [2.5, 3.0, 4.5, 5.2, 6.8, 4.2],
+                        borderColor: 'rgba(139, 92, 246, 0.8)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.2)'
+                    }, {
+                        label: 'Content Value ($M)',
+                        data: [5.0, 3.0, 2.5, 1.8, 1.2, 2.0],
+                        borderColor: 'rgba(236, 72, 153, 0.8)',
+                        backgroundColor: 'rgba(236, 72, 153, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+
+            // Market Trends Chart
+            const trendsCtx = document.getElementById('marketTrendsChart').getContext('2d');
+            marketTrendsChart = new Chart(trendsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Streaming Growth (%)',
+                        data: [2.5, 3.2, 4.1, 5.0, 6.2, 7.5, 8.8, 10.2, 11.5, 12.8, 14.0, 15.0],
+                        borderColor: 'rgba(139, 92, 246, 0.8)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Piracy Trends',
+                        data: [100, 95, 88, 82, 75, 68, 62, 58, 55, 52, 50, 48],
+                        borderColor: 'rgba(236, 72, 153, 0.8)',
+                        backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateMockAlerts() {
+            const alertTypes = [
+                { type: 'content_piracy', level: 'critical', description: 'Content piracy detected on unauthorized streaming platform', content_id: 'MEDIA_001', severity: 'critical' },
+                { type: 'copyright_infringement', level: 'high', description: 'Copyright infringement identified in user-generated content', content_id: 'MEDIA_002', severity: 'high' },
+                { type: 'illegal_streaming', level: 'high', description: 'Illegal streaming of premium content detected', content_id: 'MEDIA_003', severity: 'high' },
+                { type: 'drm_violation', level: 'medium', description: 'DRM protection circumvention attempt detected', content_id: 'MEDIA_004', severity: 'medium' },
+                { type: 'license_violation', level: 'medium', description: 'License violation detected in content distribution', content_id: 'MEDIA_005', severity: 'medium' },
+                { type: 'brand_abuse', level: 'low', description: 'Brand abuse detected in counterfeit content', content_id: 'MEDIA_006', severity: 'low' }
+            ];
+
+            const alertsContainer = document.getElementById('alerts-container');
+            alertsContainer.innerHTML = '';
+
+            alertTypes.forEach(alert => {
+                const alertItem = document.createElement('div');
+                alertItem.className = `alert-item ${alert.level}`;
+                alertItem.innerHTML = `
+                    <div class="alert-header">
+                        <span class="alert-id">${alert.type.toUpperCase()}_${alert.content_id}</span>
+                        <span class="alert-time">${new Date().toLocaleTimeString()}</span>
+                    </div>
+                    <div class="alert-description">${alert.description}</div>
+                    <div class="alert-details">
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Content ID</div>
+                            <div class="alert-detail-value">${alert.content_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Severity</div>
+                            <div class="alert-detail-value">${alert.severity.toUpperCase()}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Confidence</div>
+                            <div class="alert-detail-value">${(88 + Math.random() * 10).toFixed(1)}%</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Risk Level</div>
+                            <div class="alert-detail-value">${(0.7 + Math.random() * 0.3).toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+                alertsContainer.appendChild(alertItem);
+            });
+        }
+
+        function updateMetrics() {
+            // Simulate real-time data updates
+            const contentAnalyzed = Math.floor(Math.random() * 500) + 2600;
+            const piracyDetectionRate = (2.8 + Math.random() * 0.8).toFixed(1);
+            const violationsDetected = Math.floor(Math.random() * 20) + 35;
+            const avgContentValue = Math.floor(Math.random() * 1000000) + 2000000;
+            const highRiskContent = Math.floor(Math.random() * 15) + 20;
+
+            // Update DOM
+            document.getElementById('content-analyzed').textContent = contentAnalyzed.toLocaleString();
+            document.getElementById('piracy-detection-rate').textContent = `${piracyDetectionRate}%`;
+            document.getElementById('violations-detected').textContent = violationsDetected;
+            document.getElementById('avg-content-value').textContent = `$${(avgContentValue / 1000000).toFixed(1)}M`;
+            document.getElementById('high-risk-content').textContent = highRiskContent;
+        }
+
+        function refreshDashboard() {
+            updateMetrics();
+            generateMockAlerts();
+            
+            // Update charts with new data
+            if (threatTypeChart) {
+                threatTypeChart.data.datasets[0].data = threatTypeChart.data.datasets[0].data.map(() => Math.floor(Math.random() * 20) + 5);
+                threatTypeChart.update();
+            }
+
+            if (contentTypeChart) {
+                contentTypeChart.data.datasets[0].data = contentTypeChart.data.datasets[0].data.map(() => Math.floor(Math.random() * 30) + 20);
+                contentTypeChart.update();
+            }
+
+            if (regionalPiracyChart) {
+                regionalPiracyChart.data.datasets[0].data = regionalPiracyChart.data.datasets[0].data.map(() => (2.0 + Math.random() * 5.0));
+                regionalPiracyChart.data.datasets[1].data = regionalPiracyChart.data.datasets[1].data.map(() => Math.floor(Math.random() * 4) + 1);
+                regionalPiracyChart.update();
+            }
+
+            if (marketTrendsChart) {
+                marketTrendsChart.data.datasets[0].data = marketTrendsChart.data.datasets[0].data.map((v, i) => v + Math.random() * 0.5);
+                marketTrendsChart.data.datasets[1].data = marketTrendsChart.data.datasets[1].data.map((v, i) => v + Math.random() * 5 - 2.5);
+                marketTrendsChart.update();
+            }
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            refreshDashboard();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(refreshDashboard, 30000);
+        });
+    </script>
+</body>
+</html>

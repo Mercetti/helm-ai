@@ -1,0 +1,82 @@
+{
+  "company_overview": {
+    "company_name": "Stellar Logic AI",
+    "tagline": "Enterprise-Grade AI Security Platform",
+    "mission": "Democratize AI security for every industry",
+    "quality_score": 96.4,
+    "plugins": 11,
+    "enhanced_features": 6,
+    "certifications": 7,
+    "patents": 24,
+    "automation_level": "90%+",
+    "scalability": "100K concurrent users",
+    "team_optimization": "46% cost reduction"
+  },
+  "financial_highlights": {
+    "funding_needed": 3000000,
+    "equity_offered": 10,
+    "pre_money_valuation": 27000000,
+    "post_money_valuation": 30000000,
+    "year_1_revenue": 5000000,
+    "year_3_revenue": 50000000,
+    "year_5_revenue": 150000000,
+    "projected_roi": "50x in 5 years",
+    "gross_margin": 85,
+    "ltv_cac_ratio": "25:1",
+    "churn_rate": 5
+  },
+  "team_information": {
+    "current_team_size": 6,
+    "current_team_cost": 510000,
+    "traditional_team_cost": 975000,
+    "annual_savings": 465000,
+    "cost_reduction_percentage": 46,
+    "hiring_plan_year1": 8,
+    "hiring_plan_year2": 12,
+    "hiring_plan_year3": 20
+  },
+  "product_portfolio": {
+    "core_plugins": [
+      "Manufacturing Security",
+      "Healthcare Security",
+      "Financial Security",
+      "Cybersecurity",
+      "Retail Security",
+      "Government Security",
+      "Education Security",
+      "Real Estate Security",
+      "Transportation Security",
+      "Legal Security",
+      "Media Security"
+    ],
+    "enhanced_features": [
+      "Mobile Apps (iOS/Android)",
+      "Advanced Analytics (AI-powered insights)",
+      "Integration Marketplace (50+ connectors)",
+      "Certifications (ISO 27001, SOC 2, HIPAA, PCI DSS)",
+      "Strategic Partnerships (Global network)",
+      "Intellectual Property (24+ patents)"
+    ],
+    "pricing": {
+      "starter": "$499/month",
+      "professional": "$1,999/month",
+      "enterprise": "$9,999/month",
+      "unlimited": "Custom pricing"
+    }
+  },
+  "email_templates": [
+    "vc_firm",
+    "angel_investor",
+    "corporate_vc",
+    "follow_up"
+  ],
+  "documents_available": [
+    "executive_summary",
+    "pitch_deck",
+    "one_pager",
+    "financial_projections",
+    "roi_calculations",
+    "team_costs",
+    "funding_breakdown"
+  ]
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated AI Background</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+        
+        .ai-background {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
+        }
+        
+        .neural-network {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .neuron {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+            animation: pulse 3s infinite;
+        }
+        
+        .connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #667eea 50%, transparent 100%);
+            transform-origin: left center;
+            animation: flow 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+        
+        @keyframes flow {
+            0% { opacity: 0.3; transform: scaleX(0); }
+            50% { opacity: 1; transform: scaleX(1); }
+            100% { opacity: 0.3; transform: scaleX(0); }
+        }
+        
+        .floating-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #667eea;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 10s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+        
+        .data-stream {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, #667eea, transparent);
+            animation: stream 3s infinite linear;
+        }
+        
+        @keyframes stream {
+            0% { transform: translateY(-100px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ai-background">
+        <div class="neural-network" id="neuralNetwork"></div>
+    </div>
+    
+    <script>
+        // Create neural network visualization
+        function createNeuralNetwork() {
+            const network = document.getElementById('neuralNetwork');
+            const neurons = [];
+            const connections = [];
+            
+            // Create neurons in a grid pattern
+            for (let i = 0; i < 15; i++) {
+                const neuron = document.createElement('div');
+                neuron.className = 'neuron';
+                neuron.style.left = Math.random() * 100 + '%';
+                neuron.style.top = Math.random() * 100 + '%';
+                neuron.style.animationDelay = Math.random() * 3 + 's';
+                network.appendChild(neuron);
+                neurons.push(neuron);
+            }
+            
+            // Create connections between nearby neurons
+            neurons.forEach((neuron1, i) => {
+                neurons.slice(i + 1).forEach(neuron2 => {
+                    const rect1 = neuron1.getBoundingClientRect();
+                    const rect2 = neuron2.getBoundingClientRect();
+                    const distance = Math.sqrt(
+                        Math.pow(rect2.left - rect1.left, 2) + 
+                        Math.pow(rect2.top - rect1.top, 2)
+                    );
+                    
+                    if (distance < 300) {
+                        const connection = document.createElement('div');
+                        connection.className = 'connection';
+                        
+                        const angle = Math.atan2(
+                            rect2.top - rect1.top,
+                            rect2.left - rect1.left
+                        ) * 180 / Math.PI;
+                        
+                        connection.style.left = rect1.left + 'px';
+                        connection.style.top = rect1.top + 'px';
+                        connection.style.width = distance + 'px';
+                        connection.style.transform = `rotate(${angle}deg)`;
+                        connection.style.animationDelay = Math.random() * 2 + 's';
+                        
+                        network.appendChild(connection);
+                        connections.push(connection);
+                    }
+                });
+            });
+        }
+        
+        // Create floating particles
+        function createParticles() {
+            const background = document.querySelector('.ai-background');
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'floating-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                background.appendChild(particle);
+            }
+        }
+        
+        // Create data streams
+        function createDataStreams() {
+            const background = document.querySelector('.ai-background');
+            
+            for (let i = 0; i < 10; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'data-stream';
+                stream.style.left = Math.random() * 100 + '%';
+                stream.style.animationDelay = Math.random() * 3 + 's';
+                stream.style.animationDuration = (3 + Math.random() * 2) + 's';
+                background.appendChild(stream);
+            }
+        }
+        
+        // Initialize animations
+        createNeuralNetwork();
+        createParticles();
+        createDataStreams();
+        
+        // Regenerate network periodically
+        setInterval(createNeuralNetwork, 10000);
+    </script>
+</body>
+</html>

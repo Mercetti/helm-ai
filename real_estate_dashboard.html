@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate & Property Security Dashboard - Stellar Logic AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-header p {
+            font-size: 1.2em;
+            color: #e0f2f1;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .overview-card {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .overview-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #e0f2f1;
+            font-weight: 400;
+        }
+
+        .overview-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .overview-change {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .overview-change.positive {
+            color: #34d399;
+        }
+
+        .overview-change.negative {
+            color: #f87171;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #e0f2f1;
+            font-weight: 400;
+        }
+
+        .alerts-section {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        .alerts-section h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #e0f2f1;
+            font-weight: 400;
+        }
+
+        .alert-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #e0f2f1;
+            transition: background 0.3s ease;
+        }
+
+        .alert-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .alert-item.critical {
+            border-left-color: #dc2626;
+        }
+
+        .alert-item.high {
+            border-left-color: #f59e0b;
+        }
+
+        .alert-item.medium {
+            border-left-color: #eab308;
+        }
+
+        .alert-item.low {
+            border-left-color: #22c55e;
+        }
+
+        .alert-item.informational {
+            border-left-color: #3b82f6;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-id {
+            font-weight: 600;
+            color: #e0f2f1;
+        }
+
+        .alert-time {
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+
+        .alert-description {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .alert-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .alert-detail {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .alert-detail-label {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .alert-detail-value {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .refresh-button:hover {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2em;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>🏢 Real Estate & Property Security Dashboard</h1>
+        <p>Real-time Property Fraud Detection & Transaction Security Monitoring</p>
+    </div>
+
+    <div class="container">
+        <button class="refresh-button" onclick="refreshDashboard()">🔄 Refresh Dashboard</button>
+        
+        <div class="overview-grid">
+            <div class="overview-card">
+                <h3>🏠 Properties Analyzed</h3>
+                <div class="overview-value" id="properties-analyzed">1,247</div>
+                <div class="overview-change positive">+12% this month</div>
+                <div>Active monitoring</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>🔍 Fraud Detection Rate</h3>
+                <div class="overview-value" id="fraud-detection-rate">2.1%</div>
+                <div class="overview-change positive">Industry average: 2.5%</div>
+                <div>Below industry average</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>⚠️ Alerts Generated</h3>
+                <div class="overview-value" id="alerts-generated">28</div>
+                <div class="overview-change positive">+8 this week</div>
+                <div>Real-time monitoring</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>💰 Average Property Value</h3>
+                <div class="overview-value" id="avg-property-value">$450K</div>
+                <div class="overview-change positive">+5.2% YTD</div>
+                <div>Market analysis</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>🎯 High Risk Properties</h3>
+                <div class="overview-value" id="high-risk-properties</div>
+                <div class="overview-change negative">+3 this month</div>
+                <div>Enhanced monitoring</div>
+            </div>
+
+            <div class="overview-card">
+                <h3>📊 Processing Capacity</h3>
+                <div class="overview-value" id="processing-capacity">800</div>
+                <div class="overview-change positive">Transactions/sec</div>
+                <div>System performance</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>📈 Fraud Type Distribution</h3>
+                <canvas id="fraudTypeChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🏢 Property Type Analysis</h3>
+                <canvas id="propertyTypeChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🌍 Regional Risk Analysis</h3>
+                <canvas id="regionalRiskChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>📊 Market Trends</h3>
+                <canvas id="marketTrendsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3>🚨 Recent Security Alerts</h3>
+            <div id="alerts-container">
+                <div class="loading">Loading real estate security alerts...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        let fraudTypeChart, propertyTypeChart, regionalRiskChart, marketTrendsChart;
+
+        function initializeCharts() {
+            // Fraud Type Distribution Chart
+            const fraudCtx = document.getElementById('fraudTypeChart').getContext('2d');
+            fraudTypeChart = new Chart(fraudCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Title Fraud', 'Mortgage Fraud', 'Identity Fraud', 'Appraisal Fraud', 'Rental Fraud', 'Investment Scam'],
+                    datasets: [{
+                        label: 'Fraud Cases',
+                        data: [8, 12, 6, 4, 3, 5],
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Property Type Analysis Chart
+            const propertyCtx = document.getElementById('propertyTypeChart').getContext('2d');
+            propertyTypeChart = new Chart(propertyCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Residential', 'Commercial', 'Industrial', 'Mixed Use', 'Land'],
+                    datasets: [{
+                        data: [45, 25, 15, 10, 5],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(20, 184, 166, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+
+            // Regional Risk Analysis Chart
+            const regionalCtx = document.getElementById('regionalRiskChart').getContext('2d');
+            regionalRiskChart = new Chart(regionalCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['North America', 'Europe', 'Asia Pacific', 'Other Regions'],
+                    datasets: [{
+                        label: 'Fraud Rate (%)',
+                        data: [1.8, 2.2, 2.5, 1.5],
+                        borderColor: 'rgba(16, 185, 129, 0.8)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)'
+                    }, {
+                        label: 'Average Value ($K)',
+                        data: [520, 380, 280, 320],
+                        borderColor: 'rgba(59, 130, 246, 0.8)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+
+            // Market Trends Chart
+            const trendsCtx = document.getElementById('marketTrendsChart').getContext('2d');
+            marketTrendsChart = new Chart(trendsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Price Appreciation (%)',
+                        data: [1.2, 1.5, 1.8, 2.1, 2.3, 2.5, 2.8, 3.0, 3.2, 3.5, 3.8],
+                        borderColor: 'rgba(16, 185, 129, 0.8)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Inventory Levels',
+                        data: [100, 95, 88, 92, 85, 80, 78, 82, 85, 88, 92, 95],
+                        borderColor: 'rgba(59, 130, 246, 0.8)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateMockAlerts() {
+            const alertTypes = [
+                { type: 'title_fraud', level: 'critical', description: 'Title fraud detected in commercial property transaction', property_id: 'PROP_001', severity: 'critical' },
+                { type: 'mortgage_fraud', level: 'high', description: 'Suspicious mortgage application patterns identified', property_id: 'PROP_002', severity: 'high' },
+                { type: 'identity_fraud', level: 'high', description: 'Identity verification failed for property buyer', property_id: 'PROP_003', severity: 'high' },
+                { type: 'appraisal_fraud', level: 'medium', description: 'Property appraisal appears artificially inflated', property_id: 'PROP_004', severity: 'medium' },
+                { type: 'rental_fraud', level: 'medium', description: 'Rental application contains false information', property_id: 'PROP_005', severity: 'medium' },
+                { type: 'investment_scam', level: 'low', description: 'Potential investment opportunity flagged for review', property_id: 'PROP_006', severity: 'low' }
+            ];
+
+            const alertsContainer = document.getElementById('alerts-container');
+            alertsContainer.innerHTML = '';
+
+            alertTypes.forEach(alert => {
+                const alertItem = document.createElement('div');
+                alertItem.className = `alert-item ${alert.level}`;
+                alertItem.innerHTML = `
+                    <div class="alert-header">
+                        <span class="alert-id">${alert.type.toUpperCase()}_${alert.property_id}</span>
+                        <span class="alert-time">${new Date().toLocaleTimeString()}</span>
+                    </div>
+                    <div class="alert-description">${alert.description}</div>
+                    <div class="alert-details">
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Property ID</div>
+                            <div class="alert-detail-value">${alert.property_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Severity</div>
+                            <div class="alert-detail-value">${alert.severity.toUpperCase()}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-label">Confidence</div>
+                            <div class="alert-detail-value">${(85 + Math.random() * 10).toFixed(1)}%</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-label">Risk Level</div>
+                            <div class="alert-detail-value">${(0.6 + Math.random() * 0.3).toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+                alertsContainer.appendChild(alertItem);
+            });
+        }
+
+        function updateMetrics() {
+            // Simulate real-time data updates
+            const propertiesAnalyzed = Math.floor(Math.random() * 200) + 1200;
+            const fraudDetectionRate = (1.8 + Math.random() * 0.8).toFixed(1);
+            const alertsGenerated = Math.floor(Math.random() * 20) + 20;
+            const avgPropertyValue = Math.floor(Math.random() * 100000) + 400000;
+            const highRiskProperties = Math.floor(Math.random() * 10) + 15;
+
+            // Update DOM
+            document.getElementById('properties-analyzed').textContent = propertiesAnalyzed.toLocaleString();
+            document.getElementById('fraud-detection-rate').textContent = `${fraudDetectionRate}%`;
+            document.getElementById('alerts-generated').textContent = alertsGenerated;
+            document.getElementById('avg-property-value').textContent = `$${Math.floor(avgPropertyValue / 1000)}K`;
+            document.getElementById('high-risk-properties').textContent = highRiskProperties;
+        }
+
+        function refreshDashboard() {
+            updateMetrics();
+            generateMockAlerts();
+            
+            // Update charts with new data
+            if (fraudTypeChart) {
+                fraudTypeChart.data.datasets[0].data = fraudTypeChart.data.datasets[0].data.map(() => Math.floor(Math.random() * 15) + 5);
+                fraudTypeChart.update();
+            }
+
+            if (propertyTypeChart) {
+                propertyTypeChart.data.datasets[0].data = propertyTypeChart.data.datasets[0].data.map(() => Math.floor(Math.random() * 20) + 40);
+                propertyTypeChart.update();
+            }
+
+            if (regionalRiskChart) {
+                regionalRiskChart.data.datasets[0].data = regionalRiskChart.data.datasets[0].data.map(() => (1.5 + Math.random() * 1.5));
+                regionalRiskChart.data.datasets[1].data = regionalRiskChart.data.datasets[1].data.map(() => Math.floor(Math.random() * 200) + 300));
+                regionalRiskChart.update();
+            }
+
+            if (marketTrendsChart) {
+                marketTrendsChart.data.datasets[0].data = marketTrendsChart.data.datasets[0].data.map((v, i) => v + Math.random() * 0.5);
+                marketTrendsChart.data.datasets[1].data = marketTrends.data.datasets[1].data.map((v, i) => v + Math.random() * 10 - 5);
+                marketTrendsChart.update();
+            }
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            refreshDashboard();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(refreshDashboard, 30000);
+        });
+    </script>
+</body>
+</html>

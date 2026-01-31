@@ -1,0 +1,119 @@
+{
+  "year_1": {
+    "customers": 500,
+    "revenue_breakdown": {
+      "plugin_subscriptions": {
+        "starter_customers": 200,
+        "professional_customers": 250,
+        "enterprise_customers": 50,
+        "revenue": 3500000
+      },
+      "enhanced_features": {
+        "mobile_apps": 100000,
+        "advanced_analytics": 150000,
+        "integration_marketplace": 50000,
+        "priority_support": 200000,
+        "revenue": 500000
+      },
+      "strategic_partnerships": {
+        "revenue_sharing": 300000,
+        "licensing": 100000,
+        "integration_fees": 100000,
+        "revenue": 500000
+      }
+    },
+    "total_revenue": 5000000,
+    "costs": {
+      "cogs": 750000,
+      "sales_marketing": 1500000,
+      "rd": 1000000,
+      "ganda": 1000000,
+      "total_costs": 4250000
+    },
+    "gross_profit": 4250000,
+    "net_profit": 750000,
+    "profit_margin": "15%"
+  },
+  "year_2": {
+    "customers": 2000,
+    "revenue_breakdown": {
+      "plugin_subscriptions": {
+        "starter_customers": 800,
+        "professional_customers": 1000,
+        "enterprise_customers": 200,
+        "revenue": 14000000
+      },
+      "enhanced_features": {
+        "mobile_apps": 400000,
+        "advanced_analytics": 600000,
+        "integration_marketplace": 200000,
+        "priority_support": 800000,
+        "revenue": 2000000
+      },
+      "strategic_partnerships": {
+        "revenue_sharing": 1200000,
+        "licensing": 400000,
+        "integration_fees": 400000,
+        "revenue": 2000000
+      }
+    },
+    "total_revenue": 20000000,
+    "costs": {
+      "cogs": 3000000,
+      "sales_marketing": 6000000,
+      "rd": 4000000,
+      "ganda": 4000000,
+      "total_costs": 17000000
+    },
+    "gross_profit": 17000000,
+    "net_profit": 3000000,
+    "profit_margin": "15%"
+  },
+  "year_3": {
+    "customers": 5000,
+    "revenue_breakdown": {
+      "plugin_subscriptions": {
+        "starter_customers": 2000,
+        "professional_customers": 2500,
+        "enterprise_customers": 500,
+        "revenue": 35000000
+      },
+      "enhanced_features": {
+        "mobile_apps": 1000000,
+        "advanced_analytics": 1500000,
+        "integration_marketplace": 500000,
+        "priority_support": 2000000,
+        "revenue": 5000000
+      },
+      "strategic_partnerships": {
+        "revenue_sharing": 3000000,
+        "licensing": 1000000,
+        "integration_fees": 1000000,
+        "revenue": 5000000
+      }
+    },
+    "total_revenue": 50000000,
+    "costs": {
+      "cogs": 7500000,
+      "sales_marketing": 15000000,
+      "rd": 10000000,
+      "ganda": 10000000,
+      "total_costs": 42500000
+    },
+    "gross_profit": 42500000,
+    "net_profit": 7500000,
+    "profit_margin": "15%"
+  },
+  "year_4": {
+    "customers": 10000,
+    "total_revenue": 90000000,
+    "net_profit": 13500000,
+    "profit_margin": "15%"
+  },
+  "year_5": {
+    "customers": 15000,
+    "total_revenue": 150000000,
+    "net_profit": 22500000,
+    "profit_margin": "15%"
+  }
+}

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - Revolutionizing Gaming Security with AI</title>
+    <meta name="description" content="Stellar Logic AI revolutionizes gaming security through advanced AI-powered automation and multi-model intelligence systems. 99.07% accuracy, enterprise-ready protection.">
+    <meta name="keywords" content="AI gaming security, anti-cheat detection, gaming automation, artificial intelligence, gaming industry, multi-model AI, enterprise security">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Stellar Logic AI - AI-Powered Gaming Security">
+    <meta property="og:description" content="99.07% accuracy AI-powered gaming security and anti-cheat detection. Enterprise-ready protection for the $300B gaming industry.">
+    <meta property="og:image" content="https://stellarlogic.ai/images/og-image.jpg">
+    <meta property="og:url" content="https://stellarlogic.ai">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stellar Logic AI - AI-Powered Gaming Security">
+    <meta name="twitter:description" content="99.07% accuracy AI-powered gaming security and anti-cheat detection">
+    <meta name="twitter:image" content="https://stellarlogic.ai/images/twitter-card.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-gradient {
+            background: var(--primary-gradient);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            border-color: #667eea;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .tech-grid {
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-icon:hover {
+            transform: rotate(5deg) scale(1.1);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+        
+        .loading-skeleton {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 25%, rgba(102, 126, 234, 0.2) 50%, rgba(102, 126, 234, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full glass-effect z-50 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 hero-gradient rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold">Stellar Logic AI</span>
+                        <div class="text-xs text-gray-400">Enterprise AI Security</div>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link hover:text-purple-400">Home</a>
+                    <a href="#technology" class="nav-link hover:text-purple-400">Technology</a>
+                    <a href="#solutions" class="nav-link hover:text-purple-400">Solutions</a>
+                    <a href="#metrics" class="nav-link hover:text-purple-400">Metrics</a>
+                    <a href="#about" class="nav-link hover:text-purple-400">About</a>
+                    <a href="#contact" class="nav-link hover:text-purple-400">Contact</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-400 hover:text-white transition">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="hero-gradient px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">
+                        <i class="fas fa-rocket mr-2"></i>Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center tech-grid relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-indigo-900/20 to-black"></div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-20 h-20 bg-purple-500/20 rounded-full blur-xl float-animation"></div>
+        <div class="absolute top-40 right-20 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl float-animation" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-24 h-24 bg-pink-500/20 rounded-full blur-xl float-animation" style="animation-delay: 4s;"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center max-w-5xl mx-auto">
+                <div class="mb-8" data-aos="fade-down">
+                    <span class="inline-block px-6 py-3 glass-effect rounded-full text-purple-300 text-sm font-semibold">
+                        <i class="fas fa-shield-alt mr-2"></i>99.07% Detection Accuracy
+                    </span>
+                </div>
+                
+                <h1 class="text-6xl md:text-8xl font-bold mb-6" data-aos="fade-up" data-aos-delay="100">
+                    <span class="gradient-text">AI-Powered Gaming</span><br>
+                    <span class="gradient-text">Security Evolution</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                    Revolutionizing the $300B gaming industry with enterprise-grade AI security. 
+                    Real-time threat detection, behavioral analysis, and automated response systems.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16" data-aos="fade-up" data-aos-delay="300">
+                    <button class="hero-gradient px-10 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition pulse-animation shadow-xl">
+                        <i class="fas fa-play mr-2"></i>Watch Live Demo
+                    </button>
+                    <button class="glass-effect px-10 py-4 rounded-lg font-semibold text-lg hover:bg-purple-500/20 transition border border-purple-500/30">
+                        <i class="fas fa-chart-line mr-2"></i>View Metrics
+                    </button>
+                </div>
+                
+                <!-- Key Metrics -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+                    <div class="metric-card rounded-xl p-6 text-center">
+                        <div class="text-4xl font-bold gradient-text mb-2">99.07%</div>
+                        <div class="text-gray-400 text-sm">Detection Accuracy</div>
+                    </div>
+                    <div class="metric-card rounded-xl p-6 text-center">
+                        <div class="text-4xl font-bold gradient-text mb-2">50ms</div>
+                        <div class="text-gray-400 text-sm">Response Time</div>
+                    </div>
+                    <div class="metric-card rounded-xl p-6 text-center">
+                        <div class="text-4xl font-bold gradient-text mb-2">25+</div>
+                        <div class="text-gray-400 text-sm">AI Models</div>
+                    </div>
+                    <div class="metric-card rounded-xl p-6 text-center">
+                        <div class="text-4xl font-bold gradient-text mb-2">$84B</div>
+                        <div class="text-gray-400 text-sm">Market Coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down text-purple-400 text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="py-24 bg-gray-900/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-5xl font-bold mb-6">
+                    <span class="gradient-text">Advanced AI Technology</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Powered by cutting-edge hardware and sophisticated AI algorithms for unparalleled gaming security
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-microchip text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Threadripper 7980X</h3>
+                    <p class="text-gray-400 mb-6">
+                        64 cores of dedicated AI processing power with enterprise-grade reliability
+                    </p>
+                    <ul class="text-sm text-gray-300 space-y-3">
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>64 cores / 128 threads</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>256GB DDR5 ECC RAM</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>12TB NVMe storage</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>99.9% uptime guarantee</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Multi-Model AI System</h3>
+                    <p class="text-gray-400 mb-6">
+                        25+ specialized AI models working in perfect synchronization
+                    </p>
+                    <ul class="text-sm text-gray-300 space-y-3">
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Real-time threat detection</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Behavioral analysis</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Predictive analytics</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Automated response</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Enterprise Security</h3>
+                    <p class="text-gray-400 mb-6">
+                        Military-grade encryption and compliance frameworks
+                    </p>
+                    <ul class="text-sm text-gray-300 space-y-3">
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>SOC 2 Type II certified</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>GDPR compliant</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>End-to-end encryption</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Zero-trust architecture</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Lightning Performance</h3>
+                    <p class="text-gray-400 mb-6">
+                        Sub-50ms response times with 99.99% availability
+                    </p>
+                    <ul class="text-sm text-gray-300 space-y-3">
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>50ms average response</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>99.99% uptime SLA</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Global CDN</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Auto-scaling</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Learning Hub</h3>
+                    <p class="text-gray-400 mb-6">
+                        Continuous AI improvement through adaptive learning
+                    </p>
+                    <ul class="text-sm text-gray-300 space-y-3">
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Continuous learning</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Model optimization</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Performance tracking</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>A/B testing</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Global Scale</h3>
+                    <p class="text-gray-400 mb-6">
+                        Worldwide deployment with multi-region support
+                    </p>
+                    <ul class="text-sm text-gray-300 space-y-3">
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Multi-region deployment</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Edge computing</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Local compliance</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>24/7 support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="solutions" class="py-24 bg-black">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-5xl font-bold mb-6">
+                    <span class="gradient-text">AI-Powered Solutions</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Comprehensive security and automation solutions for the gaming industry
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Anti-Cheat Detection</h3>
+                    <p class="text-gray-400 mb-6">
+                        World-leading 99.07% accuracy in cheat detection and prevention
+                    </p>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>• Real-time detection</li>
+                        <li>• Behavioral analysis</li>
+                        <li>• Pattern recognition</li>
+                        <li>• Automated enforcement</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-shield text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Player Protection</h3>
+                    <p class="text-gray-400 mb-6">
+                        Comprehensive player safety and toxic behavior detection
+                    </p>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>• Toxic behavior detection</li>
+                        <li>• Harassment prevention</li>
+                        <li>• Age verification</li>
+                        <li>• Parental controls</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover glass-effect rounded-2xl p-8" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Esports Integrity</h3>
+                    <p class="text-gray-400 mb-6">
+                        Professional tournament monitoring and integrity protection
+                    </p>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>• Tournament monitoring</li>
+                        <li>• Match fixing detection</li>
+                        <li>• Player verification</li>
+                        <li>• Real-time alerts</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section id="metrics" class="py-24 bg-gray-900/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-5xl font-bold mb-6">
+                    <span class="gradient-text">Performance Metrics</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Real-time performance data and industry-leading benchmarks
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="metric-card rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-5xl font-bold gradient-text mb-3">99.07%</div>
+                    <div class="text-gray-400 font-semibold">Detection Rate</div>
+                    <div class="text-sm text-gray-500 mt-2">Industry-leading accuracy</div>
+                </div>
+                
+                <div class="metric-card rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-5xl font-bold gradient-text mb-3">50ms</div>
+                    <div class="text-gray-400 font-semibold">Response Time</div>
+                    <div class="text-sm text-gray-500 mt-2">Sub-100ms detection</div>
+                </div>
+                
+                <div class="metric-card rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-5xl font-bold gradient-text mb-3">99.99%</div>
+                    <div class="text-gray-400 font-semibold">Uptime</div>
+                    <div class="text-sm text-gray-500 mt-2">Enterprise reliability</div>
+                </div>
+                
+                <div class="metric-card rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-5xl font-bold gradient-text mb-3">$84B</div>
+                    <div class="text-gray-400 font-semibold">Market Coverage</div>
+                    <div class="text-sm text-gray-500 mt-2">Total addressable market</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-black border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <div class="w-10 h-10 hero-gradient rounded-lg flex items-center justify-center">
+                        <i class="fas fa-brain text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold">Stellar Logic AI</span>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-youtube text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8 text-gray-400">
+                <p>&copy; 2024 Stellar Logic AI. All rights reserved. | Enterprise AI Security Platform</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Dynamic navbar background
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/95');
+            } else {
+                nav.classList.remove('bg-black/95');
+            }
+        });
+        
+        // Counter animation for metrics
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (element.textContent.includes('%')) {
+                    element.textContent = current.toFixed(2) + '%';
+                } else if (element.textContent.includes('ms')) {
+                    element.textContent = Math.round(current) + 'ms';
+                } else if (element.textContent.includes('B')) {
+                    element.textContent = '$' + Math.round(current) + 'B';
+                } else {
+                    element.textContent = Math.round(current);
+                }
+            }, 16);
+        }
+        
+        // Trigger counter animation when metrics section is visible
+        const metricsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const metrics = entry.target.querySelectorAll('.metric-card .text-5xl');
+                    metrics.forEach(metric => {
+                        const text = metric.textContent;
+                        if (text.includes('99.07%')) {
+                            animateCounter(metric, 99.07);
+                        } else if (text.includes('50ms')) {
+                            animateCounter(metric, 50);
+                        } else if (text.includes('99.99%')) {
+                            animateCounter(metric, 99.99);
+                        } else if (text.includes('$84B')) {
+                            animateCounter(metric, 84);
+                        }
+                    });
+                    metricsObserver.unobserve(entry.target);
+                }
+            });
+        });
+        
+        const metricsSection = document.querySelector('#metrics');
+        if (metricsSection) {
+            metricsObserver.observe(metricsSection);
+        }
+    </script>
+</body>
+</html>
