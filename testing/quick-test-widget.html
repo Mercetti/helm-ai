@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick UI Test - Stellar Logic AI</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 10000;
+            max-width: 300px;
+            font-size: 14px;
+        }
+        
+        .test-widget.minimized {
+            padding: 10px;
+            max-width: 200px;
+        }
+        
+        .test-widget h3 {
+            margin: 0 0 15px 0;
+            color: #1e40af;
+            font-size: 16px;
+        }
+        
+        .test-button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .test-button.primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .test-button.primary:hover {
+            background: #2563eb;
+        }
+        
+        .test-button.secondary {
+            background: #64748b;
+            color: white;
+        }
+        
+        .test-button.secondary:hover {
+            background: #475569;
+        }
+        
+        .test-results {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 11px;
+        }
+        
+        .test-status {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .status-pass {
+            background: #059669;
+            color: white;
+        }
+        
+        .status-fail {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .status-warning {
+            background: #d97706;
+            color: white;
+        }
+        
+        .minimize-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .summary {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        .summary strong {
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <!-- Test Widget -->
+    <div class="test-widget" id="test-widget">
+        <button class="minimize-btn" onclick="toggleWidget()">−</button>
+        <h3>🧪 UI Tests</h3>
+        
+        <button class="test-button primary" onclick="runQuickTests()">
+            🚀 Quick Tests
+        </button>
+        
+        <button class="test-button secondary" onclick="testButtons()">
+            🔘 Test Buttons
+        </button>
+        
+        <button class="test-button secondary" onclick="testLinks()">
+            🔗 Test Links
+        </button>
+        
+        <button class="test-button secondary" onclick="testAccessibility()">
+            ♿ Test A11y
+        </button>
+        
+        <button class="test-button secondary" onclick="clearResults()">
+            🗑️ Clear
+        </button>
+        
+        <div class="test-results" id="test-results" style="display: none;">
+            <div class="summary" id="summary"></div>
+            <div id="test-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let isMinimized = false;
+        let testResults = [];
+
+        function toggleWidget() {
+            const widget = document.getElementById('test-widget');
+            const btn = widget.querySelector('.minimize-btn');
+            
+            isMinimized = !isMinimized;
+            
+            if (isMinimized) {
+                widget.classList.add('minimized');
+                btn.textContent = '+';
+                widget.querySelector('h3').style.display = 'none';
+                widget.querySelectorAll('.test-button').forEach(btn => {
+                    if (!btn.textContent.includes('Quick')) {
+                        btn.style.display = 'none';
+                    }
+                });
+                widget.querySelector('.test-results').style.display = 'none';
+            } else {
+                widget.classList.remove('minimized');
+                btn.textContent = '−';
+                widget.querySelector('h3').style.display = 'block';
+                widget.querySelectorAll('.test-button').forEach(btn => {
+                    btn.style.display = 'block';
+                });
+                if (testResults.length > 0) {
+                    widget.querySelector('.test-results').style.display = 'block';
+                }
+            }
+        }
+
+        function addTestResult(category, name, status, message) {
+            const result = { category, name, status, message };
+            testResults.push(result);
+            displayResults();
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('test-results');
+            const summaryDiv = document.getElementById('summary');
+            const listDiv = document.getElementById('test-list');
+            
+            if (testResults.length === 0) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+            
+            resultsDiv.style.display = 'block';
+            
+            // Calculate summary
+            const passed = testResults.filter(r => r.status === 'pass').length;
+            const failed = testResults.filter(r => r.status === 'fail').length;
+            const warnings = testResults.filter(r => r.status === 'warning').length;
+            const total = testResults.length;
+            
+            summaryDiv.innerHTML = `
+                <strong>Summary:</strong> ${passed}✅ ${failed}❌ ${warnings}⚠️ 
+                (${Math.round((passed/total)*100)}% success)
+            `;
+            
+            // Display individual tests
+            listDiv.innerHTML = testResults.map(test => `
+                <div class="test-item">
+                    <span>${test.name}</span>
+                    <span class="test-status status-${test.status}">${test.status}</span>
+                </div>
+            `).join('');
+        }
+
+        function clearResults() {
+            testResults = [];
+            displayResults();
+        }
+
+        async function runQuickTests() {
+            clearResults();
+            addTestResult('Quick', 'Starting Tests', 'pass', 'Running comprehensive tests...');
+            
+            await testButtons();
+            await testLinks();
+            await testAccessibility();
+            await testPerformance();
+            
+            addTestResult('Quick', 'Tests Complete', 'pass', 'All tests completed!');
+        }
+
+        async function testButtons() {
+            const buttons = document.querySelectorAll('button, [role="button"]');
+            
+            addTestResult('Buttons', 'Button Count', 
+                buttons.length > 0 ? 'pass' : 'warning', 
+                `${buttons.length} buttons found`);
+            
+            buttons.forEach((button, index) => {
+                const hasClickHandler = button.onclick || button.addEventListener;
+                const hasText = button.textContent.trim() !== '' || button.getAttribute('aria-label');
+                const isVisible = isVisible(button);
+                
+                addTestResult('Buttons', `Button ${index + 1}`,
+                    hasClickHandler && hasText && isVisible ? 'pass' : 'fail',
+                    `${hasClickHandler ? '✓' : '✗'} ${hasText ? '✓' : '✗'} ${isVisible ? '✓' : '✗'}`);
+            });
+        }
+
+        async function testLinks() {
+            const links = document.querySelectorAll('a[href]');
+            
+            addTestResult('Links', 'Link Count',
+                links.length > 0 ? 'pass' : 'warning',
+                `${links.length} links found`);
+            
+            links.forEach((link, index) => {
+                const hasText = link.textContent.trim() !== '';
+                const isExternal = link.href.startsWith('http');
+                const hasTargetBlank = isExternal && link.target === '_blank';
+                
+                let status = 'pass';
+                if (!hasText && !link.getAttribute('aria-label')) {
+                    status = 'fail';
+                } else if (isExternal && !hasTargetBlank) {
+                    status = 'warning';
+                }
+                
+                addTestResult('Links', `Link ${index + 1}`, status,
+                    `${hasText ? '✓' : '✗'} ${isExternal ? (hasTargetBlank ? '✓' : '⚠️') : '—'}`);
+            });
+        }
+
+        async function testAccessibility() {
+            // Test images
+            const images = document.querySelectorAll('img');
+            const imagesWithAlt = Array.from(images).filter(img => img.alt !== undefined);
+            
+            addTestResult('A11y', 'Image Alt Text',
+                imagesWithAlt.length === images.length ? 'pass' : 'warning',
+                `${imagesWithAlt.length}/${images.length} have alt`);
+            
+            // Test headings
+            const hasH1 = document.querySelector('h1');
+            addTestResult('A11y', 'H1 Present',
+                hasH1 ? 'pass' : 'warning',
+                hasH1 ? '✓ H1 found' : '✗ No H1');
+            
+            // Test focusable elements
+            const focusable = document.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            
+            addTestResult('A11y', 'Focus Elements',
+                focusable.length > 0 ? 'pass' : 'warning',
+                `${focusable.length} focusable elements`);
+        }
+
+        async function testPerformance() {
+            // Test load time
+            const loadTime = performance.now();
+            addTestResult('Perf', 'Load Time',
+                loadTime < 3000 ? 'pass' : 'warning',
+                `${Math.round(loadTime)}ms`);
+            
+            // Test viewport
+            const hasViewport = document.querySelector('meta[name="viewport"]');
+            addTestResult('Perf', 'Viewport Meta',
+                hasViewport ? 'pass' : 'fail',
+                hasViewport ? '✓ Responsive' : '✗ Not responsive');
+        }
+
+        function isVisible(element) {
+            const style = window.getComputedStyle(element);
+            return style.display !== 'none' && 
+                   style.visibility !== 'hidden' && 
+                   style.opacity !== '0' &&
+                   element.offsetWidth > 0 && 
+                   element.offsetHeight > 0;
+        }
+
+        // Auto-run tests on page load (optional)
+        window.addEventListener('load', () => {
+            console.log('🧪 UI Test Widget loaded. Click "Quick Tests" to start testing!');
+        });
+
+        // Make functions globally available
+        window.runQuickTests = runQuickTests;
+        window.testButtons = testButtons;
+        window.testLinks = testLinks;
+        window.testAccessibility = testAccessibility;
+        window.clearResults = clearResults;
+    </script>
+</body>
+</html>

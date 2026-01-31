@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Gaming Platform Security Dashboard - Stellar Logic AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-header p {
+            font-size: 1.2em;
+            color: #e9d5ff;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .metric-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #c4b5fd;
+            font-weight: 400;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .metric-change {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .metric-change.positive {
+            color: #34d399;
+        }
+
+        .metric-change.negative {
+            color: #f87171;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #c4b5fd;
+            font-weight: 400;
+        }
+
+        .alerts-section {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        .alerts-section h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #c4b5fd;
+            font-weight: 400;
+        }
+
+        .alert-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #c4b5fd;
+            transition: background 0.3s ease;
+        }
+
+        .alert-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .alert-item.critical {
+            border-left-color: #dc2626;
+        }
+
+        .alert-item.high {
+            border-left-color: #f59e0b;
+        }
+
+        .alert-item.medium {
+            border-left-color: #eab308;
+        }
+
+        .alert-item.low {
+            border-left-color: #22c55e;
+        }
+
+        .alert-item.info {
+            border-left-color: #3b82f6;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-id {
+            font-weight: 600;
+            color: #c4b5fd;
+        }
+
+        .alert-time {
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+
+        .alert-description {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .alert-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .alert-detail {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .alert-detail-label {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .alert-detail-value {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.online {
+            background-color: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+
+        .status-indicator.offline {
+            background-color: #dc2626;
+            box-shadow: 0 0 10px #dc2626;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .refresh-button:hover {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        .error {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid #dc2626;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2em;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>🎮 Enhanced Gaming Platform Security Dashboard</h1>
+        <p>Real-time Anti-Cheat Detection & Tournament Integrity Protection</p>
+    </div>
+
+    <div class="container">
+        <button class="refresh-button" onclick="refreshDashboard()">🔄 Refresh Dashboard</button>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>🎮 Players Monitored</h3>
+                <div class="metric-value" id="players-count">0</div>
+                <div class="metric-change positive">+25% from last month</div>
+                <div class="status-indicator online"></div>
+                <span>All Systems Operational</span>
+            </div>
+
+            <div class="metric-card">
+                <h3>🎯 Games Protected</h3>
+                <div class="metric-value" id="games-count">0</div>
+                <div class="metric-change positive">+12 new games</div>
+                <div>Multi-genre coverage active</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>🛡️ Security Score</h3>
+                <div class="metric-value" id="security-score">0%</div>
+                <div class="metric-change positive">+3.2% improvement</div>
+                <div>99.07% AI accuracy maintained</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>⚡ Detection Rate</h3>
+                <div class="metric-value" id="detection-rate">0%</div>
+                <div class="metric-change positive">+5.8% improvement</div>
+                <div>Real-time cheat detection</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>🏆 Tournaments Secured</h3>
+                <div class="metric-value" id="tournaments-count">0</div>
+                <div class="metric-change positive">+8 tournaments</div>
+                <div>Esports integrity protection</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>🚫 Cheats Blocked</h3>
+                <div class="metric-value" id="cheats-blocked">0</div>
+                <div class="metric-change positive">+156% increase</div>
+                <div>Proactive protection active</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>🎯 Cheat Detection Trends</h3>
+                <canvas id="cheatDetectionChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🎮 Game Type Distribution</h3>
+                <canvas id="gameTypeChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🏆 Tournament Security Analysis</h3>
+                <canvas id="tournamentSecurityChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>👥 Player Behavior Analysis</h3>
+                <canvas id="playerBehaviorChart"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3>🚨 Recent Gaming Security Alerts</h3>
+            <div id="alerts-container">
+                <div class="loading">Loading gaming security alerts...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        let gamingData = {
+            players: 0,
+            games: 0,
+            securityScore: 0,
+            detectionRate: 0,
+            tournaments: 0,
+            cheatsBlocked: 0,
+            alerts: [],
+            cheatDetectionData: [],
+            gameTypeData: [],
+            tournamentSecurityData: [],
+            playerBehaviorData: []
+        };
+
+        // Initialize charts
+        let cheatDetectionChart, gameTypeChart, tournamentSecurityChart, playerBehaviorChart;
+
+        function initializeCharts() {
+            // Cheat Detection Chart
+            const cheatDetectionCtx = document.getElementById('cheatDetectionChart').getContext('2d');
+            cheatDetectionChart = new Chart(cheatDetectionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6h ago', '5h ago', '4h ago', '3h ago', '2h ago', '1h ago', 'Now'],
+                    datasets: [{
+                        label: 'Aim Bot Detection',
+                        data: [0.85, 0.87, 0.83, 0.89, 0.91, 0.88, 0.92],
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Wallhack Detection',
+                        data: [0.78, 0.82, 0.80, 0.85, 0.83, 0.87, 0.89],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Speed Hack Detection',
+                        data: [0.92, 0.90, 0.93, 0.91, 0.94, 0.95, 0.96],
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            min: 0,
+                            max: 1
+                        }
+                    }
+                }
+            });
+
+            // Game Type Chart
+            const gameTypeCtx = document.getElementById('gameTypeChart').getContext('2d');
+            gameTypeChart = new Chart(gameTypeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['FPS', 'MOBA', 'RPG', 'Battle Royale', 'MMO', 'Sports'],
+                    datasets: [{
+                        data: [35, 25, 15, 12, 8, 5],
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(234, 179, 8, 0.8)',
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+
+            // Tournament Security Chart
+            const tournamentSecurityCtx = document.getElementById('tournamentSecurityChart').getContext('2d');
+            tournamentSecurityChart = new Chart(tournamentSecurityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Fair Play', 'Match Integrity', 'Prize Distribution', 'Player Verification', 'Anti-Cheat'],
+                    datasets: [{
+                        label: 'Security Score',
+                        data: [92, 88, 95, 87, 91],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(34, 197, 94, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Player Behavior Chart
+            const playerBehaviorCtx = document.getElementById('playerBehaviorChart').getContext('2d');
+            playerBehaviorChart = new Chart(playerBehaviorCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Skill Consistency', 'Reaction Time', 'Movement Patterns', 'Social Interaction', 'Risk Taking', 'Adaptation Speed'],
+                    datasets: [{
+                        label: 'Normal Behavior',
+                        data: [85, 78, 82, 90, 75, 88],
+                        borderColor: 'rgba(34, 197, 94, 0.8)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.2)'
+                    }, {
+                        label: 'Suspicious Behavior',
+                        data: [45, 92, 38, 65, 95, 42],
+                        borderColor: 'rgba(220, 38, 38, 0.8)',
+                        backgroundColor: 'rgba(220, 38, 38, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateMetrics() {
+            // Simulate real-time data updates
+            gamingData.players = Math.floor(Math.random() * 50000) + 100000;
+            gamingData.games = Math.floor(Math.random() * 20) + 80;
+            gamingData.securityScore = (Math.random() * 5 + 94).toFixed(2);
+            gamingData.detectionRate = (Math.random() * 10 + 88).toFixed(2);
+            gamingData.tournaments = Math.floor(Math.random() * 15) + 50;
+            gamingData.cheatsBlocked = Math.floor(Math.random() * 500) + 2000;
+
+            // Update DOM
+            document.getElementById('players-count').textContent = gamingData.players.toLocaleString();
+            document.getElementById('games-count').textContent = gamingData.games.toLocaleString();
+            document.getElementById('security-score').textContent = gamingData.securityScore + '%';
+            document.getElementById('detection-rate').textContent = gamingData.detectionRate + '%';
+            document.getElementById('tournaments-count').textContent = gamingData.tournaments.toLocaleString();
+            document.getElementById('cheats-blocked').textContent = gamingData.cheatsBlocked.toLocaleString();
+        }
+
+        function generateMockAlerts() {
+            const alertTypes = [
+                { type: 'AIM_BOT_THREAT', level: 'critical', description: 'Aim bot cheating behavior detected - unnatural aiming patterns and perfect target acquisition' },
+                { type: 'WALLHACK_THREAT', level: 'high', description: 'Wallhack cheating behavior detected - player awareness through solid objects' },
+                { type: 'SPEED_HACK_THREAT', level: 'critical', description: 'Speed hack cheating behavior detected - unnatural movement speeds and physics violations' },
+                { type: 'BEHAVIORAL_THREAT', level: 'medium', description: 'Behavioral anomaly detected - inconsistent skill level and unusual playing patterns' },
+                { type: 'ACCOUNT_INTEGRITY_THREAT', level: 'high', description: 'Account integrity issue detected - suspicious login patterns and potential account sharing' },
+                { type: 'TOURNAMENT_FAIRNESS_THREAT', level: 'critical', description: 'Tournament fairness violation detected - potential match fixing or rank manipulation' }
+            ];
+
+            const gameTypes = ['fps', 'moba', 'rpg', 'battle_royale', 'mmo', 'sports'];
+            const cheatTypes = ['aim_bot', 'wallhack', 'speed_hack', 'script_bot', 'macro_abuse', 'exploit_abuse'];
+
+            const alerts = [];
+            for (let i = 0; i < 5; i++) {
+                const alertType = alertTypes[Math.floor(Math.random() * alertTypes.length)];
+                alerts.push({
+                    id: `ENHANCED_GAMING_${Date.now()}_${i}`,
+                    type: alertType.type,
+                    level: alertType.level,
+                    description: alertType.description,
+                    player_id: `PLAYER_${Math.floor(Math.random() * 999999)}`,
+                    game_id: `GAME_${Math.floor(Math.random() * 999)}`,
+                    game_type: gameTypes[Math.floor(Math.random() * gameTypes.length)],
+                    cheat_type: cheatTypes[Math.floor(Math.random() * cheatTypes.length)],
+                    confidence_score: (Math.random() * 0.2 + 0.8).toFixed(3),
+                    timestamp: new Date(Date.now() - Math.random() * 3600000).toISOString(),
+                    impact_assessment: ['Critical game integrity compromise', 'Significant competitive advantage', 'Moderate playing pattern anomalies', 'Minor account security concerns'][Math.floor(Math.random() * 4)],
+                    recommended_action: ['Immediate player ban and account suspension', 'Temporary suspension and detailed analysis', 'Increased monitoring and behavioral analysis', 'Standard monitoring and pattern analysis'][Math.floor(Math.random() * 4)]
+                });
+            }
+
+            return alerts;
+        }
+
+        function displayAlerts() {
+            const alertsContainer = document.getElementById('alerts-container');
+            const alerts = generateMockAlerts();
+
+            if (alerts.length === 0) {
+                alertsContainer.innerHTML = '<div class="loading">No active gaming security alerts</div>';
+                return;
+            }
+
+            const alertsHTML = alerts.map(alert => `
+                <div class="alert-item ${alert.level}">
+                    <div class="alert-header">
+                        <span class="alert-id">${alert.id}</span>
+                        <span class="alert-time">${new Date(alert.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <div class="alert-description">${alert.description}</div>
+                    <div class="alert-details">
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Player ID</div>
+                            <div class="alert-detail-value">${alert.player_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Game ID</div>
+                            <div class="alert-detail-value">${alert.game_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Game Type</div>
+                            <div class="alert-detail-value">${alert.game_type.toUpperCase()}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Cheat Type</div>
+                            <div class="alert-detail-value">${alert.cheat_type.replace('_', ' ').toUpperCase()}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Confidence Score</div>
+                            <div class="alert-detail-value">${(alert.confidence_score * 100).toFixed(1)}%</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Impact Assessment</div>
+                            <div class="alert-detail-value">${alert.impact_assessment}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Recommended Action</div>
+                            <div class="alert-detail-value">${alert.recommended_action}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            alertsContainer.innerHTML = alertsHTML;
+        }
+
+        function refreshDashboard() {
+            updateMetrics();
+            displayAlerts();
+            
+            // Update charts with new data
+            if (cheatDetectionChart) {
+                cheatDetectionChart.data.datasets[0].data = cheatDetectionChart.data.datasets[0].data.map(() => Math.random() * 0.15 + 0.8);
+                cheatDetectionChart.data.datasets[1].data = cheatDetectionChart.data.datasets[1].data.map(() => Math.random() * 0.15 + 0.75);
+                cheatDetectionChart.data.datasets[2].data = cheatDetectionChart.data.datasets[2].data.map(() => Math.random() * 0.1 + 0.85);
+                cheatDetectionChart.update();
+            }
+
+            if (gameTypeChart) {
+                gameTypeChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 30,
+                    Math.floor(Math.random() * 8) + 20,
+                    Math.floor(Math.random() * 5) + 12,
+                    Math.floor(Math.random() * 5) + 10,
+                    Math.floor(Math.random() * 3) + 6,
+                    Math.floor(Math.random() * 2) + 3
+                ];
+                gameTypeChart.update();
+            }
+
+            if (tournamentSecurityChart) {
+                tournamentSecurityChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 85,
+                    Math.floor(Math.random() * 10) + 80,
+                    Math.floor(Math.random() * 5) + 90,
+                    Math.floor(Math.random() * 10) + 80,
+                    Math.floor(Math.random() * 8) + 85
+                ];
+                tournamentSecurityChart.update();
+            }
+
+            if (playerBehaviorChart) {
+                playerBehaviorChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 80,
+                    Math.floor(Math.random() * 10) + 75,
+                    Math.floor(Math.random() * 10) + 78,
+                    Math.floor(Math.random() * 10) + 85,
+                    Math.floor(Math.random() * 10) + 70,
+                    Math.floor(Math.random() * 10) + 83
+                ];
+                playerBehaviorChart.data.datasets[1].data = [
+                    Math.floor(Math.random() * 10) + 40,
+                    Math.floor(Math.random() * 10) + 85,
+                    Math.floor(Math.random() * 10) + 35,
+                    Math.floor(Math.random() * 10) + 60,
+                    Math.floor(Math.random() * 10) + 90,
+                    Math.floor(Math.random() * 10) + 38
+                ];
+                playerBehaviorChart.update();
+            }
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            refreshDashboard();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(refreshDashboard, 30000);
+        });
+    </script>
+</body>
+</html>

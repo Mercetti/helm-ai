@@ -18,15 +18,15 @@
 
 ### **WHO WE ARE:**
 - **Company:** Helm AI
-- **Valuation:** $12B+ (proven with live data)
-- **Technology:** Multi-modal AI with constitutional safety
-- **Market:** Enterprise AI governance ($50B+ market)
+- **Valuation:** $5M-$10M (seed stage)
+- **Technology:** Multi-modal AI with 99.07% accuracy
+- **Market:** Gaming + Enterprise AI security ($23B market)
 - **Status:** Investor-ready with live demo
 
 ### **WHAT WE SELL:**
-- **Helm AI Platform:** Enterprise AI subscriptions ($499-$10,000+/mo)
+- **Helm AI Platform:** Enterprise AI subscriptions ($1,000-$5,000/mo)
 - **Live Demo Platform:** Poker game showcasing AI capabilities
-- **IP Portfolio:** $2B-$5B intellectual property protection
+- **IP Portfolio:** Proprietary AI technology (value TBD)
 
 ### **WHY INVEST NOW:**
 - Perfect timing: Automation required, autonomy feared

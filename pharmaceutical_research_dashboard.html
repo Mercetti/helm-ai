@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmaceutical & Research Security Dashboard - Stellar Logic AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-header p {
+            font-size: 1.2em;
+            color: #fecaca;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .metric-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #fecaca;
+            font-weight: 400;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .metric-change {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .metric-change.positive {
+            color: #34d399;
+        }
+
+        .metric-change.negative {
+            color: #f87171;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #fecaca;
+            font-weight: 400;
+        }
+
+        .alerts-section {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        .alerts-section h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #fecaca;
+            font-weight: 400;
+        }
+
+        .alert-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #fecaca;
+            transition: background 0.3s ease;
+        }
+
+        .alert-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .alert-item.critical {
+            border-left-color: #dc2626;
+        }
+
+        .alert-item.high {
+            border-left-color: #f59e0b;
+        }
+
+        .alert-item.medium {
+            border-left-color: #eab308;
+        }
+
+        .alert-item.low {
+            border-left-color: #22c55e;
+        }
+
+        .alert-item.info {
+            border-left-color: #3b82f6;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-id {
+            font-weight: 600;
+            color: #fecaca;
+        }
+
+        .alert-time {
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+
+        .alert-description {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .alert-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .alert-detail {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .alert-detail-label {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .alert-detail-value {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.online {
+            background-color: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+
+        .status-indicator.offline {
+            background-color: #dc2626;
+            box-shadow: 0 0 10px #dc2626;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .refresh-button:hover {
+            background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(185, 28, 28, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        .error {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid #dc2626;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2em;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>🏥 Pharmaceutical & Research Security Dashboard</h1>
+        <p>Real-time Clinical Trial Security & Research Integrity Protection</p>
+    </div>
+
+    <div class="container">
+        <button class="refresh-button" onclick="refreshDashboard()">🔄 Refresh Dashboard</button>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>🔬 Researchers Monitored</h3>
+                <div class="metric-value" id="researchers-count">0</div>
+                <div class="metric-change positive">+22% from last quarter</div>
+                <div class="status-indicator online"></div>
+                <span>All Systems Operational</span>
+            </div>
+
+            <div class="metric-card">
+                <h3>🏢 Institutions Protected</h3>
+                <div class="metric-value" id="institutions-count">0</div>
+                <div class="metric-change positive">+8 new institutions</div>
+                <div>Multi-sector coverage active</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>🛡️ Security Score</h3>
+                <div class="metric-value" id="security-score">0%</div>
+                <div class="metric-change positive">+5.2% improvement</div>
+                <div>99.07% AI accuracy maintained</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>⚗️ Clinical Trials Secured</h3>
+                <div class="metric-value" id="trials-count">0</div>
+                <div class="metric-change positive">+15 new trials</div>
+                <div>Multi-phase protection active</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>💊 Drugs Protected</h3>
+                <div class="metric-value" id="drugs-count">0</div>
+                <div class="metric-change positive">+12 new drugs</div>
+                <div>Multi-type coverage active</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>🚨 Threats Detected</h3>
+                <div class="metric-value" id="threats-count">0</div>
+                <div class="metric-change positive">+234% increase</div>
+                <div>Proactive protection active</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>📊 Data Manipulation Trends</h3>
+                <canvas id="dataManipulationChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🔬 Research Phase Distribution</h3>
+                <canvas id="researchPhaseChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🏢 Institution Security Analysis</h3>
+                <canvas id="institutionSecurityChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>💊 Drug Type Security Status</h3>
+                <canvas id="drugTypeChart"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3>🚨 Recent Pharmaceutical & Research Alerts</h3>
+            <div id="alerts-container">
+                <div class="loading">Loading pharmaceutical & research alerts...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        let pharmaData = {
+            researchers: 0,
+            institutions: 0,
+            securityScore: 0,
+            trials: 0,
+            drugs: 0,
+            threats: 0,
+            alerts: [],
+            dataManipulationData: [],
+            researchPhaseData: [],
+            institutionSecurityData: [],
+            drugTypeData: []
+        };
+
+        // Initialize charts
+        let dataManipulationChart, researchPhaseChart, institutionSecurityChart, drugTypeChart;
+
+        function initializeCharts() {
+            // Data Manipulation Chart
+            const dataManipulationCtx = document.getElementById('dataManipulationChart').getContext('2d');
+            dataManipulationChart = new Chart(dataManipulationCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6h ago', '5h ago', '4h ago', '3h ago', '2h ago', '1h ago', 'Now'],
+                    datasets: [{
+                        label: 'Statistical Anomalies',
+                        data: [0.65, 0.68, 0.62, 0.70, 0.67, 0.72, 0.75],
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Data Inconsistencies',
+                        data: [0.58, 0.61, 0.59, 0.64, 0.62, 0.66, 0.68],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Modification Patterns',
+                        data: [0.72, 0.75, 0.73, 0.78, 0.76, 0.80, 0.82],
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            min: 0,
+                            max: 1
+                        }
+                    }
+                }
+            });
+
+            // Research Phase Chart
+            const researchPhaseCtx = document.getElementById('researchPhaseChart').getContext('2d');
+            researchPhaseChart = new Chart(researchPhaseCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Preclinical', 'Phase I', 'Phase II', 'Phase III', 'Phase IV', 'FDA Review'],
+                    datasets: [{
+                        data: [25, 15, 20, 25, 10, 5],
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(234, 179, 8, 0.8)',
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+
+            // Institution Security Chart
+            const institutionSecurityCtx = document.getElementById('institutionSecurityChart').getContext('2d');
+            institutionSecurityChart = new Chart(institutionSecurityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Pharma Companies', 'Research Institutes', 'Clinical Centers', 'Biotech Companies', 'Universities'],
+                    datasets: [{
+                        label: 'Security Score',
+                        data: [85, 78, 82, 88, 75],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Drug Type Chart
+            const drugTypeCtx = document.getElementById('drugTypeChart').getContext('2d');
+            drugTypeChart = new Chart(drugTypeCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Small Molecule', 'Biologic', 'Vaccine', 'Generic', 'Biosimilar', 'Controlled Substance'],
+                    datasets: [{
+                        label: 'Security Score',
+                        data: [88, 82, 90, 75, 78, 92],
+                        borderColor: 'rgba(34, 197, 94, 0.8)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.2)'
+                    }, {
+                        label: 'Risk Level',
+                        data: [22, 35, 18, 40, 30, 15],
+                        borderColor: 'rgba(220, 38, 38, 0.8)',
+                        backgroundColor: 'rgba(220, 38, 38, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateMetrics() {
+            // Simulate real-time data updates
+            pharmaData.researchers = Math.floor(Math.random() * 8000) + 25000;
+            pharmaData.institutions = Math.floor(Math.random() * 15) + 85;
+            pharmaData.securityScore = (Math.random() * 5 + 92).toFixed(2);
+            pharmaData.trials = Math.floor(Math.random() * 30) + 120;
+            pharmaData.drugs = Math.floor(Math.random() * 25) + 150;
+            pharmaData.threats = Math.floor(Math.random() * 50) + 200;
+
+            // Update DOM
+            document.getElementById('researchers-count').textContent = pharmaData.researchers.toLocaleString();
+            document.getElementById('institutions-count').textContent = pharmaData.institutions.toLocaleString();
+            document.getElementById('security-score').textContent = pharmaData.securityScore + '%';
+            document.getElementById('trials-count').textContent = pharmaData.trials.toLocaleString();
+            document.getElementById('drugs-count').textContent = pharmaData.drugs.toLocaleString();
+            document.getElementById('threats-count').textContent = pharmaData.threats.toLocaleString();
+        }
+
+        function generateMockAlerts() {
+            const alertTypes = [
+                { type: 'DATA_MANIPULATION_THREAT', level: 'critical', description: 'Data manipulation detected - statistical anomalies and unusual modification patterns identified' },
+                { type: 'CLINICAL_TRIAL_FRAUD', level: 'high', description: 'Clinical trial integrity issue detected - patient recruitment and protocol adherence concerns' },
+                { type: 'INTELLECTUAL_PROPERTY_THEFT', level: 'critical', description: 'Intellectual property protection breach detected - research confidentiality and patent security issues' },
+                { type: 'REGULATORY_COMPLIANCE_VIOLATION', level: 'high', description: 'Regulatory compliance violation detected - FDA, EMA, and ICH guideline adherence concerns' },
+                { type: 'SUPPLY_CHAIN_SECURITY_BREACH', level: 'medium', description: 'Supply chain security breach detected - raw material sourcing and manufacturing integrity issues' },
+                { type: 'RESEARCH_MISCONDUCT', level: 'critical', description: 'Research integrity violation detected - experimental design and ethical conduct concerns' }
+            ];
+
+            const researchPhases = ['preclinical', 'phase_i', 'phase_ii', 'phase_iii', 'phase_iv', 'fda_review'];
+            const institutionTypes = ['pharmaceutical_company', 'research_institute', 'clinical_trial_center', 'university_lab', 'biotech_company'];
+            const drugTypes = ['small_molecule', 'biologic', 'vaccine', 'generic', 'biosimilar', 'controlled_substance'];
+            const threatTypes = ['data_manipulation', 'clinical_trial_fraud', 'intellectual_property_theft', 'regulatory_compliance_violation', 'supply_chain_security_breach', 'research_misconduct'];
+
+            const alerts = [];
+            for (let i = 0; i < 5; i++) {
+                const alertType = alertTypes[Math.floor(Math.random() * alertTypes.length)];
+                alerts.push({
+                    id: `PHARMA_RESEARCH_${Date.now()}_${i}`,
+                    type: alertType.type,
+                    level: alertType.level,
+                    description: alertType.description,
+                    researcher_id: `RESEARCHER_${Math.floor(Math.random() * 999999)}`,
+                    institution_id: `INST_${Math.floor(Math.random() * 999)}`,
+                    trial_id: `TRIAL_${Math.floor(Math.random() * 9999)}`,
+                    drug_id: `DRUG_${Math.floor(Math.random() * 999)}`,
+                    research_phase: researchPhases[Math.floor(Math.random() * researchPhases.length)],
+                    institution_type: institutionTypes[Math.floor(Math.random() * institutionTypes.length)],
+                    drug_type: drugTypes[Math.floor(Math.random() * drugTypes.length)],
+                    threat_type: threatTypes[Math.floor(Math.random() * threatTypes.length)],
+                    confidence_score: (Math.random() * 0.2 + 0.8).toFixed(3),
+                    timestamp: new Date(Date.now() - Math.random() * 3600000).toISOString(),
+                    impact_assessment: ['Complete research invalidation and regulatory penalties', 'Significant research credibility issues and delays', 'Major trial integrity concerns and potential delays', 'Minor research quality issues requiring attention'][Math.floor(Math.random() * 4)],
+                    recommended_action: ['Immediate data audit and regulatory reporting required', 'Detailed data validation and enhanced monitoring', 'Standard data validation and monitoring', 'Monitor situation and assess further'][Math.floor(Math.random() * 4)]
+                });
+            }
+
+            return alerts;
+        }
+
+        function displayAlerts() {
+            const alertsContainer = document.getElementById('alerts-container');
+            const alerts = generateMockAlerts();
+
+            if (alerts.length === 0) {
+                alertsContainer.innerHTML = '<div class="loading">No active pharmaceutical & research alerts</div>';
+                return;
+            }
+
+            const alertsHTML = alerts.map(alert => `
+                <div class="alert-item ${alert.level}">
+                    <div class="alert-header">
+                        <span class="alert-id">${alert.id}</span>
+                        <span class="alert-time">${new Date(alert.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <div class="alert-description">${alert.description}</div>
+                    <div class="alert-details">
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Researcher ID</div>
+                            <div class="alert-detail-value">${alert.researcher_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Institution</div>
+                            <div class="alert-detail-value">${alert.institution_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Research Phase</div>
+                            <div class="alert-detail-value">${alert.research_phase.replace('_', ' ').toUpperCase()}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Drug Type</div>
+                            <div class="alert-detail-value">${alert.drug_type.replace('_', ' ').toUpperCase()}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Threat Type</div>
+                            <div class="alert-detail-value">${alert.threat_type.replace('_', ' ').toUpperCase()}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Confidence Score</div>
+                            <div class="alert-detail-value">${(alert.confidence_score * 100).toFixed(1)}%</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Impact Assessment</div>
+                            <div class="alert-detail-value">${alert.impact_assessment}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Recommended Action</div>
+                            <div class="alert-detail-value">${alert.recommended_action}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            alertsContainer.innerHTML = alertsHTML;
+        }
+
+        function refreshDashboard() {
+            updateMetrics();
+            displayAlerts();
+            
+            // Update charts with new data
+            if (dataManipulationChart) {
+                dataManipulationChart.data.datasets[0].data = dataManipulationChart.data.datasets[0].data.map(() => Math.random() * 0.2 + 0.6);
+                dataManipulationChart.data.datasets[1].data = dataManipulationChart.data.datasets[1].data.map(() => Math.random() * 0.15 + 0.55);
+                dataManipulationChart.data.datasets[2].data = dataManipulationChart.data.datasets[2].data.map(() => Math.random() * 0.15 + 0.65);
+                dataManipulationChart.update();
+            }
+
+            if (researchPhaseChart) {
+                researchPhaseChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 20,
+                    Math.floor(Math.random() * 8) + 12,
+                    Math.floor(Math.random() * 10) + 15,
+                    Math.floor(Math.random() * 10) + 20,
+                    Math.floor(Math.random() * 5) + 8,
+                    Math.floor(Math.random() * 3) + 3
+                ];
+                researchPhaseChart.update();
+            }
+
+            if (institutionSecurityChart) {
+                institutionSecurityChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 80,
+                    Math.floor(Math.random() * 10) + 73,
+                    Math.floor(Math.random() * 10) + 77,
+                    Math.floor(Math.random() * 8) + 83,
+                    Math.floor(Math.random() * 10) + 70
+                ];
+                institutionSecurityChart.update();
+            }
+
+            if (drugTypeChart) {
+                drugTypeChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 83,
+                    Math.floor(Math.random() * 10) + 77,
+                    Math.floor(Math.random() * 5) + 85,
+                    Math.floor(Math.random() * 10) + 70,
+                    Math.floor(Math.random() * 8) + 73,
+                    Math.floor(Math.random() * 5) + 87
+                ];
+                drugTypeChart.data.datasets[1].data = [
+                    Math.floor(Math.random() * 10) + 17,
+                    Math.floor(Math.random() * 10) + 30,
+                    Math.floor(Math.random() * 5) + 13,
+                    Math.floor(Math.random() * 10) + 35,
+                    Math.floor(Math.random() * 8) + 25,
+                    Math.floor(Math.random() * 5) + 10
+                ];
+                drugTypeChart.update();
+            }
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            refreshDashboard();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(refreshDashboard, 30000);
+        });
+    </script>
+</body>
+</html>

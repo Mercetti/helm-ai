@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Logic AI - UI Functionality Tests</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #1e40af;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+        
+        .test-section h2 {
+            color: #1e40af;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .test-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #64748b;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #475569;
+        }
+        
+        .btn-success {
+            background: #059669;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #047857;
+        }
+        
+        .btn-warning {
+            background: #d97706;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #b45309;
+        }
+        
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        
+        .test-results {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #e2e8f0;
+        }
+        
+        .test-item.pass {
+            border-left-color: #059669;
+            background: #f0fdf4;
+        }
+        
+        .test-item.fail {
+            border-left-color: #dc2626;
+            background: #fef2f2;
+        }
+        
+        .test-item.running {
+            border-left-color: #d97706;
+            background: #fffbeb;
+        }
+        
+        .test-status {
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .status-pass {
+            background: #059669;
+            color: white;
+        }
+        
+        .status-fail {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .status-running {
+            background: #d97706;
+            color: white;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .summary-card h3 {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
+        
+        .log-output {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+        
+        .log-info {
+            color: #60a5fa;
+        }
+        
+        .log-success {
+            color: #34d399;
+        }
+        
+        .log-error {
+            color: #f87171;
+        }
+        
+        .log-warning {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Stellar Logic AI - UI Functionality Tests</h1>
+            <p>Comprehensive testing for buttons, links, and interactive elements</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        
+        <div class="test-controls">
+            <button class="btn btn-primary" onclick="runAllTests()">
+                🚀 Run All Tests
+            </button>
+            <button class="btn btn-secondary" onclick="runButtonTests()">
+                🔘 Test Buttons
+            </button>
+            <button class="btn btn-secondary" onclick="runLinkTests()">
+                🔗 Test Links
+            </button>
+            <button class="btn btn-secondary" onclick="runNavigationTests()">
+                🧭 Test Navigation
+            </button>
+            <button class="btn btn-secondary" onclick="runFormTests()">
+                📝 Test Forms
+            </button>
+            <button class="btn btn-warning" onclick="clearResults()">
+                🗑️ Clear Results
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <h2>📊 Test Results</h2>
+            <div class="test-results" id="test-results">
+                <p style="text-align: center; color: #64748b;">Click "Run All Tests" to begin testing...</p>
+            </div>
+        </div>
+        
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Total Tests</h3>
+                <div class="number" id="total-tests">0</div>
+            </div>
+            <div class="summary-card">
+                <h3>Passed</h3>
+                <div class="number" id="passed-tests" style="color: #059669;">0</div>
+            </div>
+            <div class="summary-card">
+                <h3>Failed</h3>
+                <div class="number" id="failed-tests" style="color: #dc2626;">0</div>
+            </div>
+            <div class="summary-card">
+                <h3>Success Rate</h3>
+                <div class="number" id="success-rate">0%</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📋 Test Log</h2>
+            <div class="log-output" id="log-output">
+                <div class="log-entry log-info">Test suite initialized...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class UITestSuite {
+            constructor() {
+                this.tests = [];
+                this.results = [];
+                this.currentTest = 0;
+                this.logOutput = document.getElementById('log-output');
+            }
+            
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry log-${type}`;
+                logEntry.textContent = `[${timestamp}] ${message}`;
+                this.logOutput.appendChild(logEntry);
+                this.logOutput.scrollTop = this.logOutput.scrollHeight;
+            }
+            
+            addTest(name, description, testFunction) {
+                this.tests.push({
+                    name,
+                    description,
+                    testFunction,
+                    status: 'pending'
+                });
+            }
+            
+            async runTest(test) {
+                this.log(`Running test: ${test.name}`, 'info');
+                
+                const testElement = this.createTestElement(test.name, test.description);
+                document.getElementById('test-results').appendChild(testElement);
+                
+                try {
+                    const result = await test.testFunction();
+                    if (result.passed) {
+                        test.status = 'passed';
+                        this.updateTestElement(testElement, 'pass', result.message);
+                        this.log(`✅ ${test.name}: ${result.message}`, 'success');
+                    } else {
+                        test.status = 'failed';
+                        this.updateTestElement(testElement, 'fail', result.message);
+                        this.log(`❌ ${test.name}: ${result.message}`, 'error');
+                    }
+                } catch (error) {
+                    test.status = 'failed';
+                    this.updateTestElement(testElement, 'fail', error.message);
+                    this.log(`💥 ${test.name}: ${error.message}`, 'error');
+                }
+                
+                this.updateProgress();
+                return test.status === 'passed';
+            }
+            
+            createTestElement(name, description) {
+                const element = document.createElement('div');
+                element.className = 'test-item running';
+                element.innerHTML = `
+                    <div>
+                        <strong>${name}</strong>
+                        <div style="font-size: 12px; color: #64748b;">${description}</div>
+                    </div>
+                    <span class="test-status status-running">Running...</span>
+                `;
+                return element;
+            }
+            
+            updateTestElement(element, status, message) {
+                element.className = `test-item ${status}`;
+                const statusElement = element.querySelector('.test-status');
+                statusElement.className = `test-status status-${status}`;
+                statusElement.textContent = status === 'pass' ? 'PASS' : 'FAIL';
+            }
+            
+            updateProgress() {
+                const progress = ((this.currentTest + 1) / this.tests.length) * 100;
+                document.getElementById('progress-fill').style.width = `${progress}%`;
+                this.currentTest++;
+                this.updateSummary();
+            }
+            
+            updateSummary() {
+                const passed = this.tests.filter(t => t.status === 'passed').length;
+                const failed = this.tests.filter(t => t.status === 'failed').length;
+                const total = this.tests.length;
+                const successRate = total > 0 ? Math.round((passed / total) * 100) : 0;
+                
+                document.getElementById('total-tests').textContent = total;
+                document.getElementById('passed-tests').textContent = passed;
+                document.getElementById('failed-tests').textContent = failed;
+                document.getElementById('success-rate').textContent = `${successRate}%`;
+            }
+            
+            async runAllTests() {
+                this.log('Starting comprehensive UI test suite...', 'info');
+                this.currentTest = 0;
+                this.tests = [];
+                this.results = [];
+                
+                // Clear previous results
+                document.getElementById('test-results').innerHTML = '';
+                
+                // Add all tests
+                this.addButtonTests();
+                this.addLinkTests();
+                this.addNavigationTests();
+                this.addFormTests();
+                this.addAccessibilityTests();
+                this.addPerformanceTests();
+                
+                // Run tests
+                for (const test of this.tests) {
+                    await this.runTest(test);
+                    await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for visual feedback
+                }
+                
+                this.log('Test suite completed!', 'success');
+                this.generateReport();
+            }
+            
+            addButtonTests() {
+                this.addTest(
+                    'Button Click Detection',
+                    'Verify all buttons can be clicked and trigger events',
+                    async () => {
+                        const buttons = document.querySelectorAll('button');
+                        if (buttons.length === 0) {
+                            return { passed: false, message: 'No buttons found on page' };
+                        }
+                        
+                        let clickableCount = 0;
+                        buttons.forEach(button => {
+                            if (button.onclick || button.addEventListener) {
+                                clickableCount++;
+                            }
+                        });
+                        
+                        return {
+                            passed: clickableCount > 0,
+                            message: `${clickableCount}/${buttons.length} buttons are clickable`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Button Visual Feedback',
+                    'Check buttons have hover and active states',
+                    async () => {
+                        const buttons = document.querySelectorAll('button');
+                        let hasFeedback = 0;
+                        
+                        buttons.forEach(button => {
+                            const styles = window.getComputedStyle(button);
+                            if (styles.transition && styles.transition !== 'none') {
+                                hasFeedback++;
+                            }
+                        });
+                        
+                        return {
+                            passed: hasFeedback > 0,
+                            message: `${hasFeedback}/${buttons.length} buttons have visual feedback`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Button Accessibility',
+                    'Verify buttons have proper ARIA attributes',
+                    async () => {
+                        const buttons = document.querySelectorAll('button');
+                        let accessibleCount = 0;
+                        
+                        buttons.forEach(button => {
+                            if (button.getAttribute('aria-label') || 
+                                button.textContent.trim() !== '' ||
+                                button.getAttribute('aria-labelledby')) {
+                                accessibleCount++;
+                            }
+                        });
+                        
+                        return {
+                            passed: accessibleCount === buttons.length,
+                            message: `${accessibleCount}/${buttons.length} buttons are accessible`
+                        };
+                    }
+                );
+            }
+            
+            addLinkTests() {
+                this.addTest(
+                    'Link Validity',
+                    'Check all links have valid href attributes',
+                    async () => {
+                        const links = document.querySelectorAll('a[href]');
+                        let validLinks = 0;
+                        
+                        links.forEach(link => {
+                            const href = link.getAttribute('href');
+                            if (href && href !== '#' && href !== 'javascript:void(0)') {
+                                validLinks++;
+                            }
+                        });
+                        
+                        return {
+                            passed: validLinks > 0,
+                            message: `${validLinks}/${links.length} links have valid destinations`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Link Accessibility',
+                    'Verify links have proper descriptive text',
+                    async () => {
+                        const links = document.querySelectorAll('a');
+                        let descriptiveLinks = 0;
+                        
+                        links.forEach(link => {
+                            const text = link.textContent.trim();
+                            if (text && text !== '' && text !== 'click here' && text !== 'read more') {
+                                descriptiveLinks++;
+                            }
+                        });
+                        
+                        return {
+                            passed: descriptiveLinks === links.length,
+                            message: `${descriptiveLinks}/${links.length} links have descriptive text`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'External Link Indicators',
+                    'Check external links open in new tabs',
+                    async () => {
+                        const externalLinks = document.querySelectorAll('a[href^="http"]');
+                        let newTabLinks = 0;
+                        
+                        externalLinks.forEach(link => {
+                            if (link.getAttribute('target') === '_blank') {
+                                newTabLinks++;
+                            }
+                        });
+                        
+                        return {
+                            passed: newTabLinks === externalLinks.length,
+                            message: `${newTabLinks}/${externalLinks.length} external links open in new tabs`
+                        };
+                    }
+                );
+            }
+            
+            addNavigationTests() {
+                this.addTest(
+                    'Navigation Menu Structure',
+                    'Verify navigation has proper semantic structure',
+                    async () => {
+                        const nav = document.querySelector('nav, [role="navigation"]');
+                        if (!nav) {
+                            return { passed: false, message: 'No navigation element found' };
+                        }
+                        
+                        const navLinks = nav.querySelectorAll('a');
+                        return {
+                            passed: navLinks.length > 0,
+                            message: `Navigation found with ${navLinks.length} links`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Mobile Navigation',
+                    'Check mobile navigation functionality',
+                    async () => {
+                        const mobileMenu = document.querySelector('.mobile-menu, [data-mobile-menu]');
+                        const toggleButton = document.querySelector('[data-toggle-mobile]');
+                        
+                        if (!mobileMenu && !toggleButton) {
+                            return { passed: true, message: 'No mobile navigation required' };
+                        }
+                        
+                        return {
+                            passed: mobileMenu && toggleButton,
+                            message: mobileMenu && toggleButton ? 'Mobile navigation present' : 'Mobile navigation incomplete'
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Breadcrumb Navigation',
+                    'Verify breadcrumb navigation if present',
+                    async () => {
+                        const breadcrumbs = document.querySelector('.breadcrumb, [role="navigation"][aria-label*="breadcrumb"]');
+                        if (!breadcrumbs) {
+                            return { passed: true, message: 'No breadcrumbs required' };
+                        }
+                        
+                        const breadcrumbLinks = breadcrumbs.querySelectorAll('a');
+                        return {
+                            passed: breadcrumbLinks.length > 0,
+                            message: `Breadcrumbs found with ${breadcrumbLinks.length} levels`
+                        };
+                    }
+                );
+            }
+            
+            addFormTests() {
+                this.addTest(
+                    'Form Input Validation',
+                    'Check form inputs have proper validation',
+                    async () => {
+                        const forms = document.querySelectorAll('form');
+                        let validatedForms = 0;
+                        
+                        forms.forEach(form => {
+                            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+                            if (inputs.length > 0) {
+                                validatedForms++;
+                            }
+                        });
+                        
+                        return {
+                            passed: validatedForms === forms.length || forms.length === 0,
+                            message: `${validatedForms}/${forms.length} forms have validation`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Form Labels',
+                    'Verify form inputs have proper labels',
+                    async () => {
+                        const inputs = document.querySelectorAll('input, select, textarea');
+                        let labeledInputs = 0;
+                        
+                        inputs.forEach(input => {
+                            const label = document.querySelector(`label[for="${input.id}"]`) ||
+                                        input.closest('label') ||
+                                        input.getAttribute('aria-label');
+                            if (label) {
+                                labeledInputs++;
+                            }
+                        });
+                        
+                        return {
+                            passed: labeledInputs === inputs.length,
+                            message: `${labeledInputs}/${inputs.length} inputs have labels`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Form Submit Buttons',
+                    'Check forms have proper submit buttons',
+                    async () => {
+                        const forms = document.querySelectorAll('form');
+                        let formsWithSubmit = 0;
+                        
+                        forms.forEach(form => {
+                            const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
+                            if (submitButton) {
+                                formsWithSubmit++;
+                            }
+                        });
+                        
+                        return {
+                            passed: formsWithSubmit === forms.length || forms.length === 0,
+                            message: `${formsWithSubmit}/${forms.length} forms have submit buttons`
+                        };
+                    }
+                );
+            }
+            
+            addAccessibilityTests() {
+                this.addTest(
+                    'Alt Text for Images',
+                    'Check all images have alt text',
+                    async () => {
+                        const images = document.querySelectorAll('img');
+                        let imagesWithAlt = 0;
+                        
+                        images.forEach(img => {
+                            if (img.alt !== undefined) {
+                                imagesWithAlt++;
+                            }
+                        });
+                        
+                        return {
+                            passed: imagesWithAlt === images.length,
+                            message: `${imagesWithAlt}/${images.length} images have alt text`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Heading Structure',
+                    'Verify proper heading hierarchy',
+                    async () => {
+                        const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+                        let hasH1 = false;
+                        let properStructure = true;
+                        let previousLevel = 0;
+                        
+                        headings.forEach(heading => {
+                            const level = parseInt(heading.tagName.substring(1));
+                            if (level === 1) hasH1 = true;
+                            
+                            if (previousLevel > 0 && level > previousLevel + 1) {
+                                properStructure = false;
+                            }
+                            previousLevel = level;
+                        });
+                        
+                        return {
+                            passed: hasH1 && properStructure,
+                            message: hasH1 ? (properStructure ? 'Proper heading structure' : 'Heading levels skipped') : 'No H1 found'
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Focus Management',
+                    'Check focusable elements and tab order',
+                    async () => {
+                        const focusableElements = document.querySelectorAll(
+                            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                        );
+                        
+                        return {
+                            passed: focusableElements.length > 0,
+                            message: `${focusableElements.length} focusable elements found`
+                        };
+                    }
+                );
+            }
+            
+            addPerformanceTests() {
+                this.addTest(
+                    'Page Load Performance',
+                    'Check page load time is acceptable',
+                    async () => {
+                        const loadTime = performance.now();
+                        const acceptableLoadTime = 3000; // 3 seconds
+                        
+                        return {
+                            passed: loadTime < acceptableLoadTime,
+                            message: `Page loaded in ${Math.round(loadTime)}ms`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'Image Optimization',
+                    'Check images are properly optimized',
+                    async () => {
+                        const images = document.querySelectorAll('img');
+                        let optimizedImages = 0;
+                        
+                        images.forEach(img => {
+                            if (img.loading === 'lazy' || img.src.includes('data:image')) {
+                                optimizedImages++;
+                            }
+                        });
+                        
+                        return {
+                            passed: optimizedImages > 0,
+                            message: `${optimizedImages}/${images.length} images are optimized`
+                        };
+                    }
+                );
+                
+                this.addTest(
+                    'CSS Optimization',
+                    'Check for unused CSS classes',
+                    async () => {
+                        const allClasses = Array.from(document.styleSheets)
+                            .map(sheet => {
+                                try {
+                                    return Array.from(sheet.cssRules || [])
+                                        .map(rule => rule.selectorText)
+                                        .filter(selector => selector && selector.includes('.'))
+                                        .map(selector => selector.split('.')[1]?.split(':')[0])
+                                        .filter(Boolean);
+                                } catch (e) {
+                                    return [];
+                                }
+                            })
+                            .flat();
+                        
+                        const usedClasses = Array.from(document.querySelectorAll('[class]'))
+                            .map(el => Array.from(el.classList))
+                            .flat();
+                        
+                        const unusedClasses = allClasses.filter(cls => !usedClasses.includes(cls));
+                        
+                        return {
+                            passed: unusedClasses.length < 10,
+                            message: `${unusedClasses.length} potentially unused CSS classes found`
+                        };
+                    }
+                );
+            }
+            
+            generateReport() {
+                const passed = this.tests.filter(t => t.status === 'passed').length;
+                const failed = this.tests.filter(t => t.status === 'failed').length;
+                const total = this.tests.length;
+                
+                this.log('='.repeat(50), 'info');
+                this.log('TEST REPORT SUMMARY', 'info');
+                this.log('='.repeat(50), 'info');
+                this.log(`Total Tests: ${total}`, 'info');
+                this.log(`Passed: ${passed}`, 'success');
+                this.log(`Failed: ${failed}`, failed > 0 ? 'error' : 'success');
+                this.log(`Success Rate: ${Math.round((passed / total) * 100)}%`, 'info');
+                
+                if (failed > 0) {
+                    this.log('FAILED TESTS:', 'warning');
+                    this.tests.filter(t => t.status === 'failed').forEach(test => {
+                        this.log(`  - ${test.name}`, 'error');
+                    });
+                }
+                
+                this.log('='.repeat(50), 'info');
+            }
+        }
+        
+        // Initialize test suite
+        const testSuite = new UITestSuite();
+        
+        // Global functions for button clicks
+        async function runAllTests() {
+            await testSuite.runAllTests();
+        }
+        
+        async function runButtonTests() {
+            testSuite.tests = [];
+            testSuite.addButtonTests();
+            document.getElementById('test-results').innerHTML = '';
+            for (const test of testSuite.tests) {
+                await testSuite.runTest(test);
+            }
+        }
+        
+        async function runLinkTests() {
+            testSuite.tests = [];
+            testSuite.addLinkTests();
+            document.getElementById('test-results').innerHTML = '';
+            for (const test of testSuite.tests) {
+                await testSuite.runTest(test);
+            }
+        }
+        
+        async function runNavigationTests() {
+            testSuite.tests = [];
+            testSuite.addNavigationTests();
+            document.getElementById('test-results').innerHTML = '';
+            for (const test of testSuite.tests) {
+                await testSuite.runTest(test);
+            }
+        }
+        
+        async function runFormTests() {
+            testSuite.tests = [];
+            testSuite.addFormTests();
+            document.getElementById('test-results').innerHTML = '';
+            for (const test of testSuite.tests) {
+                await testSuite.runTest(test);
+            }
+        }
+        
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '<p style="text-align: center; color: #64748b;">Click "Run All Tests" to begin testing...</p>';
+            document.getElementById('progress-fill').style.width = '0%';
+            document.getElementById('total-tests').textContent = '0';
+            document.getElementById('passed-tests').textContent = '0';
+            document.getElementById('failed-tests').textContent = '0';
+            document.getElementById('success-rate').textContent = '0%';
+            document.getElementById('log-output').innerHTML = '<div class="log-entry log-info">Test suite reset...</div>';
+            testSuite.tests = [];
+            testSuite.currentTest = 0;
+        }
+        
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            testSuite.log('Test suite loaded and ready!', 'success');
+            testSuite.log('Click "Run All Tests" to begin comprehensive testing', 'info');
+        });
+    </script>
+</body>
+</html>

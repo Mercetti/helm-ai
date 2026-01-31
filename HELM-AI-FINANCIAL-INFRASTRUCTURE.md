@@ -331,6 +331,10 @@ EMPLOYEE INFORMATION:
 
 COMPENSATION SETUP:
 ├_ Salary structures
+│  ├_ Founder & CEO: $100,000 (Year 1)
+│  ├_ Executive team: $120K-$180K
+│  ├_ Technical team: $100K-$160K
+│  └_ Support staff: $60K-$100K
 ├_ Hourly rates
 ├_ Commission plans
 ├_ Bonus structures

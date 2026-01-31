@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automotive & Transportation Security Dashboard - Stellar Logic AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-header p {
+            font-size: 1.2em;
+            color: #dbeafe;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .metric-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #93c5fd;
+            font-weight: 400;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .metric-change {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .metric-change.positive {
+            color: #34d399;
+        }
+
+        .metric-change.negative {
+            color: #f87171;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #93c5fd;
+            font-weight: 400;
+        }
+
+        .alerts-section {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        .alerts-section h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #93c5fd;
+            font-weight: 400;
+        }
+
+        .alert-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #93c5fd;
+            transition: background 0.3s ease;
+        }
+
+        .alert-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .alert-item.critical {
+            border-left-color: #dc2626;
+        }
+
+        .alert-item.high {
+            border-left-color: #f59e0b;
+        }
+
+        .alert-item.medium {
+            border-left-color: #eab308;
+        }
+
+        .alert-item.low {
+            border-left-color: #22c55e;
+        }
+
+        .alert-item.info {
+            border-left-color: #3b82f6;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-id {
+            font-weight: 600;
+            color: #93c5fd;
+        }
+
+        .alert-time {
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+
+        .alert-description {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .alert-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .alert-detail {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .alert-detail-label {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .alert-detail-value {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.online {
+            background-color: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+
+        .status-indicator.offline {
+            background-color: #dc2626;
+            box-shadow: 0 0 10px #dc2626;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .refresh-button:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        .error {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid #dc2626;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2em;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>🚗 Automotive & Transportation Security Dashboard</h1>
+        <p>Real-time Autonomous Vehicle & Fleet Management Protection</p>
+    </div>
+
+    <div class="container">
+        <button class="refresh-button" onclick="refreshDashboard()">🔄 Refresh Dashboard</button>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>🚗 Vehicles Monitored</h3>
+                <div class="metric-value" id="vehicles-count">0</div>
+                <div class="metric-change positive">+12% from last month</div>
+                <div class="status-indicator online"></div>
+                <span>All Systems Operational</span>
+            </div>
+
+            <div class="metric-card">
+                <h3>🚚 Fleets Managed</h3>
+                <div class="metric-value" id="fleets-count">0</div>
+                <div class="metric-change positive">+8 new fleets</div>
+                <div>Fleet optimization active</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>🛡️ Security Score</h3>
+                <div class="metric-value" id="security-score">0%</div>
+                <div class="metric-change positive">+2.8% improvement</div>
+                <div>99.07% AI accuracy maintained</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>⚡ Response Time</h3>
+                <div class="metric-value" id="response-time">0ms</div>
+                <div class="metric-change positive">Sub-100ms achieved</div>
+                <div>Real-time processing</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>📦 Supply Chain Routes</h3>
+                <div class="metric-value" id="routes-count">0</div>
+                <div class="metric-change positive">+15 new routes</div>
+                <div>Global logistics coverage</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>🌐 Transportation Networks</h3>
+                <div class="metric-value" id="networks-count">0</div>
+                <div class="metric-change positive">+5 networks added</div>
+                <div>Smart infrastructure protection</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>📊 Autonomous Vehicle Security Trends</h3>
+                <canvas id="autonomousChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🚚 Fleet Management Performance</h3>
+                <canvas id="fleetChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>📦 Supply Chain Security Analysis</h3>
+                <canvas id="supplyChainChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🌐 Smart Transportation Systems</h3>
+                <canvas id="smartTransportChart"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3>🚨 Recent Automotive & Transportation Alerts</h3>
+            <div id="alerts-container">
+                <div class="loading">Loading automotive & transportation alerts...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        let automotiveData = {
+            vehicles: 0,
+            fleets: 0,
+            securityScore: 0,
+            responseTime: 0,
+            routes: 0,
+            networks: 0,
+            alerts: [],
+            autonomousData: [],
+            fleetData: [],
+            supplyChainData: [],
+            smartTransportData: []
+        };
+
+        // Initialize charts
+        let autonomousChart, fleetChart, supplyChainChart, smartTransportChart;
+
+        function initializeCharts() {
+            // Autonomous Vehicle Chart
+            const autonomousCtx = document.getElementById('autonomousChart').getContext('2d');
+            autonomousChart = new Chart(autonomousCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6h ago', '5h ago', '4h ago', '3h ago', '2h ago', '1h ago', 'Now'],
+                    datasets: [{
+                        label: 'Sensor Integrity',
+                        data: [0.95, 0.93, 0.96, 0.94, 0.97, 0.95, 0.98],
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Autonomy Security',
+                        data: [0.92, 0.94, 0.91, 0.93, 0.95, 0.96, 0.97],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Communication Security',
+                        data: [0.88, 0.90, 0.89, 0.91, 0.92, 0.93, 0.94],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            min: 0,
+                            max: 1
+                        }
+                    }
+                }
+            });
+
+            // Fleet Management Chart
+            const fleetCtx = document.getElementById('fleetChart').getContext('2d');
+            fleetChart = new Chart(fleetCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Active', 'Maintenance', 'Offline', 'Emergency'],
+                    datasets: [{
+                        label: 'Fleet Status',
+                        data: [85, 10, 3, 2],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(147, 51, 234, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Supply Chain Chart
+            const supplyChainCtx = document.getElementById('supplyChainChart').getContext('2d');
+            supplyChainChart = new Chart(supplyChainCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Secure Routes', 'At Risk', 'Under Monitoring', 'Compromised'],
+                    datasets: [{
+                        data: [75, 15, 8, 2],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(239, 68, 68, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+
+            // Smart Transportation Chart
+            const smartTransportCtx = document.getElementById('smartTransportChart').getContext('2d');
+            smartTransportChart = new Chart(smartTransportCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Traffic Systems', 'Infrastructure', 'Public Transport', 'Connected Vehicles', 'Emergency Response', 'Traffic Flow'],
+                    datasets: [{
+                        label: 'Current Security',
+                        data: [92, 88, 85, 90, 87, 91],
+                        borderColor: 'rgba(59, 130, 246, 0.8)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)'
+                    }, {
+                        label: 'Target Security',
+                        data: [90, 85, 82, 88, 85, 89],
+                        borderColor: 'rgba(34, 197, 94, 0.8)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateMetrics() {
+            // Simulate real-time data updates
+            automotiveData.vehicles = Math.floor(Math.random() * 5000) + 10000;
+            automotiveData.fleets = Math.floor(Math.random() * 50) + 200;
+            automotiveData.securityScore = (Math.random() * 5 + 94).toFixed(2);
+            automotiveData.responseTime = (Math.random() * 20 + 10).toFixed(1);
+            automotiveData.routes = Math.floor(Math.random() * 200) + 800;
+            automotiveData.networks = Math.floor(Math.random() * 15) + 50;
+
+            // Update DOM
+            document.getElementById('vehicles-count').textContent = automotiveData.vehicles.toLocaleString();
+            document.getElementById('fleets-count').textContent = automotiveData.fleets.toLocaleString();
+            document.getElementById('security-score').textContent = automotiveData.securityScore + '%';
+            document.getElementById('response-time').textContent = automotiveData.responseTime + 'ms';
+            document.getElementById('routes-count').textContent = automotiveData.routes.toLocaleString();
+            document.getElementById('networks-count').textContent = automotiveData.networks.toLocaleString();
+        }
+
+        function generateMockAlerts() {
+            const alertTypes = [
+                { type: 'AUTONOMOUS_SYSTEMS_THREAT', level: 'critical', description: 'Autonomous vehicle system security threat detected - potential sensor integrity breach' },
+                { type: 'FLEET_MANAGEMENT_THREAT', level: 'high', description: 'Fleet management security issue identified - unauthorized vehicle access detected' },
+                { type: 'SUPPLY_CHAIN_THREAT', level: 'medium', description: 'Supply chain logistics security threat detected - cargo integrity breach' },
+                { type: 'SMART_TRANSPORTATION_THREAT', level: 'low', description: 'Smart transportation system vulnerability identified - traffic system manipulation' }
+            ];
+
+            const alerts = [];
+            for (let i = 0; i < 5; i++) {
+                const alertType = alertTypes[Math.floor(Math.random() * alertTypes.length)];
+                alerts.push({
+                    id: `AUTO_TRANS_${Date.now()}_${i}`,
+                    type: alertType.type,
+                    level: alertType.level,
+                    description: alertType.description,
+                    vehicle_id: `VEH-${Math.floor(Math.random() * 9999)}`,
+                    fleet_id: `FLEET-${Math.floor(Math.random() * 99)}`,
+                    confidence_score: (Math.random() * 0.2 + 0.8).toFixed(3),
+                    timestamp: new Date(Date.now() - Math.random() * 3600000).toISOString(),
+                    location: {
+                        latitude: (Math.random() * 180 - 90).toFixed(6),
+                        longitude: (Math.random() * 360 - 180).toFixed(6)
+                    },
+                    safety_impact: ['Critical safety risk', 'High safety risk', 'Moderate safety risk', 'Low safety risk'][Math.floor(Math.random() * 4)],
+                    operational_impact: ['Severe operational disruption', 'Significant operational impact', 'Moderate operational impact', 'Minimal operational impact'][Math.floor(Math.random() * 4)]
+                });
+            }
+
+            return alerts;
+        }
+
+        function displayAlerts() {
+            const alertsContainer = document.getElementById('alerts-container');
+            const alerts = generateMockAlerts();
+
+            if (alerts.length === 0) {
+                alertsContainer.innerHTML = '<div class="loading">No active automotive & transportation alerts</div>';
+                return;
+            }
+
+            const alertsHTML = alerts.map(alert => `
+                <div class="alert-item ${alert.level}">
+                    <div class="alert-header">
+                        <span class="alert-id">${alert.id}</span>
+                        <span class="alert-time">${new Date(alert.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <div class="alert-description">${alert.description}</div>
+                    <div class="alert-details">
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Vehicle ID</div>
+                            <div class="alert-detail-value">${alert.vehicle_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Fleet ID</div>
+                            <div class="alert-detail-value">${alert.fleet_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Confidence Score</div>
+                            <div class="alert-detail-value">${(alert.confidence_score * 100).toFixed(1)}%</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Location</div>
+                            <div class="alert-detail-value">${alert.location.latitude}, ${alert.location.longitude}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Safety Impact</div>
+                            <div class="alert-detail-value">${alert.safety_impact}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Operational Impact</div>
+                            <div class="alert-detail-value">${alert.operational_impact}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            alertsContainer.innerHTML = alertsHTML;
+        }
+
+        function refreshDashboard() {
+            updateMetrics();
+            displayAlerts();
+            
+            // Update charts with new data
+            if (autonomousChart) {
+                autonomousChart.data.datasets[0].data = autonomousChart.data.datasets[0].data.map(() => Math.random() * 0.1 + 0.9);
+                autonomousChart.data.datasets[1].data = autonomousChart.data.datasets[1].data.map(() => Math.random() * 0.1 + 0.85);
+                autonomousChart.data.datasets[2].data = autonomousChart.data.datasets[2].data.map(() => Math.random() * 0.1 + 0.8);
+                autonomousChart.update();
+            }
+
+            if (fleetChart) {
+                fleetChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 80,
+                    Math.floor(Math.random() * 5) + 8,
+                    Math.floor(Math.random() * 3) + 2,
+                    Math.floor(Math.random() * 2) + 1
+                ];
+                fleetChart.update();
+            }
+
+            if (supplyChainChart) {
+                supplyChainChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 70,
+                    Math.floor(Math.random() * 10) + 10,
+                    Math.floor(Math.random() * 5) + 5,
+                    Math.floor(Math.random() * 3) + 1
+                ];
+                supplyChainChart.update();
+            }
+
+            if (smartTransportChart) {
+                smartTransportChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 85,
+                    Math.floor(Math.random() * 10) + 83,
+                    Math.floor(Math.random() * 10) + 80,
+                    Math.floor(Math.random() * 10) + 85,
+                    Math.floor(Math.random() * 10) + 82,
+                    Math.floor(Math.random() * 10) + 86
+                ];
+                smartTransportChart.update();
+            }
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            refreshDashboard();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(refreshDashboard, 30000);
+        });
+    </script>
+</body>
+</html>

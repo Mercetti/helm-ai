@@ -1,0 +1,159 @@
+/* ===================================
+   STELLAR LOGIC AI - PERFORMANCE OPTIMIZATIONS
+   =================================== */
+
+/* Critical CSS - Above the Fold Optimization */
+.critical-css {
+  /* Only essential styles for above-the-fold content */
+  font-family: var(--font-family-primary);
+  background: var(--gradient-hero);
+  color: var(--secondary-800);
+  min-height: 100vh;
+}
+
+/* Lazy Loading for Images */
+.lazy-img {
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.lazy-img.loaded {
+  opacity: 1;
+}
+
+/* Optimized Animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Resource Hints */
+.preload {
+  display: none;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-500: #0000ff;
+    --secondary-600: #333333;
+    --accent-500: #ff8c00;
+  }
+  
+  .btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Focus Visible Enhancement */
+.focus-visible {
+  outline: 3px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* Container Queries (Future-proofing) */
+@container (min-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@container (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Optimized Font Display */
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+}
+
+/* CSS Containment for Performance */
+.contain-layout {
+  contain: layout;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+.contain-size {
+  contain: size;
+}
+
+.contain-style {
+  contain: style;
+}
+
+/* Will-change Optimization */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* GPU Acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimized Scroll Performance */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Reduced Data Usage */
+@media (prefers-reduced-data: reduce) {
+  .video-background,
+  .large-image,
+  .animation-heavy {
+    display: none;
+  }
+}
+
+/* Battery Optimization */
+@media (prefers-reduced-battery: low) {
+  .animation-heavy,
+  .parallax-effect {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Inverted Colors for Accessibility */
+@media (inverted-colors: inverted) {
+  img,
+  video {
+    filter: invert(100%);
+  }
+}

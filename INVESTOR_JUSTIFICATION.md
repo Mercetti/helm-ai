@@ -5,11 +5,11 @@
 ### **✅ Investor-Ready ROI Analysis:**
 ```
 💰 Total Investment: $16,350-21,200
-📈 Expected ROI: 500%+ over 5 years
+📈 Expected ROI: 100-300% over 5 years
 💡 Daily Operating Cost: ~$8-12
 🎯 Daily Revenue Potential: $200-500+
-⏰ Break-even Point: 6-12 months
-🚀 5-Year Value: $100,000+
+⏰ Break-even Point: 18-24 months
+🚀 5-Year Value: $50,000-75,000
 ```
 
 ---

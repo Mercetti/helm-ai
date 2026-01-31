@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Safety Guardrails - Compliance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #1e40af;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .safety-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .status-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .status-card.compliant {
+            border-left-color: #059669;
+        }
+        
+        .status-card.warning {
+            border-left-color: #d97706;
+        }
+        
+        .status-card.critical {
+            border-left-color: #dc2626;
+        }
+        
+        .status-card h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .status-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
+        
+        .status-card.compliant .number {
+            color: #059669;
+        }
+        
+        .status-card.warning .number {
+            color: #d97706;
+        }
+        
+        .status-card.critical .number {
+            color: #dc2626;
+        }
+        
+        .protected-files {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .protected-files h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+        }
+        
+        .file-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .compliance-rules {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .compliance-rules h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        
+        .rule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .rule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .rule-name {
+            font-weight: 500;
+        }
+        
+        .rule-value {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .activity-log {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 4px 0;
+        }
+        
+        .log-timestamp {
+            color: #60a5fa;
+        }
+        
+        .log-event {
+            color: #34d399;
+        }
+        
+        .log-warning {
+            color: #fbbf24;
+        }
+        
+        .log-error {
+            color: #f87171;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #64748b;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #475569;
+        }
+        
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        
+        .btn-success {
+            background: #059669;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #047857;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 AI Safety Guardrails</h1>
+            <p>Compliance & Self-Modification Protection Dashboard</p>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-primary" onclick="loadSafetyReport()">
+                📊 Load Safety Report
+            </button>
+            <button class="btn btn-secondary" onclick="resetSafetySession()">
+                🔄 Reset Session
+            </button>
+            <button class="btn btn-success" onclick="addProtectedFile()">
+                ➕ Add Protected File
+            </button>
+            <button class="btn btn-danger" onclick="testSafetyViolation()">
+                ⚠️ Test Safety Violation
+            </button>
+        </div>
+        
+        <div class="safety-status" id="safety-status">
+            <div class="status-card compliant">
+                <h3>Compliance Rate</h3>
+                <div class="number" id="compliance-rate">100%</div>
+            </div>
+            <div class="status-card compliant">
+                <h3>Session Modifications</h3>
+                <div class="number" id="modifications">0</div>
+            </div>
+            <div class="status-card compliant">
+                <h3>Auto-Fixes Applied</h3>
+                <div class="number" id="auto-fixes">0</div>
+            </div>
+            <div class="status-card compliant">
+                <h3>Blocked Attempts</h3>
+                <div class="number" id="blocked-attempts">0</div>
+            </div>
+        </div>
+        
+        <div class="compliance-rules">
+            <h3>📋 Compliance Rules</h3>
+            <div class="rule-item">
+                <span class="rule-name">Max File Modifications</span>
+                <span class="rule-value" id="max-modifications">5</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-name">Max Auto-Fixes Per Session</span>
+                <span class="rule-value" id="max-auto-fixes">20</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-name">Require Human Approval</span>
+                <span class="rule-value" id="require-approval">Enabled</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-name">Log All Modifications</span>
+                <span class="rule-value" id="log-modifications">Enabled</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-name">Backup Before Changes</span>
+                <span class="rule-value" id="backup-changes">Enabled</span>
+            </div>
+        </div>
+        
+        <div class="protected-files">
+            <h3>🛡️ Protected Files (AI Cannot Modify)</h3>
+            <div class="file-list" id="protected-files-list">
+                <div class="file-item">js/comprehensive-test-suite.js</div>
+                <div class="file-item">js/ui-tester.js</div>
+                <div class="file-item">js/backend-tester.js</div>
+                <div class="file-item">js/integration-tester.js</div>
+                <div class="file-item">js/security-tester.js</div>
+                <div class="file-item">js/ai-safety-guardrails.js</div>
+                <div class="file-item">package.json</div>
+                <div class="file-item">js/performance.js</div>
+                <div class="file-item">js/accessibility.js</div>
+                <div class="file-item">.env</div>
+                <div class="file-item">config/</div>
+                <div class="file-item">.github/workflows/</div>
+            </div>
+        </div>
+        
+        <div class="activity-log">
+            <h3>📋 Activity Log</h3>
+            <div id="activity-log">
+                <div class="log-entry">
+                    <span class="log-timestamp">[2024-01-30 19:00:00]</span>
+                    <span class="log-event"> AI Safety Guardrails initialized</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-timestamp">[2024-01-30 19:00:01]</span>
+                    <span class="log-event"> Self-modification protection activated</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-timestamp">[2024-01-30 19:00:02]</span>
+                    <span class="log-event"> Protected files loaded: 12</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize safety guardrails
+        let safetyGuardrails;
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (window.StellarLogicAI && window.StellarLogicAI.safetyGuardrails) {
+                safetyGuardrails = window.StellarLogicAI.safetyGuardrails;
+                await loadSafetyReport();
+                startRealTimeUpdates();
+            } else {
+                addLogEntry('error', 'AI Safety Guardrails not available');
+            }
+        });
+        
+        // Load safety report
+        async function loadSafetyReport() {
+            if (!safetyGuardrails) return;
+            
+            try {
+                const report = safetyGuardrails.generateComplianceSummary();
+                updateDashboard(report);
+                addLogEntry('event', 'Safety report loaded successfully');
+            } catch (error) {
+                addLogEntry('error', `Failed to load safety report: ${error.message}`);
+            }
+        }
+        
+        // Update dashboard with safety data
+        function updateDashboard(report) {
+            // Update status cards
+            document.getElementById('compliance-rate').textContent = `${report.summary.complianceRate}%`;
+            document.getElementById('modifications').textContent = report.sessionStats.modifications;
+            document.getElementById('auto-fixes').textContent = report.sessionStats.autoFixes;
+            document.getElementById('blocked-attempts').textContent = report.sessionStats.blockedAttempts;
+            
+            // Update compliance rules
+            document.getElementById('max-modifications').textContent = report.complianceRules.maxFileModifications;
+            document.getElementById('max-auto-fixes').textContent = report.complianceRules.maxAutoFixesPerSession;
+            document.getElementById('require-approval').textContent = report.complianceRules.requireHumanApproval ? 'Enabled' : 'Disabled';
+            document.getElementById('log-modifications').textContent = report.complianceRules.logAllModifications ? 'Enabled' : 'Disabled';
+            document.getElementById('backup-changes').textContent = report.complianceRules.backupBeforeChanges ? 'Enabled' : 'Disabled';
+            
+            // Update status card colors based on compliance
+            updateStatusCards(report.summary.complianceRate);
+        }
+        
+        // Update status card colors
+        function updateStatusCards(complianceRate) {
+            const cards = document.querySelectorAll('.status-card');
+            cards.forEach(card => {
+                card.classList.remove('compliant', 'warning', 'critical');
+                
+                if (complianceRate >= 90) {
+                    card.classList.add('compliant');
+                } else if (complianceRate >= 70) {
+                    card.classList.add('warning');
+                } else {
+                    card.classList.add('critical');
+                }
+            });
+        }
+        
+        // Reset safety session
+        async function resetSafetySession() {
+            if (!safetyGuardrails) return;
+            
+            try {
+                safetyGuardrails.resetSession();
+                await loadSafetyReport();
+                addLogEntry('event', 'Safety session reset successfully');
+            } catch (error) {
+                addLogEntry('error', `Failed to reset session: ${error.message}`);
+            }
+        }
+        
+        // Add protected file
+        async function addProtectedFile() {
+            const filePath = prompt('Enter file path to protect:');
+            if (!filePath) return;
+            
+            if (!safetyGuardrails) return;
+            
+            try {
+                safetyGuardrails.addProtectedFile(filePath);
+                updateProtectedFilesList();
+                addLogEntry('event', `Added protected file: ${filePath}`);
+            } catch (error) {
+                addLogEntry('error', `Failed to add protected file: ${error.message}`);
+            }
+        }
+        
+        // Test safety violation
+        async function testSafetyViolation() {
+            if (!safetyGuardrails) return;
+            
+            try {
+                // Test self-modification attempt
+                const maliciousCode = 'AISafetyGuardrails.protectedFiles = [];';
+                const isSafe = safetyGuardrails.checkSelfModification(maliciousCode, 'test.js');
+                
+                if (!isSafe) {
+                    addLogEntry('warning', 'Self-modification attempt blocked successfully');
+                } else {
+                    addLogEntry('error', 'Self-modification protection failed - SECURITY RISK');
+                }
+                
+                // Test protected file access
+                const protectedFile = 'js/comprehensive-test-suite.js';
+                const isProtected = safetyGuardrails.isProtectedFile(protectedFile);
+                
+                if (isProtected) {
+                    addLogEntry('event', `Protected file check passed: ${protectedFile}`);
+                } else {
+                    addLogEntry('error', `Protected file check failed: ${protectedFile}`);
+                }
+                
+            } catch (error) {
+                addLogEntry('error', `Safety violation test error: ${error.message}`);
+            }
+        }
+        
+        // Update protected files list
+        function updateProtectedFilesList() {
+            if (!safetyGuardrails) return;
+            
+            const report = safetyGuardrails.getComplianceReport();
+            const filesList = document.getElementById('protected-files-list');
+            
+            filesList.innerHTML = report.protectedFiles.map(file => 
+                `<div class="file-item">${file}</div>`
+            ).join('');
+        }
+        
+        // Add log entry
+        function addLogEntry(type, message) {
+            const log = document.getElementById('activity-log');
+            const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+            
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                <span class="log-${type}"> ${message}</span>
+            `;
+            
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Start real-time updates
+        function startRealTimeUpdates() {
+            setInterval(async () => {
+                if (safetyGuardrails) {
+                    await loadSafetyReport();
+                }
+            }, 30000); // Update every 30 seconds
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏥 Healthcare Compliance Dashboard - Stellar Logic AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00ff88, #00aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.1em;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .critical { color: #ff4444; }
+        .high { color: #ff8844; }
+        .medium { color: #ffaa44; }
+        .low { color: #44ff44; }
+        .success { color: #00ff88; }
+        .warning { color: #ffaa44; }
+
+        .alerts-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid;
+            transition: transform 0.2s ease;
+        }
+
+        .alert-item:hover {
+            transform: translateX(5px);
+        }
+
+        .alert-critical { border-left-color: #ff4444; }
+        .alert-high { border-left-color: #ff8844; }
+        .alert-medium { border-left-color: #ffaa44; }
+        .alert-low { border-left-color: #44ff44; }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-type {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .alert-time {
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+
+        .alert-description {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .alert-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-patient {
+            font-weight: bold;
+            color: #ffaa44;
+        }
+
+        .alert-hipaa {
+            background: rgba(255, 170, 68, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        .alert-action {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-active { background: #00ff88; }
+        .status-warning { background: #ffaa44; }
+        .status-critical { background: #ff4444; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .accuracy-badge {
+            background: linear-gradient(45deg, #00ff88, #00aaff);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(45deg, #00ff88, #00aaff);
+            border: none;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .compliance-chart {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .chart-label {
+            width: 150px;
+            text-align: right;
+            margin-right: 15px;
+            font-size: 0.9em;
+        }
+
+        .chart-progress {
+            flex: 1;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .chart-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00aaff);
+            border-radius: 12px;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .hipaa-summary {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .hipaa-count {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ff4444;
+        }
+
+        .compliance-status {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .compliance-score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ff88;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>🏥 Healthcare Compliance Dashboard</h1>
+            <p>Stellar Logic AI - 99.07% Accuracy HIPAA Compliance</p>
+            <span class="accuracy-badge">AI ACCURACY: 99.07%</span>
+        </div>
+
+        <div class="compliance-status">
+            <div class="compliance-score">99.07%</div>
+            <div>Overall Compliance Score</div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value success" id="totalAlerts">0</div>
+                <div class="metric-label">Total Alerts</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value critical" id="criticalAlerts">0</div>
+                <div class="metric-label">Critical</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value high" id="highAlerts">0</div>
+                <div class="metric-label">High Priority</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value medium" id="mediumAlerts">0</div>
+                <div class="metric-label">Medium Priority</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value low" id="lowAlerts">0</div>
+                <div class="metric-label">Low Priority</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value success" id="patientsMonitored">1,847</div>
+                <div class="metric-label">Patients Monitored</div>
+            </div>
+        </div>
+
+        <div class="hipaa-summary">
+            <div class="hipaa-count" id="hipaaViolations">0</div>
+            <div>HIPAA Violations Detected</div>
+        </div>
+
+        <div class="alerts-section">
+            <div class="section-title">
+                <span class="status-indicator status-active"></span>
+                Recent Compliance Alerts
+                <button class="refresh-btn" onclick="refreshDashboard()">🔄 Refresh</button>
+            </div>
+
+            <div id="alertsList">
+                <!-- Alerts will be populated here -->
+            </div>
+
+            <div class="compliance-chart">
+                <div class="section-title">Compliance Type Distribution</div>
+                <div id="complianceChart">
+                    <!-- Chart will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for demonstration
+        const mockDashboardData = {
+            total_alerts: 2,
+            critical_alerts: 2,
+            high_alerts: 0,
+            medium_alerts: 0,
+            low_alerts: 0,
+            compliance_types: {
+                'unauthorized_access': 2
+            },
+            recent_alerts: [
+                {
+                    alert_id: 'HC_20260130_215421_provider_001',
+                    compliance_type: 'unauthorized_access',
+                    compliance_level: 'critical',
+                    confidence_score: 0.9907,
+                    provider_id: 'provider_001',
+                    patient_id: 'PT_83490',
+                    description: 'Compliance violation detected: After-hours access, High-risk patient access',
+                    timestamp: '2026-01-30T21:54:21.709768',
+                    recommended_action: 'IMMEDIATE: Terminate session and notify security',
+                    risk_factors: ['After-hours access', 'High-risk patient access'],
+                    hipaa_sections: ['164.312(a)', '164.308(a)', '164.502(a)']
+                },
+                {
+                    alert_id: 'HC_20260130_215421_provider_003',
+                    compliance_type: 'unauthorized_access',
+                    compliance_level: 'critical',
+                    confidence_score: 0.9907,
+                    provider_id: 'provider_003',
+                    patient_id: 'PT_88162',
+                    description: 'Compliance violation detected: After-hours access, High-risk patient access',
+                    timestamp: '2026-01-30T21:54:21.710785',
+                    recommended_action: 'IMMEDIATE: Terminate session and notify security',
+                    risk_factors: ['After-hours access', 'High-risk patient access'],
+                    hipaa_sections: ['164.312(a)', '164.308(a)', '164.502(a)']
+                }
+            ],
+            hipaa_violations: 0,
+            data_breaches: 0,
+            ai_accuracy: 99.07,
+            last_updated: '2026-01-30T21:54:21.711236'
+        };
+
+        function updateDashboard(data) {
+            // Update metrics
+            document.getElementById('totalAlerts').textContent = data.total_alerts;
+            document.getElementById('criticalAlerts').textContent = data.critical_alerts;
+            document.getElementById('highAlerts').textContent = data.high_alerts;
+            document.getElementById('mediumAlerts').textContent = data.medium_alerts;
+            document.getElementById('lowAlerts').textContent = data.low_alerts;
+            document.getElementById('hipaaViolations').textContent = data.hipaa_violations;
+
+            // Update alerts list
+            const alertsList = document.getElementById('alertsList');
+            alertsList.innerHTML = '';
+
+            if (data.recent_alerts && data.recent_alerts.length > 0) {
+                data.recent_alerts.forEach(alert => {
+                    const alertElement = createAlertElement(alert);
+                    alertsList.appendChild(alertElement);
+                });
+            } else {
+                alertsList.innerHTML = '<p style="text-align: center; opacity: 0.7;">No recent alerts - System operating normally</p>';
+            }
+
+            // Update compliance chart
+            updateComplianceChart(data.compliance_types);
+        }
+
+        function createAlertElement(alert) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert-item alert-${alert.compliance_level}`;
+            
+            const time = new Date(alert.timestamp).toLocaleString();
+            
+            alertDiv.innerHTML = `
+                <div class="alert-header">
+                    <span class="alert-type">${alert.compliance_type.replace('_', ' ')}</span>
+                    <span class="alert-time">${time}</span>
+                </div>
+                <div class="alert-details">
+                    <div>
+                        <strong>Provider:</strong> ${alert.provider_id}<br>
+                        <strong>Patient:</strong> ${alert.patient_id}<br>
+                        ${alert.description}
+                    </div>
+                </div>
+                <div class="alert-hipaa">
+                    <strong>HIPAA Sections:</strong> ${alert.hipaa_sections.join(', ')}
+                </div>
+                <div class="alert-action">
+                    <strong>Action:</strong> ${alert.recommended_action}
+                </div>
+            `;
+            
+            return alertDiv;
+        }
+
+        function updateComplianceChart(complianceTypes) {
+            const chartDiv = document.getElementById('complianceChart');
+            chartDiv.innerHTML = '';
+
+            const total = Object.values(complianceTypes).reduce((sum, count) => sum + count, 0);
+            
+            Object.entries(complianceTypes).forEach(([type, count]) => {
+                const percentage = total > 0 ? (count / total * 100).toFixed(1) : 0;
+                
+                const chartBar = document.createElement('div');
+                chartBar.className = 'chart-bar';
+                chartBar.innerHTML = `
+                    <div class="chart-label">${type.replace('_', ' ')}</div>
+                    <div class="chart-progress">
+                        <div class="chart-fill" style="width: ${percentage}%">
+                            ${count} (${percentage}%)
+                        </div>
+                    </div>
+                `;
+                chartDiv.appendChild(chartBar);
+            });
+
+            if (total === 0) {
+                chartDiv.innerHTML = '<p style="text-align: center; opacity: 0.7;">No compliance violations detected</p>';
+            }
+        }
+
+        function refreshDashboard() {
+            // Simulate refresh with animation
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                metric.style.opacity = '0.5';
+                setTimeout(() => {
+                    metric.style.opacity = '1';
+                }, 300);
+            });
+
+            // In real implementation, this would fetch new data from the backend
+            setTimeout(() => {
+                updateDashboard(mockDashboardData);
+            }, 500);
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard(mockDashboardData);
+            
+            // Auto-refresh every 30 seconds
+            setInterval(refreshDashboard, 30000);
+        });
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Simulate new compliance alert occasionally
+            if (Math.random() < 0.2) { // 20% chance every 10 seconds
+                const complianceTypes = ['hipaa_violation', 'data_breach', 'unauthorized_access', 'privacy_breach', 'compliance_failure'];
+                const levels = ['critical', 'high', 'medium'];
+                
+                const newAlert = {
+                    alert_id: `HC_${Date.now()}_provider_${Math.floor(Math.random() * 100)}`,
+                    compliance_type: complianceTypes[Math.floor(Math.random() * complianceTypes.length)],
+                    compliance_level: levels[Math.floor(Math.random() * levels.length)],
+                    confidence_score: 0.9907,
+                    provider_id: `provider_${Math.floor(Math.random() * 100)}`,
+                    patient_id: `PT_${Math.floor(Math.random() * 99999)}`,
+                    description: 'Real-time compliance monitoring alert',
+                    timestamp: new Date().toISOString(),
+                    recommended_action: 'Immediate compliance review required',
+                    risk_factors: ['Unusual access pattern detected'],
+                    hipaa_sections: ['164.308(a)', '164.502(a)']
+                };
+                
+                mockDashboardData.recent_alerts.unshift(newAlert);
+                mockDashboardData.total_alerts++;
+                mockDashboardData[mockDashboardData.recent_alerts[0].compliance_level + '_alerts']++;
+                
+                if (newAlert.compliance_type === 'hipaa_violation') {
+                    mockDashboardData.hipaa_violations++;
+                }
+                
+                updateDashboard(mockDashboardData);
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

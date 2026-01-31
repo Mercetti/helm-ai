@@ -1,0 +1,86 @@
+<!-- ===================================
+   STELLAR LOGIC AI - STANDARDIZED HEADER
+   =================================== -->
+<header class="header" role="banner">
+  <div class="container">
+    <div class="header-content">
+      <div class="header-title">
+        <div class="logo logo--image" role="img" aria-label="Stellar Logic AI Logo"></div>
+        <div>
+          <h1 id="page-title">Stellar Logic AI</h1>
+          <p class="text-secondary text-sm mt-1" id="page-subtitle">Advanced AI-Powered Solutions</p>
+        </div>
+      </div>
+      
+      <nav class="hidden md:flex" role="navigation" aria-label="Main navigation">
+        <ul class="flex gap-6">
+          <li><a href="index.html" class="text-secondary hover:text-primary transition-fast">Home</a></li>
+          <li><a href="dashboard.html" class="text-secondary hover:text-primary transition-fast">Dashboard</a></li>
+          <li><a href="crm.html" class="text-secondary hover:text-primary transition-fast">CRM</a></li>
+          <li><a href="ai_assistant.html" class="text-secondary hover:text-primary transition-fast">AI Assistant</a></li>
+          <li><a href="study_guide.html" class="text-secondary hover:text-primary transition-fast">Learning</a></li>
+        </ul>
+      </nav>
+      
+      <div class="flex gap-3">
+        <button class="btn btn--primary btn--sm" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+        <button class="btn btn--secondary btn--sm md:hidden" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+          <span>☰</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile Navigation -->
+    <nav id="mobile-menu" class="hidden md:hidden mt-4" role="navigation" aria-label="Mobile navigation">
+      <ul class="grid grid--cols-1 gap-3">
+        <li><a href="index.html" class="block p-3 text-secondary hover:bg-secondary rounded-lg transition-fast">Home</a></li>
+        <li><a href="dashboard.html" class="block p-3 text-secondary hover:bg-secondary rounded-lg transition-fast">Dashboard</a></li>
+        <li><a href="crm.html" class="block p-3 text-secondary hover:bg-secondary rounded-lg transition-fast">CRM</a></li>
+        <li><a href="ai_assistant.html" class="block p-3 text-secondary hover:bg-secondary rounded-lg transition-fast">AI Assistant</a></li>
+        <li><a href="study_guide.html" class="block p-3 text-secondary hover:bg-secondary rounded-lg transition-fast">Learning</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+// Theme Toggle Functionality
+function toggleTheme() {
+  const body = document.body;
+  const themeIcon = document.getElementById('theme-icon');
+  const header = document.querySelector('.header');
+  
+  if (body.classList.contains('dark-theme')) {
+    body.classList.remove('dark-theme');
+    header.classList.remove('header--dark');
+    themeIcon.textContent = '🌙';
+    localStorage.setItem('theme', 'light');
+  } else {
+    body.classList.add('dark-theme');
+    header.classList.add('header--dark');
+    themeIcon.textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
+// Mobile Menu Toggle
+function toggleMobileMenu() {
+  const mobileMenu = document.getElementById('mobile-menu');
+  mobileMenu.classList.toggle('hidden');
+}
+
+// Initialize theme on load
+document.addEventListener('DOMContentLoaded', function() {
+  const savedTheme = localStorage.getItem('theme');
+  const themeIcon = document.getElementById('theme-icon');
+  const header = document.querySelector('.header');
+  
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+    header.classList.add('header--dark');
+    themeIcon.textContent = '☀️';
+  }
+});
+</script>

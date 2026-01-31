@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturing Security Dashboard - Stellar Logic AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-header p {
+            font-size: 1.2em;
+            color: #ecf0f1;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .metric-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #3498db;
+            font-weight: 400;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .metric-change {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .metric-change.positive {
+            color: #27ae60;
+        }
+
+        .metric-change.negative {
+            color: #e74c3c;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-weight: 400;
+        }
+
+        .alerts-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        .alerts-section h3 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-weight: 400;
+        }
+
+        .alert-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            transition: background 0.3s ease;
+        }
+
+        .alert-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .alert-item.critical {
+            border-left-color: #e74c3c;
+        }
+
+        .alert-item.high {
+            border-left-color: #f39c12;
+        }
+
+        .alert-item.medium {
+            border-left-color: #f1c40f;
+        }
+
+        .alert-item.low {
+            border-left-color: #27ae60;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-id {
+            font-weight: 600;
+            color: #3498db;
+        }
+
+        .alert-time {
+            font-size: 0.9em;
+            color: #95a5a6;
+        }
+
+        .alert-description {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .alert-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .alert-detail {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .alert-detail-label {
+            font-size: 0.9em;
+            color: #95a5a6;
+            margin-bottom: 5px;
+        }
+
+        .alert-detail-value {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.online {
+            background-color: #27ae60;
+            box-shadow: 0 0 10px #27ae60;
+        }
+
+        .status-indicator.offline {
+            background-color: #e74c3c;
+            box-shadow: 0 0 10px #e74c3c;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .refresh-button:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #95a5a6;
+        }
+
+        .error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2em;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>🏭 Manufacturing Security Dashboard</h1>
+        <p>Real-time Industrial IoT Security & Predictive Maintenance</p>
+    </div>
+
+    <div class="container">
+        <button class="refresh-button" onclick="refreshDashboard()">🔄 Refresh Dashboard</button>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>🔧 Equipment Monitored</h3>
+                <div class="metric-value" id="equipment-count">0</div>
+                <div class="metric-change positive">+12% from last week</div>
+                <div class="status-indicator online"></div>
+                <span>All Systems Operational</span>
+            </div>
+
+            <div class="metric-card">
+                <h3>⚠️ Active Alerts</h3>
+                <div class="metric-value" id="active-alerts">0</div>
+                <div class="metric-change negative">+3 critical alerts</div>
+                <div>Real-time monitoring active</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>📊 Quality Score</h3>
+                <div class="metric-value" id="quality-score">0%</div>
+                <div class="metric-change positive">+2.3% improvement</div>
+                <div>99.07% AI accuracy maintained</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>⚡ Response Time</h3>
+                <div class="metric-value" id="response-time">0ms</div>
+                <div class="metric-change positive">Sub-100ms achieved</div>
+                <div>AI core processing</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>💰 Cost Savings</h3>
+                <div class="metric-value" id="cost-savings">$0</div>
+                <div class="metric-change positive">+$15M+ saved</div>
+                <div>Predictive maintenance impact</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>🏭 Facilities</h3>
+                <div class="metric-value" id="facilities-count">0</div>
+                <div class="metric-change positive">Multi-site coverage</div>
+                <div>Global manufacturing network</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>📈 Maintenance Alerts Trend</h3>
+                <canvas id="maintenanceChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🎯 Quality Metrics</h3>
+                <canvas id="qualityChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>🔒 Security Events</h3>
+                <canvas id="securityChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>⚡ Performance Metrics</h3>
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3>🚨 Recent Manufacturing Alerts</h3>
+            <div id="alerts-container">
+                <div class="loading">Loading manufacturing alerts...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        let manufacturingData = {
+            equipment: 0,
+            activeAlerts: 0,
+            qualityScore: 0,
+            responseTime: 0,
+            costSavings: 0,
+            facilities: 0,
+            alerts: [],
+            maintenanceData: [],
+            qualityData: [],
+            securityData: [],
+            performanceData: []
+        };
+
+        // Initialize charts
+        let maintenanceChart, qualityChart, securityChart, performanceChart;
+
+        function initializeCharts() {
+            // Maintenance Chart
+            const maintenanceCtx = document.getElementById('maintenanceChart').getContext('2d');
+            maintenanceChart = new Chart(maintenanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6h ago', '5h ago', '4h ago', '3h ago', '2h ago', '1h ago', 'Now'],
+                    datasets: [{
+                        label: 'Critical',
+                        data: [2, 3, 1, 4, 2, 3, 5],
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'High',
+                        data: [5, 4, 6, 3, 5, 4, 7],
+                        borderColor: '#f39c12',
+                        backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Medium',
+                        data: [8, 7, 9, 6, 8, 7, 10],
+                        borderColor: '#f1c40f',
+                        backgroundColor: 'rgba(241, 196, 15, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Quality Chart
+            const qualityCtx = document.getElementById('qualityChart').getContext('2d');
+            qualityChart = new Chart(qualityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Excellent', 'Good', 'Acceptable', 'Poor', 'Critical'],
+                    datasets: [{
+                        label: 'Quality Distribution',
+                        data: [45, 30, 15, 7, 3],
+                        backgroundColor: [
+                            'rgba(39, 174, 96, 0.8)',
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(243, 156, 18, 0.8)',
+                            'rgba(231, 76, 60, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Security Chart
+            const securityCtx = document.getElementById('securityChart').getContext('2d');
+            securityChart = new Chart(securityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Access Control', 'Physical Security', 'Cyber Security', 'Supply Chain', 'Insider Threats'],
+                    datasets: [{
+                        data: [25, 20, 30, 15, 10],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(39, 174, 96, 0.8)',
+                            'rgba(241, 196, 15, 0.8)',
+                            'rgba(243, 156, 18, 0.8)',
+                            'rgba(231, 76, 60, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            performanceChart = new Chart(performanceCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Response Time', 'Accuracy', 'Throughput', 'Availability', 'Efficiency'],
+                    datasets: [{
+                        label: 'Current Performance',
+                        data: [95, 99.07, 92, 98, 89],
+                        borderColor: 'rgba(52, 152, 219, 0.8)',
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)'
+                    }, {
+                        label: 'Target Performance',
+                        data: [90, 99.07, 85, 95, 85],
+                        borderColor: 'rgba(39, 174, 96, 0.8)',
+                        backgroundColor: 'rgba(39, 174, 96, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateMetrics() {
+            // Simulate real-time data updates
+            manufacturingData.equipment = Math.floor(Math.random() * 500) + 1000;
+            manufacturingData.activeAlerts = Math.floor(Math.random() * 20) + 5;
+            manufacturingData.qualityScore = (Math.random() * 5 + 94).toFixed(2);
+            manufacturingData.responseTime = (Math.random() * 20 + 10).toFixed(1);
+            manufacturingData.costSavings = Math.floor(Math.random() * 10000000) + 15000000;
+            manufacturingData.facilities = Math.floor(Math.random() * 20) + 50;
+
+            // Update DOM
+            document.getElementById('equipment-count').textContent = manufacturingData.equipment.toLocaleString();
+            document.getElementById('active-alerts').textContent = manufacturingData.activeAlerts;
+            document.getElementById('quality-score').textContent = manufacturingData.qualityScore + '%';
+            document.getElementById('response-time').textContent = manufacturingData.responseTime + 'ms';
+            document.getElementById('cost-savings').textContent = '$' + (manufacturingData.costSavings / 1000000).toFixed(1) + 'M';
+            document.getElementById('facilities-count').textContent = manufacturingData.facilities;
+        }
+
+        function generateMockAlerts() {
+            const alertTypes = [
+                { type: 'CRITICAL_MAINTENANCE', level: 'critical', description: 'Critical equipment failure detected on production line 3' },
+                { type: 'HIGH_SECURITY', level: 'high', description: 'Unauthorized access attempt detected at facility entrance' },
+                { type: 'QUALITY_ISSUE', level: 'medium', description: 'Quality control threshold exceeded in batch processing' },
+                { type: 'HIGH_MAINTENANCE', level: 'high', description: 'Predictive maintenance required for CNC machine #5' },
+                { type: 'CRITICAL_SECURITY', level: 'critical', description: 'Cyber security threat detected in industrial control system' }
+            ];
+
+            const alerts = [];
+            for (let i = 0; i < 5; i++) {
+                const alertType = alertTypes[Math.floor(Math.random() * alertTypes.length)];
+                alerts.push({
+                    id: `MANUF_${Date.now()}_${i}`,
+                    type: alertType.type,
+                    level: alertType.level,
+                    description: alertType.description,
+                    equipment_id: `EQ-${Math.floor(Math.random() * 1000)}`,
+                    facility_id: `FAC-${Math.floor(Math.random() * 50)}`,
+                    confidence_score: (Math.random() * 0.2 + 0.8).toFixed(3),
+                    timestamp: new Date(Date.now() - Math.random() * 3600000).toISOString(),
+                    cost_impact: Math.floor(Math.random() * 50000) + 5000,
+                    downtime_risk: (Math.random() * 100).toFixed(1)
+                });
+            }
+
+            return alerts;
+        }
+
+        function displayAlerts() {
+            const alertsContainer = document.getElementById('alerts-container');
+            const alerts = generateMockAlerts();
+
+            if (alerts.length === 0) {
+                alertsContainer.innerHTML = '<div class="loading">No active manufacturing alerts</div>';
+                return;
+            }
+
+            const alertsHTML = alerts.map(alert => `
+                <div class="alert-item ${alert.level}">
+                    <div class="alert-header">
+                        <span class="alert-id">${alert.id}</span>
+                        <span class="alert-time">${new Date(alert.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <div class="alert-description">${alert.description}</div>
+                    <div class="alert-details">
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Equipment ID</div>
+                            <div class="alert-detail-value">${alert.equipment_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Facility ID</div>
+                            <div class="alert-detail-value">${alert.facility_id}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Confidence Score</div>
+                            <div class="alert-detail-value">${(alert.confidence_score * 100).toFixed(1)}%</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Cost Impact</div>
+                            <div class="alert-detail-value">$${alert.cost_impact.toLocaleString()}</div>
+                        </div>
+                        <div class="alert-detail">
+                            <div class="alert-detail-label">Downtime Risk</div>
+                            <div class="alert-detail-value">${alert.downtime_risk}%</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            alertsContainer.innerHTML = alertsHTML;
+        }
+
+        function refreshDashboard() {
+            updateMetrics();
+            displayAlerts();
+            
+            // Update charts with new data
+            if (maintenanceChart) {
+                maintenanceChart.data.datasets[0].data = maintenanceChart.data.datasets[0].data.map(() => Math.floor(Math.random() * 5) + 1);
+                maintenanceChart.data.datasets[1].data = maintenanceChart.data.datasets[1].data.map(() => Math.floor(Math.random() * 8) + 2);
+                maintenanceChart.data.datasets[2].data = maintenanceChart.data.datasets[2].data.map(() => Math.floor(Math.random() * 12) + 3);
+                maintenanceChart.update();
+            }
+
+            if (qualityChart) {
+                qualityChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 20) + 35,
+                    Math.floor(Math.random() * 15) + 25,
+                    Math.floor(Math.random() * 10) + 10,
+                    Math.floor(Math.random() * 8) + 5,
+                    Math.floor(Math.random() * 5) + 1
+                ];
+                qualityChart.update();
+            }
+
+            if (securityChart) {
+                securityChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 20) + 15,
+                    Math.floor(Math.random() * 15) + 10,
+                    Math.floor(Math.random() * 25) + 20,
+                    Math.floor(Math.random() * 15) + 10,
+                    Math.floor(Math.random() * 10) + 5
+                ];
+                securityChart.update();
+            }
+
+            if (performanceChart) {
+                performanceChart.data.datasets[0].data = [
+                    Math.floor(Math.random() * 10) + 90,
+                    99.07,
+                    Math.floor(Math.random() * 15) + 85,
+                    Math.floor(Math.random() * 10) + 90,
+                    Math.floor(Math.random() * 15) + 80
+                ];
+                performanceChart.update();
+            }
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            refreshDashboard();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(refreshDashboard, 30000);
+        });
+    </script>
+</body>
+</html>

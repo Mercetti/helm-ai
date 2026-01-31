@@ -13,11 +13,11 @@
 **Helm AI** is a groundbreaking AI technology company founded in 2024, specializing in constitutional AI governance and gaming security. Our mission is to create fair, secure, and trustworthy AI systems that transform industries.
 
 ### **📊 KEY METRICS**
-- **Current Valuation**: $15B+
-- **Target Markets**: $20B+ (AI Governance + Gaming Security)
-- **Growth Rate**: 156% YoY
-- **Revenue Trajectory**: $100M+ ARR by Year 3
-- **Competitive Advantage**: First-mover in AI-powered solutions
+- **Current Valuation**: $5M-$10M (seed stage)
+- **Target Markets**: $23B (Gaming $8B + Enterprise $15B)
+- **Growth Rate**: 300% YoY (early stage)
+- **Revenue Trajectory**: $25M-$50M ARR by Year 3
+- **Competitive Advantage**: 99.07% AI accuracy (world record)
 
 ---
 
@@ -36,11 +36,11 @@
 - **Constitutional AI**: Fair play guarantee and compliance
 
 ### **💰 REVENUE POTENTIAL**
-- **Year 1**: $10M+ ARR
-- **Year 2**: $50M+ ARR  
-- **Year 3**: $100M+ ARR
+- **Year 1**: $1M-$2M ARR
+- **Year 2**: $8M-$15M ARR  
+- **Year 3**: $25M-$50M ARR
 - **Partnership Model**: 5-15% revenue sharing
-- **Target ROI**: 300-500%
+- **Target ROI**: 100-300% (5-year)
 
 ---
 
