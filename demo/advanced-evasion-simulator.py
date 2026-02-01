@@ -644,6 +644,17 @@ if __name__ == "__main__":
     
     # Save comprehensive report
     with open('advanced_security_test_report.json', 'w') as f:
+        # Convert SecurityEvent objects to dictionaries for JSON serialization
+        report['security_events'] = [
+            {
+                'event_type': event.event_type,
+                'timestamp': event.timestamp.isoformat(),
+                'severity': event.severity,
+                'description': event.description,
+                'metadata': event.metadata
+            }
+            for event in report['security_events']
+        ]
         json.dump(report, f, indent=2)
     
     print(f"\n📄 Comprehensive report saved to 'advanced_security_test_report.json'")

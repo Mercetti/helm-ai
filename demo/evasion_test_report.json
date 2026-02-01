@@ -1,0 +1,53 @@
+{
+  "test_summary": {
+    "total_attempts": 4,
+    "detected": 2,
+    "evaded": 2,
+    "detection_rate": 50.0,
+    "evasion_rate": 50.0,
+    "avg_confidence": 0.7999999999999999,
+    "avg_evasion_success": 0.475
+  },
+  "detailed_results": [
+    {
+      "cheat_type": "aimbot",
+      "technique": "humanization",
+      "detected": false,
+      "confidence": 0.8999999999999999,
+      "evasion_success": 0.6,
+      "timestamp": "2026-01-31T15:38:51.435785"
+    },
+    {
+      "cheat_type": "aimbot",
+      "technique": "timing_randomization",
+      "detected": true,
+      "confidence": 0.6,
+      "evasion_success": 0.5,
+      "timestamp": "2026-01-31T15:38:51.435901"
+    },
+    {
+      "cheat_type": "wallhack",
+      "technique": "memory_cloaking",
+      "detected": true,
+      "confidence": 1.0,
+      "evasion_success": 0.5,
+      "timestamp": "2026-01-31T15:38:51.436517"
+    },
+    {
+      "cheat_type": "wallhack",
+      "technique": "pattern_obscuration",
+      "detected": false,
+      "confidence": 0.7,
+      "evasion_success": 0.3,
+      "timestamp": "2026-01-31T15:38:51.436584"
+    }
+  ],
+  "recommendations": [
+    "\ud83d\udd0d Enhance pattern recognition for humanized behaviors",
+    "\u23f0 Implement timing analysis for randomization detection",
+    "\ud83e\udde0 Add behavioral baseline learning",
+    "\u2705 Current detection algorithms are effective",
+    "\ud83d\udcc8 Consider lowering confidence thresholds for broader detection",
+    "\ud83c\udfaf Develop advanced humanization detection"
+  ]
+}

@@ -751,63 +751,6 @@ def test_complete_anti_cheat_ecosystem():
 
 if __name__ == "__main__":
     test_complete_anti_cheat_ecosystem()
-            'esp_pattern_001': CheatPattern(
-                pattern_id='esp_pattern_001',
-                cheat_type=CheatType.ESP,
-                detection_confidence=97.8,
-                threat_level=ThreatLevel.MEDIUM,
-                first_detected=datetime.now() - timedelta(days=180),
-                games_affected=['Battle_Royale_B', 'Tactical_Shooter_C'],
-                detection_methods=[DetectionMethod.BEHAVIORAL, DetectionMethod.PREDICTIVE],
-                mitigation_strategies=['information_access_monitoring', 'predictive_analysis']
-            )
-        }
-        
-    def _initialize_threat_intelligence(self):
-        """Initialize threat intelligence network"""
-        self.threat_intelligence = {
-            'global_cheat_database': {
-                'total_patterns': len(self.cheat_patterns),
-                'active_threats': 3,
-                'new_patterns_this_month': 2,
-                'cross_game_correlations': 5
-            },
-            'developer_monitoring': {
-                'known_developers': 12,
-                'active_projects': 8,
-                'new_techniques_detected': 3,
-                'marketplace_listings': 25
-            },
-            'dark_web_intelligence': {
-                'marketplaces_monitored': 5,
-                'cheat_listings_tracked': 150,
-                'transaction_volume': '$2.5M/month',
-                'emerging_threats': 7
-            }
-        }
-        
-    def _initialize_esports_integrity(self):
-        """Initialize esports integrity systems"""
-        self.esports_integrity = {
-            'tournament_monitoring': {
-                'active_tournaments': 15,
-                'players_monitored': 2500,
-                'suspicious_activities': 12,
-                'integrity_score': 98.7
-            },
-            'player_verification': {
-                'verified_players': 10000,
-                'background_checks': 5000,
-                'behavioral_baselines': 8000,
-                'risk_assessments': 1200
-            },
-            'real_time_monitoring': {
-                'matches_monitored': 50,
-                'data_points_per_second': 10000,
-                'anomaly_detection_rate': 99.07,
-                'false_positive_rate': 0.5
-            }
-        }
         
     def integrate_game(self, game_name: str, player_count: int, integration_complexity: str) -> Dict[str, Any]:
         """Integrate a new game into the enhanced anti-cheat system"""

@@ -4,6 +4,11 @@ Basic security module tests to verify imports and basic functionality
 
 import pytest
 from unittest.mock import Mock, patch
+import sys
+import os
+
+# Add the project root to Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 def test_disaster_recovery_import():
     """Test that disaster recovery module can be imported"""

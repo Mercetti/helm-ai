@@ -1,0 +1,347 @@
+{
+  "test_timestamp": "2026-01-31T15:38:59.764240",
+  "evasion_techniques_tested": [
+    {
+      "technique": "advanced_humanization",
+      "evasion_data": {
+        "adaptive_learning": {
+          "detection_history": [
+            0.28770938330684337,
+            0.29008101870534697,
+            0.0029696105862319078,
+            0.8521167691203746,
+            0.47286781249151977,
+            0.24187785738940348,
+            0.12223434034104597,
+            0.5680775106730861,
+            0.9712845277381507,
+            0.36063150323189197,
+            0.0005758274999735358,
+            0.07984518117227535,
+            0.7675017823398201,
+            0.25222540080735156,
+            0.18356455168381036,
+            0.40665482797702535,
+            0.7429661036127857,
+            0.22838369830319805,
+            0.7981229437079127,
+            0.7880094641940176,
+            0.3777296277883523,
+            0.7083649823631145,
+            0.054794650549095825,
+            0.0730186352738269,
+            0.9155051767830154,
+            0.8612517573008569,
+            0.015364714768317467,
+            0.19253914772261338,
+            0.22208299552871202,
+            0.8608635985543651,
+            0.8112271046675512,
+            0.9995282129732785,
+            0.07423582438663945,
+            0.13095412688878527,
+            0.8442411424773857,
+            0.8538664816892282,
+            0.2860487409422947,
+            0.11539407709824301,
+            0.17271653655959485,
+            0.9743328636676497,
+            0.730122672860594,
+            0.15398422650489474,
+            0.20288657979757962,
+            0.7738302905316513,
+            0.0751702061238777,
+            0.7158311540307274,
+            0.48575851295749006,
+            0.7480947677581951,
+            0.5487303035595718,
+            0.7481145722922595
+          ],
+          "adaptation_rate": 0.17803157016710155,
+          "learning_algorithm": "reinforcement_learning",
+          "success_rate_trend": [
+            0.40288628912332725,
+            0.5132581133236167,
+            0.441464790273791,
+            0.8234558657915176,
+            0.6044592987989087,
+            0.31556394299166196,
+            0.7174665761258865,
+            0.4310093551091633,
+            0.839634549335629,
+            0.6772977303658971,
+            0.83855520228703,
+            0.33952226874444974,
+            0.6250381584804701,
+            0.5927026695655206,
+            0.4472918955639837,
+            0.8285907676625208,
+            0.6996417740109422,
+            0.38397997086818464,
+            0.8064755836102016,
+            0.4157842279839947
+          ]
+        },
+        "fatigue_simulation": {
+          "hours_played": 5.367062633251301,
+          "fatigue_factor": 0.6708828291564126,
+          "performance_degradation": 0.20126484874692377,
+          "reaction_time_increase": 33.54414145782063,
+          "accuracy_decrease": 0.10063242437346188
+        },
+        "emotion_simulation": {
+          "frustration_level": 0.30566618798153344,
+          "confidence_level": 0.630615551242053,
+          "tilt_probability": 0.1261880667056344,
+          "focus_level": 0.9870253347281525,
+          "emotional_volatility": 0.153370865644871
+        },
+        "skill_progression": {
+          "games_played": 1141,
+          "skill_rating": 2680.953346451848,
+          "improvement_rate": 0.003573144922695839,
+          "plateau_periods": 8,
+          "breakthrough_moments": 1
+        },
+        "context_aware_behavior": {
+          "context_score": 0.46090725338485894
+        },
+        "social_engineering": {
+          "social_manipulation": false
+        }
+      },
+      "detection_results": {
+        "behavioral_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "pattern_recognition": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "statistical_anomaly": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "machine_learning": {
+          "detected": true,
+          "confidence": 0.14358627864194573
+        },
+        "network_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        }
+      },
+      "detection_rate": 0.2,
+      "avg_confidence": 0.028717255728389145,
+      "evasion_success": 0.8
+    },
+    {
+      "technique": "distributed_attacks",
+      "evasion_data": {
+        "botnet_coordination": {
+          "bot_nodes": 10,
+          "coordination_level": 0.9869242490953125
+        },
+        "load_distribution": {
+          "load_distribution": "balanced",
+          "nodes": 12
+        },
+        "geographic_distribution": {
+          "countries": 26,
+          "distribution": "global"
+        },
+        "time_synchronization": {
+          "sync_precision": 0.814409759394971,
+          "nodes": 67
+        },
+        "redundant_systems": {
+          "redundancy_level": 3,
+          "failover": true
+        }
+      },
+      "detection_results": {
+        "behavioral_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "pattern_recognition": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "statistical_anomaly": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "machine_learning": {
+          "detected": true,
+          "confidence": 0.0699422105471571
+        },
+        "network_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        }
+      },
+      "detection_rate": 0.2,
+      "avg_confidence": 0.01398844210943142,
+      "evasion_success": 0.8
+    },
+    {
+      "technique": "zero_day_exploits",
+      "evasion_data": {
+        "vulnerability_scanning": {
+          "scans_performed": 617,
+          "vulnerabilities_found": 2
+        },
+        "exploit_development": {
+          "exploit_complexity": 0.5869642332139182,
+          "development_time": 20
+        },
+        "obfuscation_techniques": {
+          "obfuscation_level": 0.7170071805277535,
+          "techniques": [
+            "packing",
+            "encryption",
+            "anti-debug"
+          ]
+        },
+        "anti_analysis": {
+          "anti_vm": true,
+          "anti_debug": true,
+          "anti_disassembly": true
+        },
+        "persistence_mechanisms": {
+          "persistence_method": "registry",
+          "stealth_level": 0.880087798302996
+        }
+      },
+      "detection_results": {
+        "behavioral_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "pattern_recognition": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "statistical_anomaly": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "machine_learning": {
+          "detected": true,
+          "confidence": 0.08548983403117516
+        },
+        "network_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        }
+      },
+      "detection_rate": 0.2,
+      "avg_confidence": 0.017097966806235033,
+      "evasion_success": 0.8
+    },
+    {
+      "technique": "ai_vs_ai",
+      "evasion_data": {
+        "adversarial_attacks": {
+          "attack_type": "gradient_based",
+          "success_rate": 0.7902839362743077
+        },
+        "model_poisoning": {
+          "poisoned_samples": 198,
+          "impact_level": 0.6613688025086725
+        },
+        "data_manipulation": {
+          "manipulated_samples": 114,
+          "detection_evasion": 0.49739136173850307
+        },
+        "neural_network_evasion": {
+          "evasion_technique": "adversarial_examples",
+          "success_rate": 0.4833858671051616
+        },
+        "reinforcement_learning": {
+          "learning_episodes": 7368,
+          "reward_manipulation": true
+        }
+      },
+      "detection_results": {
+        "behavioral_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "pattern_recognition": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "statistical_anomaly": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "machine_learning": {
+          "detected": true,
+          "confidence": 0.108025894109951
+        },
+        "network_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        }
+      },
+      "detection_rate": 0.2,
+      "avg_confidence": 0.0216051788219902,
+      "evasion_success": 0.8
+    },
+    {
+      "technique": "polymorphic_cheats",
+      "evasion_data": {
+        "code_morphing": {
+          "morphing_frequency": 0.1188032474530913,
+          "signature_changes": 37
+        },
+        "signature_evasion": {
+          "evasion_success": 0.9915336702996842,
+          "techniques_used": 7
+        },
+        "runtime_modification": {
+          "modification_points": 22,
+          "detection_avoidance": 0.5697258870460095
+        },
+        "encrypted_payloads": {
+          "encryption_strength": 0.957241235568757,
+          "key_rotation": true
+        },
+        "self_modifying_code": {
+          "modification_frequency": 0.6643274175169886,
+          "polymorphic_engine": true
+        }
+      },
+      "detection_results": {
+        "behavioral_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "pattern_recognition": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "statistical_anomaly": {
+          "detected": false,
+          "confidence": 0.0
+        },
+        "machine_learning": {
+          "detected": true,
+          "confidence": 0.08264179572377506
+        },
+        "network_analysis": {
+          "detected": false,
+          "confidence": 0.0
+        }
+      },
+      "detection_rate": 0.2,
+      "avg_confidence": 0.016528359144755013,
+      "evasion_success": 0.8
+    }
+  ],
+  "detection_results": [],
+  "security_events": [
+    

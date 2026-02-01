@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class TestHealthcareAISecurityPlugin:
     """Test suite for Healthcare AI Security Plugin"""
     
-    def setup_method(self):
+    def setUp(self):
         """Setup test environment"""
         self.plugin = HealthcareAISecurityPlugin()
         self.test_results = []
