@@ -1,0 +1,22 @@
+{
+  "name": "Healthcare AI Security Plugin",
+  "version": "1.0.0",
+  "enabled": true,
+  "settings": {
+    "max_concurrent_requests": 100,
+    "timeout": 30,
+    "retry_attempts": 3,
+    "log_level": "INFO"
+  },
+  "security": {
+    "hipaa_compliance": true,
+    "data_encryption": true,
+    "audit_logging": true,
+    "retention_days": 2555
+  },
+  "api": {
+    "rate_limit": 1000,
+    "authentication_required": true,
+    "cors_enabled": true
+  }
+}

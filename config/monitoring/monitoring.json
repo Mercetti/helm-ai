@@ -1,0 +1,44 @@
+{
+  "monitoring": {
+    "name": "Stellar Logic AI Monitoring",
+    "version": "1.0.0",
+    "enabled": true,
+    "metrics": {
+      "collection_interval": 60,
+      "retention_days": 30,
+      "export_formats": [
+        "json",
+        "prometheus"
+      ]
+    },
+    "logging": {
+      "level": "INFO",
+      "format": "json",
+      "rotation": "daily",
+      "retention_days": 90
+    },
+    "alerts": {
+      "enabled": true,
+      "channels": [
+        "email",
+        "slack",
+        "webhook"
+      ],
+      "thresholds": {
+        "error_rate": 0.05,
+        "response_time": 2.0,
+        "memory_usage": 0.8,
+        "cpu_usage": 0.8
+      }
+    },
+    "health_checks": {
+      "enabled": true,
+      "interval": 30,
+      "timeout": 10,
+      "endpoints": [
+        "/health",
+        "/metrics"
+      ]
+    }
+  }
+}

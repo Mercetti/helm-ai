@@ -1,0 +1,59 @@
+{
+  "security_policies": {
+    "name": "Stellar Logic AI Security Policies",
+    "version": "1.0.0",
+    "enabled": true,
+    "authentication": {
+      "oauth2": {
+        "enabled": true,
+        "issuer": "https://auth.stellarlogic.ai",
+        "client_id": "stellar_logic_ai_gateway",
+        "scopes": [
+          "read",
+          "write",
+          "admin"
+        ]
+      },
+      "api_keys": {
+        "enabled": true,
+        "header_name": "X-API-Key",
+        "rotation_days": 90
+      }
+    },
+    "encryption": {
+      "data_at_rest": {
+        "algorithm": "AES-256-GCM",
+        "key_rotation_days": 90
+      },
+      "data_in_transit": {
+        "tls_version": "1.3",
+        "cipher_suites": [
+          "TLS_AES_256_GCM_SHA384"
+        ]
+      }
+    },
+    "audit": {
+      "enabled": true,
+      "log_level": "INFO",
+      "retention_days": 2555,
+      "include_sensitive_data": false
+    },
+    "compliance": {
+      "hipaa": {
+        "enabled": true,
+        "phi_protection": true,
+        "audit_required": true
+      },
+      "pci_dss": {
+        "enabled": true,
+        "card_data_protection": true,
+        "audit_required": true
+      },
+      "gdpr": {
+        "enabled": true,
+        "data_protection": true,
+        "consent_required": true
+      }
+    }
+  }
+}

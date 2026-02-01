@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    depends_on:
+      - healthcare-server
+      - financial-server
+      - cybersecurity-server
+      - gaming-server
+    
+  healthcare-server:
+    build: .
+    command: python healthcare_server.py
+    environment:
+      - PLUGIN_NAME=healthcare
+      - PORT=5001
+    ports:
+      - "5001:5001"
+    restart: unless-stopped
+    
+  financial-server:
+    build: .
+    command: python financial_server.py
+    environment:
+      - PLUGIN_NAME=financial
+      - PORT=5002
+    ports:
+      - "5002:5002"
+    restart: unless-stopped
+    
+  cybersecurity-server:
+    build: .
+    command: python cybersecurity_server.py
+    environment:
+      - PLUGIN_NAME=cybersecurity
+      - PORT=5009
+    ports:
+      - "5009:5009"
+    restart: unless-stopped
+    
+  gaming-server:
+    build: .
+    command: python gaming_server.py
+    environment:
+      - PLUGIN_NAME=gaming
+      - PORT=5010
+    ports:
+      - "5010:5010"
+    restart: unless-stopped
+
+volumes:
+  logs:
+    driver: local

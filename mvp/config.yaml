@@ -1,11 +1,11 @@
-# Helm AI Configuration File
-# YAML configuration for all Helm AI services
+# Stellar Logic AI Configuration File
+# YAML configuration for all Stellar Logic AI services
 
 # =============================================================================
 # APPLICATION CONFIGURATION
 # =============================================================================
 application:
-  name: "Helm AI"
+  name: "Stellar Logic AI"
   version: "1.0.0"
   description: "AI-powered anti-cheat detection system"
   environment: "production"

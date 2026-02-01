@@ -1,0 +1,128 @@
+{
+  "timestamp": "2026-01-31T21:17:05.590457",
+  "total_plugins": 13,
+  "healthy_plugins": 0,
+  "unhealthy_plugins": 0,
+  "offline_plugins": 13,
+  "error_plugins": 0,
+  "health_percentage": 0.0,
+  "plugin_details": {
+    "real-estate-plugin": {
+      "plugin_id": "real-estate-plugin",
+      "name": "Real Estate & Property Plugin",
+      "port": 5007,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.576854"
+    },
+    "helm-api": {
+      "plugin_id": "helm-api",
+      "name": "Core API Server",
+      "port": 5001,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.575128"
+    },
+    "ecommerce-plugin": {
+      "plugin_id": "ecommerce-plugin",
+      "name": "E-Commerce Plugin",
+      "port": 5011,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.580009"
+    },
+    "automotive-transportation-plugin": {
+      "plugin_id": "automotive-transportation-plugin",
+      "name": "Automotive & Transportation Plugin",
+      "port": 5006,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.576560"
+    },
+    "healthcare-plugin": {
+      "plugin_id": "healthcare-plugin",
+      "name": "Healthcare Plugin",
+      "port": 5002,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.575777"
+    },
+    "media-entertainment-plugin": {
+      "plugin_id": "media-entertainment-plugin",
+      "name": "Media & Entertainment Plugin",
+      "port": 5012,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.580815"
+    },
+    "manufacturing-plugin": {
+      "plugin_id": "manufacturing-plugin",
+      "name": "Manufacturing & IoT Plugin",
+      "port": 5009,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.579195"
+    },
+    "education-plugin": {
+      "plugin_id": "education-plugin",
+      "name": "Education & Academic Plugin",
+      "port": 5010,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.579575"
+    },
+    "government-defense-plugin": {
+      "plugin_id": "government-defense-plugin",
+      "name": "Government & Defense Plugin",
+      "port": 5005,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.576223"
+    },
+    "financial-plugin": {
+      "plugin_id": "financial-plugin",
+      "name": "Financial Services Plugin",
+      "port": 5008,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:21.577156"
+    },
+    "pharmaceutical-plugin": {
+      "plugin_id": "pharmaceutical-plugin",
+      "name": "Pharmaceutical & Research Plugin",
+      "port": 5013,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:25.680478"
+    },
+    "gaming-plugin": {
+      "plugin_id": "gaming-plugin",
+      "name": "Enhanced Gaming Plugin",
+      "port": 5015,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:25.681062"
+    },
+    "enterprise-plugin": {
+      "plugin_id": "enterprise-plugin",
+      "name": "Enterprise Solutions Plugin",
+      "port": 5014,
+      "status": "offline",
+      "response_time": null,
+      "error": "Connection refused - plugin not running",
+      "timestamp": "2026-01-31T21:15:25.680837"
+    }
+  }
+}

@@ -1,3 +1,40 @@
+# -*- coding: utf-8 -*-
+
+# UTF-8 Encoding Utilities
+import sys
+import locale
+
+# Set UTF-8 encoding for all operations
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+except:
+    pass  # Fallback if locale not available
+
+def safe_encode(text):
+    """Safely encode text to UTF-8"""
+    if isinstance(text, str):
+        return text.encode('utf-8', errors='ignore').decode('utf-8')
+    return text
+
+def safe_write_file(file_path, content):
+    """Safely write file with UTF-8 encoding"""
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+    except UnicodeEncodeError:
+        with open(file_path, 'w', encoding='utf-8', errors='ignore') as f:
+            f.write(content)
+
+def safe_read_file(file_path):
+    """Safely read file with UTF-8 encoding"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except UnicodeDecodeError:
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            return f.read()
+
 """
 🏛️ GOVERNMENT & DEFENSE PLUGIN
 Stellar Logic AI - National Security & Defense

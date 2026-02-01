@@ -1,0 +1,35 @@
+{
+  "production": {
+    "debug": false,
+    "testing": false,
+    "secret_key": "stellar-logic-ai-production-secret-key-change-immediately",
+    "security": {
+      "https_enforced": true,
+      "csrf_protection": true,
+      "auth_rate_limiting": true,
+      "password_policy": true,
+      "jwt_rotation": true,
+      "input_validation": true,
+      "api_key_management": true,
+      "security_headers": true,
+      "security_logging": true,
+      "sql_injection_prevention": true
+    },
+    "ssl": {
+      "cert_file": "production/ssl/stellar_logic_ai.crt",
+      "key_file": "production/ssl/stellar_logic_ai.key",
+      "ca_file": "production/ssl/ca.crt"
+    },
+    "logging": {
+      "level": "INFO",
+      "file": "production/logs/stellar_security.log",
+      "max_size": "10MB",
+      "backup_count": 5
+    },
+    "monitoring": {
+      "enabled": true,
+      "alert_threshold": 100,
+      "metrics_port": 9090
+    }
+  }
+}

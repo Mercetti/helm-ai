@@ -1,0 +1,22 @@
+{
+  "name": "Gaming AI Security Plugin",
+  "version": "1.0.0",
+  "enabled": true,
+  "settings": {
+    "max_concurrent_requests": 1000,
+    "timeout": 15,
+    "retry_attempts": 2,
+    "log_level": "INFO"
+  },
+  "security": {
+    "anti_cheat_detection": true,
+    "tournament_integrity": true,
+    "player_protection": true,
+    "real_time_monitoring": true
+  },
+  "api": {
+    "rate_limit": 10000,
+    "authentication_required": true,
+    "cors_enabled": true
+  }
+}

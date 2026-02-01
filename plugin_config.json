@@ -1,0 +1,106 @@
+{
+  "helm-api": {
+    "name": "Core API Server",
+    "port": 5001,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "healthcare-plugin": {
+    "name": "Healthcare Plugin",
+    "port": 5002,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "government-defense-plugin": {
+    "name": "Government & Defense Plugin",
+    "port": 5005,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "automotive-transportation-plugin": {
+    "name": "Automotive & Transportation Plugin",
+    "port": 5006,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "real-estate-plugin": {
+    "name": "Real Estate & Property Plugin",
+    "port": 5007,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "financial-plugin": {
+    "name": "Financial Services Plugin",
+    "port": 5008,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "manufacturing-plugin": {
+    "name": "Manufacturing & IoT Plugin",
+    "port": 5009,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "education-plugin": {
+    "name": "Education & Academic Plugin",
+    "port": 5010,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "ecommerce-plugin": {
+    "name": "E-Commerce Plugin",
+    "port": 5011,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "media-entertainment-plugin": {
+    "name": "Media & Entertainment Plugin",
+    "port": 5012,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "pharmaceutical-plugin": {
+    "name": "Pharmaceutical & Research Plugin",
+    "port": 5013,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "enterprise-plugin": {
+    "name": "Enterprise Solutions Plugin",
+    "port": 5014,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  },
+  "gaming-plugin": {
+    "name": "Enhanced Gaming Plugin",
+    "port": 5015,
+    "enabled": true,
+    "host": "localhost",
+    "debug": false,
+    "environment": "production"
+  }
+}

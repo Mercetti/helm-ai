@@ -1,0 +1,22 @@
+{
+  "name": "Cybersecurity AI Security Plugin",
+  "version": "1.0.0",
+  "enabled": true,
+  "settings": {
+    "max_concurrent_requests": 500,
+    "timeout": 60,
+    "retry_attempts": 5,
+    "log_level": "INFO"
+  },
+  "security": {
+    "threat_intelligence": true,
+    "real_time_monitoring": true,
+    "automated_response": true,
+    "audit_logging": true
+  },
+  "api": {
+    "rate_limit": 5000,
+    "authentication_required": true,
+    "cors_enabled": true
+  }
+}

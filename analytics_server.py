@@ -514,15 +514,6 @@ def get_metrics():
 if __name__ == '__main__':
     logger.info("Starting Analytics Server...")
     app.run(host='0.0.0.0', port=5001, debug=False)
-        
-        # Total users today
-        cursor.execute('''
-            SELECT COUNT(DISTINCT user_id) FROM user_activity 
-            WHERE date(timestamp) = date('now')
-        ''')
-        daily_users = cursor.fetchone()[0]
-        
-        # Feature usage today
         cursor.execute('''
             SELECT feature_name, SUM(usage_count) as total_usage
             FROM feature_usage 

@@ -2,7 +2,7 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: 'helm-ai'
+    cluster: 'stellar-logic-ai'
     environment: 'production'
 
 rule_files:
@@ -23,8 +23,8 @@ scrape_configs:
     scrape_interval: 30s
     metrics_path: /metrics
 
-  # Helm AI API Server
-  - job_name: 'helm-ai-api'
+  # Stellar Logic AI API Server
+  - job_name: 'stellar-logic-ai-api'
     static_configs:
       - targets: ['api-server:8000']
     scrape_interval: 15s

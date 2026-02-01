@@ -1,0 +1,55 @@
+{
+  "deployment": {
+    "name": "Stellar Logic AI Deployment",
+    "version": "1.0.0",
+    "environments": {
+      "development": {
+        "replicas": 1,
+        "resources": {
+          "cpu": "0.5",
+          "memory": "512Mi"
+        },
+        "debug": true,
+        "log_level": "DEBUG"
+      },
+      "staging": {
+        "replicas": 2,
+        "resources": {
+          "cpu": "1.0",
+          "memory": "1Gi"
+        },
+        "debug": false,
+        "log_level": "INFO"
+      },
+      "production": {
+        "replicas": 5,
+        "resources": {
+          "cpu": "2.0",
+          "memory": "2Gi"
+        },
+        "debug": false,
+        "log_level": "WARN"
+      }
+    },
+    "scaling": {
+      "enabled": true,
+      "min_replicas": 2,
+      "max_replicas": 10,
+      "target_cpu_utilization": 70,
+      "target_memory_utilization": 80
+    },
+    "database": {
+      "host": "localhost",
+      "port": 5432,
+      "name": "stellar_logic_ai",
+      "ssl_mode": "require",
+      "connection_pool_size": 20
+    },
+    "redis": {
+      "host": "localhost",
+      "port": 6379,
+      "db": 0,
+      "connection_pool_size": 10
+    }
+  }
+}

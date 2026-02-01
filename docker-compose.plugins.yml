@@ -1,0 +1,463 @@
+version: '3.8'
+
+services:
+  # Helm AI Application (existing)
+  helm-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: helm-ai-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - S3_BUCKET=${S3_BUCKET}
+      - MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY}
+      - MAILCHIMP_LIST_ID=${MAILCHIMP_LIST_ID}
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
+      - SLACK_SIGNING_SECRET=${SLACK_SIGNING_SECRET}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - ENABLE_RATE_LIMITING=${ENABLE_RATE_LIMITING:-true}
+      - ENABLE_INPUT_VALIDATION=${ENABLE_INPUT_VALIDATION:-true}
+      - ENABLE_REQUEST_LOGGING=${ENABLE_REQUEST_LOGGING:-true}
+      - ENABLE_SECURITY_HEADERS=${ENABLE_SECURITY_HEADERS:-true}
+    networks:
+      - helm-network
+    depends_on:
+      - postgres
+      - redis
+
+  # Core API Server
+  helm-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: helm-api-server
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=development
+      - API_PORT=5001
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Healthcare Plugin
+  healthcare-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.healthcare
+    container_name: healthcare-plugin
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5002
+      - PLUGIN_TYPE=healthcare
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Government & Defense Plugin
+  government-defense-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.government
+    container_name: government-defense-plugin
+    ports:
+      - "5005:5005"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5005
+      - PLUGIN_TYPE=government_defense
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Automotive & Transportation Plugin
+  automotive-transportation-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.automotive
+    container_name: automotive-transportation-plugin
+    ports:
+      - "5006:5006"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5006
+      - PLUGIN_TYPE=automotive_transportation
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Real Estate & Property Plugin
+  real-estate-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.realestate
+    container_name: real-estate-plugin
+    ports:
+      - "5007:5007"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5007
+      - PLUGIN_TYPE=real_estate
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5007/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Financial Services Plugin
+  financial-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.financial
+    container_name: financial-plugin
+    ports:
+      - "5008:5008"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5008
+      - PLUGIN_TYPE=financial
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5008/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Manufacturing & IoT Plugin
+  manufacturing-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.manufacturing
+    container_name: manufacturing-plugin
+    ports:
+      - "5009:5009"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5009
+      - PLUGIN_TYPE=manufacturing
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5009/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Education & Academic Plugin
+  education-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.education
+    container_name: education-plugin
+    ports:
+      - "5010:5010"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5010
+      - PLUGIN_TYPE=education
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # E-Commerce Plugin
+  ecommerce-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.ecommerce
+    container_name: ecommerce-plugin
+    ports:
+      - "5011:5011"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5011
+      - PLUGIN_TYPE=ecommerce
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5011/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Media & Entertainment Plugin
+  media-entertainment-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.media
+    container_name: media-entertainment-plugin
+    ports:
+      - "5012:5012"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5012
+      - PLUGIN_TYPE=media_entertainment
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5012/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Pharmaceutical & Research Plugin
+  pharmaceutical-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.pharmaceutical
+    container_name: pharmaceutical-plugin
+    ports:
+      - "5013:5013"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5013
+      - PLUGIN_TYPE=pharmaceutical
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5013/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Enterprise Solutions Plugin
+  enterprise-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.enterprise
+    container_name: enterprise-plugin
+    ports:
+      - "5014:5014"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5014
+      - PLUGIN_TYPE=enterprise
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5014/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Enhanced Gaming Plugin
+  gaming-plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile.gaming
+    container_name: gaming-plugin
+    ports:
+      - "5015:5015"
+    environment:
+      - FLASK_ENV=development
+      - PLUGIN_PORT=5015
+      - PLUGIN_TYPE=gaming
+      - DATABASE_URL=postgresql://helm_user:helm_password@postgres:5432/helm_ai
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    networks:
+      - helm-network
+    depends_on:
+      - helm-api
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5015/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Database (existing)
+  postgres:
+    image: postgres:15
+    container_name: helm-postgres
+    environment:
+      - POSTGRES_DB=helm_ai
+      - POSTGRES_USER=helm_user
+      - POSTGRES_PASSWORD=helm_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - helm-network
+    restart: unless-stopped
+
+  # Redis (existing)
+  redis:
+    image: redis:7-alpine
+    container_name: helm-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - helm-network
+    restart: unless-stopped
+
+  # Nginx (existing)
+  nginx:
+    image: nginx:alpine
+    container_name: helm-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    networks:
+      - helm-network
+    depends_on:
+      - helm-ai
+      - helm-api
+    restart: unless-stopped
+
+networks:
+  helm-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
