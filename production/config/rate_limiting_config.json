@@ -1,0 +1,37 @@
+{
+  "enabled": true,
+  "default_limits": {
+    "requests_per_minute": 60,
+    "requests_per_hour": 1000,
+    "requests_per_day": 10000
+  },
+  "endpoint_limits": {
+    "/login": {
+      "requests_per_minute": 5,
+      "requests_per_hour": 20
+    },
+    "/register": {
+      "requests_per_minute": 3,
+      "requests_per_hour": 10
+    },
+    "/api/auth": {
+      "requests_per_minute": 10,
+      "requests_per_hour": 100
+    },
+    "/api/data": {
+      "requests_per_minute": 30,
+      "requests_per_hour": 500
+    },
+    "/security-status": {
+      "requests_per_minute": 20,
+      "requests_per_hour": 200
+    }
+  },
+  "ip_whitelist": [
+    "127.0.0.1",
+    "::1"
+  ],
+  "penalty_threshold": 100,
+  "penalty_duration": 300,
+  "cleanup_interval": 3600
+}

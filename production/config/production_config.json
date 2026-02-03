@@ -18,7 +18,17 @@
     "ssl": {
       "cert_file": "production/ssl/stellar_logic_ai.crt",
       "key_file": "production/ssl/stellar_logic_ai.key",
-      "ca_file": "production/ssl/ca.crt"
+      "ca_file": "production/ssl/ca.crt",
+      "auto_generate": true,
+      "certificate_info": {
+        "common_name": "stellarlogic.ai",
+        "organization": "Stellar Logic AI",
+        "country": "US",
+        "state": "CA",
+        "locality": "San Francisco",
+        "valid_days": 365,
+        "key_size": 2048
+      }
     },
     "logging": {
       "level": "INFO",
@@ -30,6 +40,24 @@
       "enabled": true,
       "alert_threshold": 100,
       "metrics_port": 9090
+    },
+    "https_enforcement": {
+      "force_https": true,
+      "strict_transport_security": true,
+      "hsts_max_age": 31536000,
+      "hsts_include_subdomains": true,
+      "hsts_preload": true,
+      "redirect_http_to_https": true,
+      "ssl_protocols": [
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      "ssl_ciphers": [
+        "ECDHE-RSA-AES256-GCM-SHA384",
+        "ECDHE-RSA-AES128-GCM-SHA256",
+        "ECDHE-RSA-AES256-SHA384",
+        "ECDHE-RSA-AES128-SHA256"
+      ]
     }
   }
 }

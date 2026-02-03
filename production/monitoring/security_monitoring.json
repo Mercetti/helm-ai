@@ -1,0 +1,25 @@
+{
+  "security_monitoring": {
+    "enabled": true,
+    "log_file": "production/logs/stellar_security.log",
+    "alert_thresholds": {
+      "failed_logins": 10,
+      "suspicious_patterns": 5,
+      "rate_limit_hits": 100,
+      "csrf_failures": 10,
+      "sql_injection_attempts": 3,
+      "xss_attempts": 3,
+      "unauthorized_access": 5
+    },
+    "notifications": {
+      "email": "security@stellarlogic.ai",
+      "webhook": "https://api.stellarlogic.ai/alerts",
+      "slack": "#security-alerts"
+    },
+    "metrics": {
+      "collection_interval": 60,
+      "retention_days": 30,
+      "export_format": "json"
+    }
+  }
+}

@@ -1,0 +1,313 @@
+{
+  "timestamp": "2026-02-01T20:33:34.798589",
+  "system": "Stellar Logic AI",
+  "test_type": "security_performance_testing",
+  "test_results": [
+    {
+      "test_name": "Individual Security Components",
+      "timestamp": "2026-02-01T20:28:36.417547",
+      "metrics": {
+        "test_type": "individual_components",
+        "component_results": {
+          "https_enforcement": {
+            "component": "https_enforcement",
+            "total_requests": 50,
+            "avg_response_time_ms": 41.006669998168945,
+            "min_response_time_ms": 18.96834373474121,
+            "max_response_time_ms": 60.23097038269043,
+            "p95_response_time_ms": 59.59177017211914,
+            "p99_response_time_ms": 60.23097038269043,
+            "requests_per_second": 24.386276672664536,
+            "avg_memory_usage_mb": 97.00154034562628,
+            "peak_memory_usage_mb": 148.82047083084512,
+            "avg_cpu_usage_percent": 15.207871022487549,
+            "peak_cpu_usage_percent": 24.714585572973157
+          },
+          "csrf_protection": {
+            "component": "csrf_protection",
+            "total_requests": 50,
+            "avg_response_time_ms": 38.372154235839844,
+            "min_response_time_ms": 20.24221420288086,
+            "max_response_time_ms": 61.261892318725586,
+            "p95_response_time_ms": 57.03902244567871,
+            "p99_response_time_ms": 61.261892318725586,
+            "requests_per_second": 26.060564487828348,
+            "avg_memory_usage_mb": 101.6185360168981,
+            "peak_memory_usage_mb": 148.5682304658065,
+            "avg_cpu_usage_percent": 15.189675822769583,
+            "peak_cpu_usage_percent": 23.811467764477598
+          },
+          "rate_limiting": {
+            "component": "rate_limiting",
+            "total_requests": 50,
+            "avg_response_time_ms": 39.261627197265625,
+            "min_response_time_ms": 19.154787063598633,
+            "max_response_time_ms": 60.70876121520996,
+            "p95_response_time_ms": 57.39474296569824,
+            "p99_response_time_ms": 60.70876121520996,
+            "requests_per_second": 25.470161870154097,
+            "avg_memory_usage_mb": 107.3494718034679,
+            "peak_memory_usage_mb": 145.93603776584695,
+            "avg_cpu_usage_percent": 16.31414462719677,
+            "peak_cpu_usage_percent": 24.980231702140927
+          },
+          "input_validation": {
+            "component": "input_validation",
+            "total_requests": 50,
+            "avg_response_time_ms": 36.411805152893066,
+            "min_response_time_ms": 19.66714859008789,
+            "max_response_time_ms": 57.49011039733887,
+            "p95_response_time_ms": 53.53832244873047,
+            "p99_response_time_ms": 57.49011039733887,
+            "requests_per_second": 27.46362054287072,
+            "avg_memory_usage_mb": 99.19648519836032,
+            "peak_memory_usage_mb": 149.92736614209366,
+            "avg_cpu_usage_percent": 14.881587192921137,
+            "peak_cpu_usage_percent": 24.973530061462156
+          },
+          "security_headers": {
+            "component": "security_headers",
+            "total_requests": 50,
+            "avg_response_time_ms": 39.08082962036133,
+            "min_response_time_ms": 19.01698112487793,
+            "max_response_time_ms": 59.530019760131836,
+            "p95_response_time_ms": 56.86640739440918,
+            "p99_response_time_ms": 59.530019760131836,
+            "requests_per_second": 25.587993134081128,
+            "avg_memory_usage_mb": 98.89304719622926,
+            "peak_memory_usage_mb": 149.16258488002939,
+            "avg_cpu_usage_percent": 16.26702971653007,
+            "peak_cpu_usage_percent": 24.38110847270484
+          },
+          "security_logging": {
+            "component": "security_logging",
+            "total_requests": 50,
+            "avg_response_time_ms": 40.6740665435791,
+            "min_response_time_ms": 18.744945526123047,
+            "max_response_time_ms": 58.73894691467285,
+            "p95_response_time_ms": 58.01653861999512,
+            "p99_response_time_ms": 58.73894691467285,
+            "requests_per_second": 24.585690219309093,
+            "avg_memory_usage_mb": 98.38263790223792,
+            "peak_memory_usage_mb": 148.0511956238878,
+            "avg_cpu_usage_percent": 15.221608475636009,
+            "peak_cpu_usage_percent": 24.855696241014748
+          }
+        },
+        "avg_component_response_time": 39.13452545801798
+      }
+    },
+    {
+      "test_name": "Concurrent Load Testing",
+      "timestamp": "2026-02-01T20:30:33.363375",
+      "metrics": {
+        "test_type": "concurrent_load_scenarios",
+        "load_results": {
+          "10_users": {
+            "concurrent_users": 10,
+            "total_duration_seconds": 27.98592495918274,
+            "total_requests": 170,
+            "total_errors": 2,
+            "error_rate_percent": 1.1764705882352942,
+            "avg_response_time_ms": 64.78309070362764,
+            "min_response_time_ms": 19.771337509155273,
+            "max_response_time_ms": 110.76235771179199,
+            "p95_response_time_ms": 104.54106330871582,
+            "p99_response_time_ms": 108.74485969543457,
+            "requests_per_second": 6.074482092264012,
+            "throughput_mbps": 0.005932111418226574
+          },
+          "25_users": {
+            "concurrent_users": 25,
+            "total_duration_seconds": 28.59415912628174,
+            "total_requests": 401,
+            "total_errors": 9,
+            "error_rate_percent": 2.2443890274314215,
+            "avg_response_time_ms": 64.4784140170661,
+            "min_response_time_ms": 17.51399040222168,
+            "max_response_time_ms": 109.92264747619629,
+            "p95_response_time_ms": 104.92205619812012,
+            "p99_response_time_ms": 108.16287994384766,
+            "requests_per_second": 14.023843059313084,
+            "throughput_mbps": 0.013695159237610433
+          },
+          "50_users": {
+            "concurrent_users": 50,
+            "total_duration_seconds": 29.834906339645386,
+            "total_requests": 769,
+            "total_errors": 10,
+            "error_rate_percent": 1.3003901170351104,
+            "avg_response_time_ms": 66.24420473572492,
+            "min_response_time_ms": 18.4783935546875,
+            "max_response_time_ms": 111.34576797485352,
+            "p95_response_time_ms": 105.73387145996094,
+            "p99_response_time_ms": 108.5667610168457,
+            "requests_per_second": 25.775177278774734,
+            "throughput_mbps": 0.02517107156130345
+          },
+          "100_users": {
+            "concurrent_users": 100,
+            "total_duration_seconds": 30.52511763572693,
+            "total_requests": 1607,
+            "total_errors": 38,
+            "error_rate_percent": 2.3646546359676415,
+            "avg_response_time_ms": 64.91782224615983,
+            "min_response_time_ms": 18.27383041381836,
+            "max_response_time_ms": 111.38105392456055,
+            "p95_response_time_ms": 105.0882339477539,
+            "p99_response_time_ms": 108.56080055236816,
+            "requests_per_second": 52.645169764035565,
+            "throughput_mbps": 0.05141129859769098
+          }
+        },
+        "max_throughput": 52.645169764035565
+      }
+    },
+    {
+      "test_name": "Security Scalability",
+      "timestamp": "2026-02-01T20:33:05.021488",
+      "metrics": {
+        "test_type": "scalability_analysis",
+        "scalability_results": [
+          {
+            "concurrent_users": 10,
+            "total_duration_seconds": 29.02482771873474,
+            "total_requests": 146,
+            "total_errors": 0,
+            "error_rate_percent": 0.0,
+            "avg_response_time_ms": 67.99642680442497,
+            "min_response_time_ms": 20.254135131835938,
+            "max_response_time_ms": 111.22560501098633,
+            "p95_response_time_ms": 105.11660575866699,
+            "p99_response_time_ms": 109.03406143188477,
+            "requests_per_second": 5.030176282691971,
+            "throughput_mbps": 0.004912281526066378,
+            "test_type": "scalability"
+          },
+          {
+            "concurrent_users": 25,
+            "total_duration_seconds": 29.522708415985107,
+            "total_requests": 387,
+            "total_errors": 9,
+            "error_rate_percent": 2.3255813953488373,
+            "avg_response_time_ms": 64.43805287974749,
+            "min_response_time_ms": 18.747329711914062,
+            "max_response_time_ms": 109.94219779968262,
+            "p95_response_time_ms": 103.2571792602539,
+            "p99_response_time_ms": 107.09595680236816,
+            "requests_per_second": 13.10855340733096,
+            "throughput_mbps": 0.012801321686846641,
+            "test_type": "scalability"
+          },
+          {
+            "concurrent_users": 50,
+            "total_duration_seconds": 30.201647996902466,
+            "total_requests": 789,
+            "total_errors": 13,
+            "error_rate_percent": 1.6476552598225602,
+            "avg_response_time_ms": 64.10142405404791,
+            "min_response_time_ms": 18.381357192993164,
+            "max_response_time_ms": 108.75105857849121,
+            "p95_response_time_ms": 104.94852066040039,
+            "p99_response_time_ms": 107.61260986328125,
+            "requests_per_second": 26.124402220730513,
+            "throughput_mbps": 0.02551211154368214,
+            "test_type": "scalability"
+          },
+          {
+            "concurrent_users": 100,
+            "total_duration_seconds": 31.67302441596985,
+            "total_requests": 1564,
+            "total_errors": 27,
+            "error_rate_percent": 1.7263427109974423,
+            "avg_response_time_ms": 64.32402926637694,
+            "min_response_time_ms": 17.642736434936523,
+            "max_response_time_ms": 112.09917068481445,
+            "p95_response_time_ms": 105.1945686340332,
+            "p99_response_time_ms": 109.0707778930664,
+            "requests_per_second": 49.379559699117834,
+            "throughput_mbps": 0.04822222626866976,
+            "test_type": "scalability"
+          },
+          {
+            "concurrent_users": 200,
+            "total_duration_seconds": 31.227932691574097,
+            "total_requests": 3192,
+            "total_errors": 51,
+            "error_rate_percent": 1.5977443609022555,
+            "avg_response_time_ms": 64.09712094710883,
+            "min_response_time_ms": 17.318010330200195,
+            "max_response_time_ms": 111.3126277923584,
+            "p95_response_time_ms": 104.91800308227539,
+            "p99_response_time_ms": 108.69908332824707,
+            "requests_per_second": 102.21618035129376,
+            "throughput_mbps": 0.09982048862431031,
+            "test_type": "scalability"
+          }
+        ],
+        "max_concurrent_users_tested": 200,
+        "avg_performance_degradation_percent": -113.97726832880306,
+        "scalability_grade": "A"
+      }
+    },
+    {
+      "test_name": "Security Overhead Impact",
+      "timestamp": "2026-02-01T20:33:34.798101",
+      "metrics": {
+        "test_type": "security_overhead_analysis",
+        "baseline_performance": {
+          "avg_response_time_ms": 20.978076457977295,
+          "min_response_time_ms": 10.717630386352539,
+          "max_response_time_ms": 30.37118911743164,
+          "requests_per_second": 47.66881282004918
+        },
+        "individual_feature_overheads": {
+          "https_enforcement": {
+            "avg_response_time_ms": 40.33777475357056,
+            "overhead_percent": 92.28538343052604,
+            "requests_per_second": 24.790658535557505
+          },
+          "csrf_protection": {
+            "avg_response_time_ms": 36.879096031188965,
+            "overhead_percent": 75.79827256833654,
+            "requests_per_second": 27.115632095599402
+          },
+          "rate_limiting": {
+            "avg_response_time_ms": 40.55047273635864,
+            "overhead_percent": 93.29928946339876,
+            "requests_per_second": 24.660624957483495
+          },
+          "input_validation": {
+            "avg_response_time_ms": 39.249796867370605,
+            "overhead_percent": 87.09912200956421,
+            "requests_per_second": 25.477838863194894
+          },
+          "security_headers": {
+            "avg_response_time_ms": 40.404696464538574,
+            "overhead_percent": 92.60439128189923,
+            "requests_per_second": 24.749598128466477
+          },
+          "security_logging": {
+            "avg_response_time_ms": 39.179415702819824,
+            "overhead_percent": 86.76362335366139,
+            "requests_per_second": 25.523606773135924
+          }
+        },
+        "total_security_overhead": {
+          "avg_response_time_ms": 40.03874063491821,
+          "overhead_percent": 90.85992328764134,
+          "requests_per_second": 24.97581053106074
+        },
+        "overhead_grade": "F"
+      }
+    }
+  ],
+  "performance_grade": "F",
+  "recommendations": [
+    "Implement caching for frequently accessed security data",
+    "Monitor security overhead in production environment",
+    "Consider load testing with real-world traffic patterns",
+    "Implement performance monitoring for security components",
+    "Optimize database queries used by security components"
+  ]
+}

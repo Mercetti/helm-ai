@@ -1,0 +1,53 @@
+{
+  "security_scanning": {
+    "enabled": true,
+    "schedule": {
+      "code_analysis": "daily",
+      "dependency_scan": "daily",
+      "configuration_audit": "weekly",
+      "network_scan": "weekly",
+      "web_application": "daily",
+      "infrastructure": "monthly"
+    },
+    "scanners": {
+      "code_analysis": {
+        "enabled": true,
+        "languages": [
+          "python",
+          "javascript"
+        ]
+      },
+      "dependency_scan": {
+        "enabled": true,
+        "check_transitive": true
+      },
+      "configuration_audit": {
+        "enabled": true,
+        "check_defaults": true
+      },
+      "network_scan": {
+        "enabled": true,
+        "port_range": "1-65535"
+      },
+      "web_application": {
+        "enabled": true,
+        "check_owasp": true
+      },
+      "infrastructure": {
+        "enabled": true,
+        "check_hardening": true
+      }
+    },
+    "thresholds": {
+      "max_critical_vulns": 0,
+      "max_high_vulns": 5,
+      "max_medium_vulns": 20,
+      "min_scan_score": 7.0
+    },
+    "notifications": {
+      "email_alerts": true,
+      "slack_notifications": true,
+      "dashboard_updates": true
+    }
+  }
+}

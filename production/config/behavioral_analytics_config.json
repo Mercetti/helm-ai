@@ -1,0 +1,17 @@
+{
+  "behavioral_analytics": {
+    "enabled": true,
+    "models": {
+      "statistical": {
+        "enabled": true,
+        "z_score_threshold": 3.0
+      }
+    },
+    "anomaly_detection": {
+      "sensitivity": 0.7,
+      "min_confidence": 0.6,
+      "alert_threshold": 0.8,
+      "auto_response": true
+    }
+  }
+}

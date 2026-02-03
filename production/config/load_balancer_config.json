@@ -1,0 +1,62 @@
+{
+  "load_balancer": {
+    "enabled": true,
+    "algorithm": "WEIGHTED_ROUND_ROBIN",
+    "health_check": {
+      "interval": 30,
+      "timeout": 5,
+      "path": "/health",
+      "expected_status": 200
+    },
+    "security": {
+      "ssl_termination": true,
+      "security_headers": true,
+      "rate_limiting": true,
+      "rate_limit": {
+        "requests_per_minute": 1000,
+        "burst_size": 100
+      },
+      "ddos_protection": true,
+      "ddos_threshold": 1000,
+      "web_application_firewall": true,
+      "waf_rules": [
+        "SQL_INJECTION",
+        "XSS",
+        "PATH_TRAVERSAL"
+      ]
+    },
+    "session_affinity": {
+      "enabled": true,
+      "timeout": 3600
+    },
+    "backend_servers": [
+      {
+        "server_id": "web01",
+        "host": "192.168.1.10",
+        "port": 8080,
+        "weight": 3,
+        "max_connections": 1000,
+        "ssl_enabled": true,
+        "location": "us-east-1"
+      },
+      {
+        "server_id": "web02",
+        "host": "192.168.1.11",
+        "port": 8080,
+        "weight": 2,
+        "max_connections": 1000,
+        "ssl_enabled": true,
+        "location": "us-east-1"
+      },
+      {
+        "server_id": "web03",
+        "host": "192.168.1.12",
+        "port": 8080,
+        "weight": 1,
+        "max_connections": 500,
+        "ssl_enabled": true,
+        "location": "us-west-1"
+      }
+    ]
+  }
+}

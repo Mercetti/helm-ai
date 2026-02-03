@@ -1,0 +1,31 @@
+{
+  "zero_trust": {
+    "enabled": true,
+    "principles": {
+      "never_trust": true,
+      "always_verify": true,
+      "least_privilege": true,
+      "assume_compromise": true
+    },
+    "session": {
+      "max_duration": 3600,
+      "reauth_threshold": 0.7,
+      "device_trust_threshold": 0.6
+    },
+    "policy": {
+      "default_deny": true,
+      "policy_cache_ttl": 300,
+      "max_policies_per_user": 50
+    },
+    "device": {
+      "initial_trust_score": 0.5,
+      "trust_decay_rate": 0.1,
+      "max_devices_per_user": 10
+    },
+    "context": {
+      "location_verification": true,
+      "time_verification": true,
+      "behavior_verification": true
+    }
+  }
+}

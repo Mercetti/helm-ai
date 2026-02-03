@@ -1,0 +1,50 @@
+{
+  "ai_threat_detection": {
+    "enabled": true,
+    "models": {
+      "sql_injection": {
+        "enabled": true,
+        "threshold": 0.8
+      },
+      "xss_attack": {
+        "enabled": true,
+        "threshold": 0.7
+      },
+      "brute_force": {
+        "enabled": true,
+        "threshold": 0.9
+      },
+      "ddos_attack": {
+        "enabled": true,
+        "threshold": 0.8
+      },
+      "anomalous_access": {
+        "enabled": true,
+        "threshold": 0.6
+      },
+      "malicious_payload": {
+        "enabled": true,
+        "threshold": 0.7
+      },
+      "suspicious_patterns": {
+        "enabled": true,
+        "threshold": 0.6
+      },
+      "credential_stuffing": {
+        "enabled": true,
+        "threshold": 0.9
+      }
+    },
+    "response_actions": {
+      "block_ip": true,
+      "alert_team": true,
+      "log_event": true,
+      "quarantine_session": true
+    },
+    "learning": {
+      "continuous_learning": true,
+      "model_update_interval": 3600,
+      "feedback_collection": true
+    }
+  }
+}

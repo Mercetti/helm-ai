@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "token_length": 32,
+  "token_expiry": 3600,
+  "refresh_threshold": 300,
+  "secure_cookie": true,
+  "http_only": true,
+  "same_site": "Strict",
+  "exempt_endpoints": [
+    "/health",
+    "/security-status"
+  ],
+  "header_name": "X-CSRF-Token",
+  "form_field_name": "csrf_token",
+  "cookie_name": "stellar_csrf_token"
+}

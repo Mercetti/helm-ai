@@ -1,0 +1,12 @@
+{
+  "ip_requests": {},
+  "endpoint_requests": {},
+  "blocked_ips": {},
+  "penalties": {},
+  "statistics": {
+    "total_requests": 0,
+    "blocked_requests": 0,
+    "active_ips": 0,
+    "last_cleanup": "2026-02-01T20:16:59.483599"
+  }
+}

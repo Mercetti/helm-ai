@@ -1,0 +1,58 @@
+{
+  "security_performance": {
+    "enabled": true,
+    "optimization": {
+      "auto_optimize": true,
+      "optimization_interval": 3600,
+      "min_improvement_threshold": 5.0,
+      "max_optimization_attempts": 3
+    },
+    "targets": {
+      "max_response_time": 100,
+      "min_throughput": 1000,
+      "max_cpu_usage": 70,
+      "max_memory_usage": 80,
+      "max_error_rate": 1.0
+    },
+    "components": {
+      "rate_limiting": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "csrf_protection": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "authentication": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "authorization": {
+        "enabled": true,
+        "priority": "medium"
+      },
+      "input_validation": {
+        "enabled": true,
+        "priority": "medium"
+      },
+      "encryption": {
+        "enabled": true,
+        "priority": "medium"
+      },
+      "logging": {
+        "enabled": true,
+        "priority": "low"
+      },
+      "monitoring": {
+        "enabled": true,
+        "priority": "low"
+      }
+    },
+    "load_testing": {
+      "enabled": true,
+      "concurrent_users": 1000,
+      "test_duration": 300,
+      "ramp_up_time": 60
+    }
+  }
+}

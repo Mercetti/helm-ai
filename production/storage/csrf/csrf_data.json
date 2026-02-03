@@ -1,0 +1,10 @@
+{
+  "active_tokens": {},
+  "token_statistics": {
+    "tokens_generated": 0,
+    "tokens_validated": 0,
+    "tokens_expired": 0,
+    "validation_failures": 0,
+    "last_cleanup": "2026-02-01T20:16:59.485525"
+  }
+}
