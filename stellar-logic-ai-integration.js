@@ -5,9 +5,9 @@
 
 class StellarLogicAIIntegration {
     constructor() {
-        this.stellarAPIBase = 'http://localhost:5001/api';
+        this.stellarAPIBase = process.env.STELLAR_API_URL || 'http://localhost:5001/api';
         this.isStellarAvailable = false;
-        this.fallbackMode = true;
+        this.fallbackMode = false; // Start with fallback mode disabled
         this.cache = new Map();
         this.requestQueue = [];
         this.isProcessing = false;

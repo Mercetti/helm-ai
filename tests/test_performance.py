@@ -7,6 +7,7 @@ import time
 import threading
 import statistics
 import requests
+import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Any
 import json

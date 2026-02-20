@@ -4,6 +4,7 @@ This module provides database query optimization and performance tuning
 """
 
 import os
+import sys
 import json
 import logging
 import time
@@ -22,7 +23,7 @@ import re
 # Add src to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from database_manager import get_database_manager
+from .database_manager import get_database_manager
 from monitoring.structured_logging import logger
 
 logger = logging.getLogger(__name__)

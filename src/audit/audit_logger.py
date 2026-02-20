@@ -198,10 +198,14 @@ class AuditLogger:
             ip_address=ip_address,
             outcome="detected",
             details=details or {},
-            risk_score=risk_score or self._calculate_risk_score(event),
+            risk_score=risk_score,
             compliance_frameworks=[ComplianceFramework.SOC2, ComplianceFramework.ISO27001],
             source_service="security_service"
         )
+        
+        # Calculate risk score after instantiation if not provided
+        if not event.risk_score:
+            event.risk_score = self._calculate_risk_score(event)
         
         self.log_event(event)
     
@@ -266,20 +270,28 @@ class AuditLogger:
     def _process_events(self):
         """Process audit events from queue"""
         batch = []
+        batch_lock = threading.Lock()
         
         while True:
             try:
                 # Get event from queue with timeout
                 try:
                     event = self.events_queue.get(timeout=1)
-                    batch.append(event)
+                    with batch_lock:
+                        batch.append(event)
+                        
+                        # Process batch if full or timeout
+                        if len(batch) >= self.batch_size:
+                            self._flush_batch(batch.copy())
+                            batch.clear()
+                            
                 except Empty:
+                    # Flush any remaining events on timeout
+                    with batch_lock:
+                        if batch:
+                            self._flush_batch(batch.copy())
+                            batch.clear()
                     continue
-                
-                # Process batch if full or timeout
-                if len(batch) >= self.batch_size:
-                    self._flush_batch(batch)
-                    batch = []
                     
             except Exception as e:
                 logger.error(f"Error processing audit events: {e}")
@@ -290,12 +302,12 @@ class AuditLogger:
             # Convert events to JSON
             events_data = [asdict(event) for event in events]
             
-            # Convert datetime objects to ISO format
+            # Convert datetime objects to ISO format with null checks
             for event_data in events_data:
                 event_data['timestamp'] = event_data['timestamp'].isoformat()
-                event_data['event_type'] = event_data['event_type'].value
-                event_data['data_classification'] = event_data['data_classification'].value
-                event_data['compliance_frameworks'] = [fw.value for fw in event_data['compliance_frameworks']]
+                event_data['event_type'] = event_data['event_type'].value if event_data['event_type'] else None
+                event_data['data_classification'] = event_data['data_classification'].value if event_data['data_classification'] else None
+                event_data['compliance_frameworks'] = [fw.value for fw in event_data['compliance_frameworks'] if fw]
             
             # Store in different backends
             if self.use_s3:
@@ -443,19 +455,18 @@ class AuditLogger:
         
         if self.use_s3:
             try:
-                # List and delete old S3 objects
+                # Use paginator for complete S3 cleanup
                 prefix = "audit-logs/"
-                response = self.s3_client.list_objects_v2(
-                    Bucket=self.s3_bucket,
-                    Prefix=prefix
-                )
+                paginator = self.s3_client.get_paginator('list_objects_v2')
                 
-                for obj in response.get('Contents', []):
-                    if obj['LastModified'].replace(tzinfo=None) < cutoff_date:
-                        self.s3_client.delete_object(
-                            Bucket=self.s3_bucket,
-                            Key=obj['Key']
-                        )
+                for page in paginator.paginate(Bucket=self.s3_bucket, Prefix=prefix):
+                    for obj in page.get('Contents', []):
+                        if obj['LastModified'].replace(tzinfo=None) < cutoff_date:
+                            self.s3_client.delete_object(
+                                Bucket=self.s3_bucket,
+                                Key=obj['Key']
+                            )
+                            logger.info(f"Deleted old S3 audit log: {obj['Key']}")
                         
             except ClientError as e:
                 logger.error(f"Failed to cleanup old S3 audit events: {e}")
@@ -470,6 +481,7 @@ class AuditLogger:
                         
                         if file_time < cutoff_date:
                             os.remove(filepath)
+                            logger.info(f"Deleted old local audit log: {filename}")
                             
             except Exception as e:
                 logger.error(f"Failed to cleanup old local audit events: {e}")
