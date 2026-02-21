@@ -89,6 +89,36 @@
             color: #4a5568;
         }
         
+        .security-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .security-alerts {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .security-alert {
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #dc3545;
+            background: #f8d7da;
+        }
+        
+        .security-alert.warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        
+        .security-alert.info {
+            border-left-color: #17a2b8;
+            background: #d1ecf1;
+        }
+        
         .progress-bar {
             width: 100%;
             height: 8px;
@@ -1373,6 +1403,50 @@
                             <button class="task-complete-btn" onclick="completeTask(5)">✓ Complete</button>
                         </div>
                         <span class="task-status">Not Started</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Security Dashboard & Alerts -->
+        <div class="grid">
+            <div class="card">
+                <h3>🛡️ Security Dashboard</h3>
+                <div class="security-dashboard">
+                    <div class="metric">
+                        <span class="metric-label">Security Score</span>
+                        <span class="metric-value" style="color: #28a745;">97/100</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Block Rate</span>
+                        <span class="metric-value" style="color: #28a745;">3.0%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Requests</span>
+                        <span class="metric-value">1,500</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Blocked</span>
+                        <span class="metric-value" style="color: #ffc107;">45</span>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <a href="/security/dashboard" target="_blank" class="btn btn-primary" style="text-decoration: none; display: inline-block; padding: 8px 16px; background: #667eea; color: white; border-radius: 6px; font-size: 14px;">
+                            📊 View Full Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>🚨 Security Alerts</h3>
+                <div id="security-alerts">
+                    <div class="alert warning">
+                        <strong>🔍 Injection Attempt</strong>
+                        <p>Prompt injection detected and blocked</p>
+                    </div>
+                    <div class="alert info">
+                        <strong>⏱️ Rate Limit</strong>
+                        <p>User exceeded rate limit temporarily</p>
                     </div>
                 </div>
             </div>

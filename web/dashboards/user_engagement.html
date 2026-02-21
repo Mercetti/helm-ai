@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Engagement Dashboard - Stellar Logic AI</title>
+    <link rel="icon" href="../favicon_32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon_16x16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../Stellar_Logic_AI_Logo.png">
+    <link rel="stylesheet" href="../css/mobile_responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 36px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 16px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .metric-value {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 15px 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .metric-change {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .metric-change.positive {
+            color: #28a745;
+        }
+        
+        .metric-change.negative {
+            color: #dc3545;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .status-healthy {
+            background: #28a745;
+        }
+        
+        .status-warning {
+            background: #ffc107;
+        }
+        
+        .status-critical {
+            background: #dc3545;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .breakdown-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .breakdown-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .breakdown-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .breakdown-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .breakdown-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .alert-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .alert-item {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0 8px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alert-item.warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        
+        .alert-item.info {
+            border-left-color: #17a2b8;
+            background: #d1ecf1;
+        }
+        
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2d3748;
+        }
+        
+        .alert-time {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .refresh-info {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>👥 User Engagement Dashboard</h1>
+            <p>Real-time monitoring and analytics for user behavior, feature adoption, and engagement metrics</p>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="active-users">0</span>
+                </div>
+                <div class="metric-label">Active Users</div>
+                <div class="metric-change" id="active-users-change">
+                    <span class="metric-change positive">↑</span> 5%
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="total-sessions">0</span>
+                </div>
+                <div class="metric-label">Total Sessions</div>
+                <div class="metric-change" id="sessions-change">
+                    <span class="metric-change positive">↑</span> 8%
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="avg-session-duration">0</span>s
+                </div>
+                <div class="metric-label">Avg Session Duration</div>
+                <div class="status-indicator" id="session-duration-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="bounce-rate">0</span>%
+                </div>
+                <div class="metric-label">Bounce Rate</div>
+                <div class="status-indicator" id="bounce-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="pages-per-session">0</span>
+                </div>
+                <div class="metric-label">Pages Per Session</div>
+                <div class="status-indicator" id="pages-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="feature-adoption-rate">0</span>%
+                </div>
+                <div class="metric-label">Feature Adoption Rate</div>
+                <div class="status-indicator" id="adoption-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="user-satisfaction">0</span>/5
+                </div>
+                <div class="metric-label">User Satisfaction</div>
+                <div class="status-indicator" id="satisfaction-status"></div>
+            </div>
+        </div>
+        
+        <div class="breakdown-grid">
+            <div class="breakdown-card">
+                <div class="breakdown-title">📱 Device Breakdown</div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Desktop</span>
+                    <span class="breakdown-value"><span id="desktop-users">0</span></span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Mobile</span>
+                    <span class="breakdown-value"><span id="mobile-users">0</span></span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Tablet</span>
+                    <span class="breakdown-value"><span id="tablet-users">0</span></span>
+                </div>
+            </div>
+            
+            <div class="breakdown-card">
+                <div class="breakdown-title">🌍 Geographic Distribution</div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">North America</span>
+                    <span class="breakdown-value"><span id="na-users">0</span></span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Europe</span>
+                    <span class="breakdown-value"><span id="eu-users">0</span></span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Asia Pacific</span>
+                    <span class="breakdown-value"><span id="ap-users">0</span></span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Other</span>
+                    <span class="breakdown-value"><span id="other-users">0</span></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">📈 User Growth & Engagement Trends (Last 30 Days)</div>
+            <canvas id="engagement-chart" width="800" height="300"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">🎯 Feature Adoption Analysis</div>
+            <canvas id="feature-chart" width="800" height="300"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">📊 Session Quality Metrics</div>
+            <canvas id="session-chart" width="800" height="300"></canvas>
+        </div>
+        
+        <div class="alert-container">
+            <div class="chart-title">🚨 Engagement Alerts</div>
+            <div id="alerts-list">
+                <div class="alert-item info">
+                    <div class="alert-title">System Status</div>
+                    <div class="alert-time">Just now</div>
+                    <div>User Engagement Dashboard is initializing...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="refresh-info">
+            <div class="pulse">🔄</div> Auto-refresh every 30 seconds | 
+            Last updated: <span id="last-update">Loading...</span>
+        </div>
+    </div>
+    
+    <script>
+        // User engagement data
+        let engagementData = {
+            users: [],
+            sessions: [],
+            features: [],
+            alerts: []
+        };
+        
+        // Initialize charts
+        let engagementChart, featureChart, sessionChart;
+        
+        function initCharts() {
+            const ctx1 = document.getElementById('engagement-chart').getContext('2d');
+            const ctx2 = document.getElementById('feature-chart').getContext('2d');
+            const ctx3 = document.getElementById('session-chart').getContext('2d');
+            
+            engagementChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Active Users',
+                        data: [],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        tension: 0.4
+                    }, {
+                        label: 'New Users',
+                        data: [],
+                        borderColor: '#17a2b8',
+                        backgroundColor: 'rgba(23, 162, 184, 0.2)',
+                        tension: 0.4
+                    }, {
+                        label: 'Returning Users',
+                        data: [],
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: 'Count'
+                        }
+                    }
+                }
+            });
+            
+            featureChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['AI Assistant', 'Security Dashboard', 'Financial Analytics', 'User Engagement', 'System Health'],
+                    datasets: [{
+                        label: 'Adoption Rate (%)',
+                        data: [85, 92, 78, 65, 88],
+                        backgroundColor: [
+                            'rgba(40, 167, 69, 0.8)',
+                            'rgba(23, 162, 184, 0.8)',
+                            'rgba(255, 193, 7, 0.8)',
+                            'rgba(220, 53, 69, 0.8)',
+                            'rgba(118, 75, 162, 0.8)'
+                        ],
+                        borderColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: 'Adoption Rate (%)'
+                        }
+                    }
+                }
+            });
+            
+            sessionChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Session Duration (s)',
+                        data: [],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        tension: 0.4
+                    }, {
+                        label: 'Pages Per Session',
+                        data: [],
+                        borderColor: '#17a2b8',
+                        backgroundColor: 'rgba(23, 162, 184, 0.2)',
+                        tension: 0.4
+                    }, {
+                        label: 'Bounce Rate (%)',
+                        data: [],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: 'Value'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateUserEngagement() {
+            fetch('/api/v1/analytics/metrics')
+                .then(response => response.json())
+                .then(data => {
+                    // Update metric displays
+                    updateMetrics(data);
+                    updateCharts(data);
+                    
+                    // Update last update time
+                    document.getElementById('last-update').textContent = new Date().toLocaleString();
+                })
+                .catch(error => {
+                    console.error('Error fetching user engagement metrics:', error);
+                    showAlert('error', 'Failed to fetch user engagement metrics');
+                });
+        }
+        
+        function updateMetrics(data) {
+            // Update engagement metrics
+            if (data.engagement_stats) {
+                document.getElementById('active-users').textContent = data.engagement_stats.active_users.toLocaleString();
+                document.getElementById('total-sessions').textContent = data.engagement_stats.total_sessions.toLocaleString();
+                document.getElementById('avg-session-duration').textContent = data.engagement_stats.avg_session_duration.toFixed(1);
+                document.getElementById('bounce-rate').textContent = (data.engagement_stats.bounce_rate * 100).toFixed(1);
+                document.getElementById('pages-per-session').textContent = data.engagement_stats.pages_per_session.toFixed(1);
+                document.getElementById('feature-adoption-rate').textContent = (data.engagement_stats.feature_adoption_rate * 100).toFixed(1);
+                document.getElementById('user-satisfaction').textContent = data.engagement_stats.user_satisfaction.toFixed(1);
+                
+                // Update status indicators
+                updateStatusIndicator('session-duration-status', data.engagement_stats.avg_session_duration, 'session_duration');
+                updateStatusIndicator('bounce-status', data.engagement_stats.bounce_rate * 100, 'bounce_rate');
+                updateStatusIndicator('pages-status', data.engagement_stats.pages_per_session, 'pages_per_session');
+                updateStatusIndicator('adoption-status', data.engagement_stats.feature_adoption_rate * 100, 'adoption_rate');
+                updateStatusIndicator('satisfaction-status', data.engagement_stats.user_satisfaction, 'satisfaction');
+            }
+            
+            // Update device breakdown
+            if (data.device_data) {
+                document.getElementById('desktop-users').textContent = data.device_data.desktop || 0;
+                document.getElementById('mobile-users').textContent = data.device_data.mobile || 0;
+                document.getElementById('tablet-users').textContent = data.device_data.tablet || 0;
+            }
+            
+            // Update geographic breakdown
+            if (data.geographic_data) {
+                document.getElementById('na-users').textContent = data.geographic_data.north_america || 0;
+                document.getElementById('eu-users').textContent = data.geographic_data.europe || 0;
+                document.getElementById('ap-users').textContent = data.geographic_data.asia_pacific || 0;
+                document.getElementById('other-users').textContent = data.geographic_data.other || 0;
+            }
+            
+            // Update trend indicators
+            updateTrendIndicator('active-users-change', 5); // Mock data
+            updateTrendIndicator('sessions-change', 8); // Mock data
+        }
+        
+        function updateStatusIndicator(elementId, value, type) {
+            const indicator = document.getElementById(elementId);
+            
+            indicator.className = 'status-indicator';
+            if (type === 'bounce_rate') {
+                if (value >= 60) {
+                    indicator.classList.add('status-critical');
+                } else if (value >= 40) {
+                    indicator.classList.add('status-warning');
+                } else {
+                    indicator.classList.add('status-healthy');
+                }
+            } else if (type === 'session_duration') {
+                if (value < 10) {
+                    indicator.classList.add('status-critical');
+                } else if (value < 30) {
+                    indicator.classList.add('status-warning');
+                } else {
+                    indicator.classList.add('status-healthy');
+                }
+            } else if (type === 'adoption_rate') {
+                if (value < 10) {
+                    indicator.classList.add('status-critical');
+                } else if (value < 20) {
+                    indicator.classList.add('status-warning');
+                } else {
+                    indicator.classList.add('status-healthy');
+                }
+            } else if (type === 'satisfaction') {
+                if (value < 2.5) {
+                    indicator.classList.add('status-critical');
+                } else if (value < 3.5) {
+                    indicator.classList.add('status-warning');
+                } else {
+                    indicator.classList.add('status-healthy');
+                }
+            } else {
+                // For pages_per_session - higher is better
+                if (value < 2) {
+                    indicator.classList.add('status-critical');
+                } else if (value < 3) {
+                    indicator.classList.add('status-warning');
+                } else {
+                    indicator.classList.add('status-healthy');
+                }
+            }
+        }
+        
+        function updateTrendIndicator(elementId, trend) {
+            const element = document.getElementById(elementId);
+            const changeElement = element.querySelector('.metric-change');
+            
+            if (trend > 0) {
+                changeElement.textContent = '↑';
+                changeElement.className = 'metric-change positive';
+            } else if (trend < 0) {
+                changeElement.textContent = '↓';
+                changeElement.className = 'metric-change negative';
+            } else {
+                changeElement.textContent = '→';
+                changeElement.className = 'metric-change';
+            }
+        }
+        
+        function updateCharts(data) {
+            // Update engagement chart
+            const now = new Date();
+            const labels = [];
+            const activeUsersData = [];
+            const newUsersData = [];
+            const returningUsersData = [];
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(now.getTime() - (i * 24 * 60 * 60 * 1000));
+                labels.push(date.toLocaleDateString());
+                activeUsersData.push(Math.floor(Math.random() * 200) + 1000); // Mock data
+                newUsersData.push(Math.floor(Math.random() * 50) + 20); // Mock data
+                returningUsersData.push(Math.floor(Math.random() * 100) + 800); // Mock data
+            }
+            
+            engagementChart.data.labels = labels;
+            engagementChart.data.datasets[0].data = activeUsersData;
+            engagementChart.data.datasets[1].data = newUsersData;
+            engagementChart.data.datasets[2].data = returningUsersData;
+            engagementChart.update();
+            
+            // Update session chart
+            const sessionDurationData = [];
+            const pagesPerSessionData = [];
+            const bounceRateData = [];
+            
+            for (let i = 29; i >= 0; i--) {
+                sessionDurationData.push(Math.random() * 60 + 120); // Mock data
+                pagesPerSessionData.push(Math.random() * 3 + 4); // Mock data
+                bounceRateData.push(Math.random() * 20 + 25); // Mock data
+            }
+            
+            sessionChart.data.labels = labels;
+            sessionChart.data.datasets[0].data = sessionDurationData;
+            sessionChart.data.datasets[1].data = pagesPerSessionData;
+            sessionChart.data.datasets[2].data = bounceRateData;
+            sessionChart.update();
+        }
+        
+        function showAlert(type, message) {
+            const alertsList = document.getElementById('alerts-list');
+            const alertItem = document.createElement('div');
+            alertItem.className = `alert-item ${type}`;
+            alertItem.innerHTML = `
+                <div class="alert-title">${type.toUpperCase()}</div>
+                <div class="alert-time">${new Date().toLocaleTimeString()}</div>
+                <div>${message}</div>
+            `;
+            alertsList.appendChild(alertItem);
+            
+            // Remove old alerts if too many
+            while (alertsList.children.length > 5) {
+                alertsList.removeChild(alertsList.lastChild);
+            }
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            updateUserEngagement();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(updateUserEngagement, 30000);
+        });
+    </script>
+</body>
+</html>

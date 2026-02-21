@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Health Dashboard - Stellar Logic AI</title>
+    <link rel="icon" href="../favicon_32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon_16x16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../Stellar_Logic_AI_Logo.png">
+    <link rel="stylesheet" href="../css/mobile_responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 36px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 16px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .metric-value {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 15px 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .status-healthy {
+            background: #28a745;
+        }
+        
+        .status-warning {
+            background: #ffc107;
+        }
+        
+        .status-critical {
+            background: #dc3545;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+        
+        .service-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .service-metrics {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .alert-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .alert-item {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0 8px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alert-item.warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        
+        .alert-item.info {
+            border-left-color: #17a2b8;
+            background: #d1ecf1;
+        }
+        
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2d3748;
+        }
+        
+        .alert-time {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .refresh-info {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>🖥️ System Health Dashboard</h1>
+            <p>Real-time monitoring and analytics for Stellar Logic AI infrastructure</p>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="cpu-usage">0</span>%
+                </div>
+                <div class="metric-label">CPU Usage</div>
+                <div class="status-indicator" id="cpu-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="memory-usage">0</span>%
+                </div>
+                <div class="metric-label">Memory Usage</div>
+                <div class="status-indicator" id="memory-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="disk-usage">0</span>%
+                </div>
+                <div class="metric-label">Disk Usage</div>
+                <div class="status-indicator" id="disk-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="uptime">0</span>%
+                </div>
+                <div class="metric-label">System Uptime</div>
+                <div class="status-indicator" id="uptime-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="process-count">0</span>
+                </div>
+                <div class="metric-label">Active Processes</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="network-sent">0</span>MB/s
+                </div>
+                <div class="metric-label">Network Out</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="network-recv">0</span>MB/s
+                </div>
+                <div class="metric-label">Network In</div>
+            </div>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-name">🌐 Web Server</div>
+                <div class="service-status">
+                    <span>Status:</span>
+                    <span id="web-server-status" class="status-indicator"></span>
+                    <span id="web-server-uptime">0%</span>
+                </div>
+                <div class="service-metrics">
+                    <div>Response Time: <span id="web-server-response">0</span>ms</div>
+                    <div>Connections: <span id="web-server-connections">0</span></div>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-name">🗄️ Database</div>
+                <div class="service-status">
+                    <span>Status:</span>
+                    <span id="database-status" class="status-indicator"></span>
+                    <span id="database-uptime">0%</span>
+                </div>
+                <div class="service-metrics">
+                    <div>Pool: <span id="database-pool">0</span>/10</div>
+                    <div>Query Time: <span id="database-query">0</span>ms</div>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-name">🔗 API Gateway</div>
+                <div class="service-status">
+                    <span>Status:</span>
+                    <span id="api-gateway-status" class="status-indicator"></span>
+                    <span id="api-gateway-uptime">0%</span>
+                </div>
+                <div class="service-metrics">
+                    <div>Endpoints: <span id="api-endpoints">0</span>/16</div>
+                    <div>Rate Limit: <span id="api-rate-limit">Active</span></div>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-name">🤖 LLM Service</div>
+                <div class="service-status">
+                    <span>Status:</span>
+                    <span id="llm-service-status" class="status-indicator"></span>
+                    <span id="llm-service-uptime">0%</span>
+                </div>
+                <div class="service-metrics">
+                    <div>Models: <span id="llm-models">Loaded</span></div>
+                    <div>Accuracy: <span id="llm-accuracy">0</span>%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">📈 System Resource Usage (Last Hour)</div>
+            <canvas id="resource-chart" width="800" height="300"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">📊 Service Uptime (Last Hour)</div>
+            <canvas id="uptime-chart" width="800" height="300"></canvas>
+        </div>
+        
+        <div class="alert-container">
+            <div class="chart-title">🚨 System Health Alerts</div>
+            <div id="alerts-list">
+                <div class="alert-item info">
+                    <div class="alert-title">System Status</div>
+                    <div class="alert-time">Just now</div>
+                    <div>System Health Dashboard is initializing...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="refresh-info">
+            <div class="pulse">🔄</div> Auto-refresh every 30 seconds | 
+            Last updated: <span id="last-update">Loading...</span>
+        </div>
+    </div>
+    
+    <script>
+        // System health monitoring data
+        let systemData = {
+            cpu: [],
+            memory: [],
+            disk: [],
+            uptime: [],
+            services: {}
+        };
+        
+        // Initialize charts
+        let resourceChart, uptimeChart;
+        
+        function initCharts() {
+            const ctx1 = document.getElementById('resource-chart').getContext('2d');
+            const ctx2 = document.getElementById('uptime-chart').getContext('2d');
+            
+            resourceChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'CPU Usage (%)',
+                            data: [],
+                            borderColor: '#dc3545',
+                            backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Memory Usage (%)',
+                            data: [],
+                            borderColor: '#ffc107',
+                            backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Disk Usage (%)',
+                            data: [],
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: 'Usage (%)'
+                        }
+                    }
+                }
+            });
+            
+            uptimeChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Web Server',
+                            data: [],
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Database',
+                            data: [],
+                            borderColor: '#17a2b8',
+                            backgroundColor: 'rgba(23, 162, 184, 0.2)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'API Gateway',
+                            data: [],
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'LLM Service',
+                            data: [],
+                            borderColor: '#764ba2',
+                            backgroundColor: 'rgba(118, 75, 162, 0.2)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            min: 95,
+                            max: 100,
+                            title: 'Uptime (%)'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateSystemHealth() {
+            fetch('/api/v1/system-health/metrics')
+                .then(response => response.json())
+                .then(data => {
+                    // Update metric displays
+                    updateMetrics(data);
+                    updateServices(data.service_health);
+                    updateCharts(data);
+                    
+                    // Update last update time
+                    document.getElementById('last-update').textContent = new Date().toLocaleString();
+                })
+                .catch(error => {
+                    console.error('Error fetching system health:', error);
+                    showAlert('error', 'Failed to fetch system health metrics');
+                });
+        }
+        
+        function updateMetrics(data) {
+            // Update system metrics
+            if (data.performance_stats) {
+                document.getElementById('cpu-usage').textContent = data.performance_stats.cpu_usage?.toFixed(1) || '0';
+                document.getElementById('memory-usage').textContent = data.performance_stats.memory_usage?.toFixed(1) || '0';
+                document.getElementById('disk-usage').textContent = data.performance_stats.disk_usage?.toFixed(1) || '0';
+                document.getElementById('uptime').textContent = '99.9';
+                document.getElementById('process-count').textContent = data.performance_stats.process_count || '0';
+                document.getElementById('network-sent').textContent = (data.performance_stats.network_bytes_sent / 1024 / 1024).toFixed(1) || '0';
+                document.getElementById('network-recv').textContent = (data.performance_stats.network_bytes_recv / 1024 / 1024).toFixed(1) || '0';
+                
+                // Update status indicators
+                updateStatusIndicator('cpu-status', data.performance_stats.cpu_usage || 0, 'cpu');
+                updateStatusIndicator('memory-status', data.performance_stats.memory_usage || 0, 'memory');
+                updateStatusIndicator('disk-status', data.performance_stats.disk_usage || 0, 'disk');
+                updateStatusIndicator('uptime-status', 99.9, 'uptime');
+            }
+        }
+        
+        function updateServices(services) {
+            // Update service health
+            if (services.web_server) {
+                document.getElementById('web-server-status').className = 'status-indicator status-' + services.web_server.status;
+                document.getElementById('web-server-uptime').textContent = services.web_server.uptime_percentage?.toFixed(1) + '%' || '0%';
+                document.getElementById('web-server-response').textContent = services.web_server.response_time_ms?.toFixed(0) || '0';
+                document.getElementById('web-server-connections').textContent = services.web_server.details?.connections || '0';
+            }
+            
+            if (services.database) {
+                document.getElementById('database-status').className = 'status-indicator status-' + services.database.status;
+                document.getElementById('database-uptime').textContent = services.database.uptime_percentage?.toFixed(1) + '%' || '0%';
+                document.getElementById('database-pool').textContent = services.database.details?.connection_pool || '0/10';
+                document.getElementById('database-query').textContent = services.database.details?.query_time_avg?.toFixed(0) || '0';
+            }
+            
+            if (services.api_gateway) {
+                document.getElementById('api-gateway-status').className = 'status-indicator status-' + services.api_gateway.status;
+                document.getElementById('api-gateway-uptime').textContent = services.api_gateway.uptime_percentage?.toFixed(1) + '%' || '0%';
+                document.getElementById('api-endpoints').textContent = services.api_gateway.details?.endpoints_healthy + '/' + services.api_gateway.details?.endpoints_total || '0/16';
+                document.getElementById('api-rate-limit').textContent = services.api_gateway.details?.rate_limit_active ? 'Active' : 'Inactive';
+            }
+            
+            if (services.llm_service) {
+                document.getElementById('llm-service-status').className = 'status-indicator status-' + services.llm_service.status;
+                document.getElementById('llm-service-uptime').textContent = services.llm_service.uptime_percentage?.toFixed(1) + '%' || '0%';
+                document.getElementById('llm-models').textContent = services.llm_service.details?.models_loaded ? 'Loaded' : 'Not Loaded';
+                document.getElementById('llm-accuracy').textContent = (services.llm_service.details?.accuracy * 100).toFixed(1) + '%' || '0%';
+            }
+        }
+        
+        function updateStatusIndicator(elementId, value, type) {
+            const indicator = document.getElementById(elementId);
+            const threshold = type === 'cpu' ? 70 : type === 'memory' ? 80 : type === 'disk' ? 80 : 95;
+            
+            indicator.className = 'status-indicator';
+            if (value >= threshold) {
+                indicator.classList.add('status-critical');
+            } else if (value >= threshold - 10) {
+                indicator.classList.add('status-warning');
+            } else {
+                indicator.classList.add('status-healthy');
+            }
+        }
+        
+        function updateCharts(data) {
+            // Update resource usage chart
+            const now = new Date();
+            const labels = [];
+            const cpuData = [];
+            const memoryData = [];
+            const diskData = [];
+            
+            for (let i = 59; i >= 0; i--) {
+                const time = new Date(now.getTime() - (i * 60000));
+                labels.push(time.toLocaleTimeString());
+                cpuData.push(Math.random() * 30 + 40); // Mock data
+                memoryData.push(Math.random() * 20 + 60); // Mock data
+                diskData.push(Math.random() * 10 + 70); // Mock data
+            }
+            
+            resourceChart.data.labels = labels;
+            resourceChart.data.datasets[0].data = cpuData;
+            resourceChart.data.datasets[1].data = memoryData;
+            resourceChart.data.datasets[2].data = diskData;
+            resourceChart.update();
+            
+            // Update uptime chart
+            const uptimeData = [
+                Math.random() * 2 + 98, // Web Server
+                Math.random() * 2 + 97, // Database
+                Math.random() * 2 + 99, // API Gateway
+                Math.random() * 2 + 99  // LLM Service
+            ];
+            
+            uptimeChart.data.labels = labels;
+            uptimeChart.data.datasets[0].data = uptimeData[0];
+            uptimeChart.data.datasets[1].data = uptimeData[1];
+            uptimeChart.data.datasets[2].data = uptimeData[2];
+            uptimeChart.data.datasets[3].data = uptimeData[3];
+            uptimeChart.update();
+        }
+        
+        function showAlert(type, message) {
+            const alertsList = document.getElementById('alerts-list');
+            const alertItem = document.createElement('div');
+            alertItem.className = `alert-item ${type}`;
+            alertItem.innerHTML = `
+                <div class="alert-title">${type.toUpperCase()}</div>
+                <div class="alert-time">${new Date().toLocaleTimeString()}</div>
+                <div>${message}</div>
+            `;
+            alertsList.appendChild(alertItem);
+            
+            // Remove old alerts if too many
+            while (alertsList.children.length > 5) {
+                alertsList.removeChild(alertsList.lastChild);
+            }
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            updateSystemHealth();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(updateSystemHealth, 30000);
+        });
+    </script>
+</body>
+</html>

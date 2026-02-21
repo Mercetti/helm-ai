@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Security Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .metric-value {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 15px 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        
+        .status-good { color: #28a745; }
+        .status-warning { color: #ffc107; }
+        .status-critical { color: #dc3545; }
+        
+        .events-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .events-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .event-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.2s ease;
+        }
+        
+        .event-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .event-time {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+        
+        .event-details {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .refresh-info {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ LLM Security Dashboard</h1>
+            <p>Real-time monitoring and threat detection for Stellar Logic AI</p>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value status-critical">
+                    33.33333333333334/100
+                </div>
+                <div class="metric-label">Security Score</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value status-critical">
+                    66.7%
+                </div>
+                <div class="metric-label">Block Rate</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    3
+                </div>
+                <div class="metric-label">Total Requests</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value status-critical">
+                    2
+                </div>
+                <div class="metric-label">Blocked Requests</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    1
+                </div>
+                <div class="metric-label">Injection Attempts</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    1
+                </div>
+                <div class="metric-label">Content Violations</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    1
+                </div>
+                <div class="metric-label">Rate Limit Violations</div>
+            </div>
+        </div>
+        
+        <div class="events-section">
+            <div class="events-header">📊 Recent Security Events</div>
+            
+                <div class="event-item">
+                    <div class="event-time">2026-02-19 23:48:39</div>
+                    <div class="event-details">
+                        <strong>Rate Limit</strong>: User exceeded rate limit and was temporarily blocked
+                    </div>
+                </div>
+            
+                <div class="event-item">
+                    <div class="event-time">2026-02-19 23:53:39</div>
+                    <div class="event-details">
+                        <strong>Injection Attempt</strong>: Prompt injection detected and blocked
+                    </div>
+                </div>
+            
+        </div>
+        
+        <div class="refresh-info">
+            <div class="pulse">🔄</div> Auto-refresh every 30 seconds | 
+            Last updated: 2026-02-19T23:53:39.858637
+        </div>
+    </div>
+    
+    <script>
+        // Auto-refresh every 30 seconds
+        setTimeout(function(){
+            location.reload();
+        }, 30000);
+        
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('LLM Security Dashboard loaded successfully');
+            
+            // Add click handlers to metric cards
+            const cards = document.querySelectorAll('.metric-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+        

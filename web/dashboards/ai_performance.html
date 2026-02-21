@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Performance Dashboard - Stellar Logic AI</title>
+    <link rel="icon" href="../favicon_32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon_16x16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../Stellar_Logic_AI_Logo.png">
+    <link rel="stylesheet" href="../css/mobile_responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 36px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 16px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .metric-value {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 15px 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .metric-change {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .metric-change.positive {
+            color: #28a745;
+        }
+        
+        .metric-change.negative {
+            color: #dc3545;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .status-healthy {
+            background: #28a745;
+        }
+        
+        .status-degraded {
+            background: #ffc107;
+        }
+        
+        .status-unhealthy {
+            background: #dc3545;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .alert-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .alert-item {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0 8px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alert-item.warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        
+        .alert-item.info {
+            border-left-color: #17a2b8;
+            background: #d1ecf1;
+        }
+        
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2d3748;
+        }
+        
+        .alert-time {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .refresh-info {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>🤖 AI Performance Dashboard</h1>
+            <p>Real-time monitoring and analytics for Stellar Logic AI performance</p>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="avg-response-time">0</span>ms
+                </div>
+                <div class="metric-label">Avg Response Time</div>
+                <div class="metric-change" id="response-time-change">
+                    <span class="metric-change positive">↓</span> 12%
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="accuracy-score">0</span>%
+                </div>
+                <div class="metric-label">Accuracy Score</div>
+                <div class="status-indicator" id="accuracy-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="total-requests">0</span>
+                </div>
+                <div class="metric-label">Total Requests</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="success-rate">0</span>%
+                </div>
+                <div class="metric-label">Success Rate</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="error-rate">0</span>%
+                </div>
+                <div class="metric-label">Error Rate</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="gpu-usage">0</span>%
+                </div>
+                <div class="metric-label">GPU Usage</div>
+                <div class="status-indicator" id="gpu-status"></div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">
+                    <span id="memory-usage">0</span>%
+                </div>
+                <div class="metric-label">Memory Usage</div>
+                <div class="status-indicator" id="memory-status"></div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">📈 Response Time Trend (Last Hour)</div>
+            <canvas id="response-time-chart" width="400" height="200"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">📊 Request Volume (Last Hour)</div>
+            <canvas id="request-volume-chart" width="400" height="200"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">🎯 Accuracy Trend (Last Hour)</div>
+            <canvas id="accuracy-chart" width="400" height="200"></canvas>
+        </div>
+        
+        <div class="alert-container">
+            <div class="chart-title">🚨 Performance Alerts</div>
+            <div id="alerts-list">
+                <div class="alert-item info">
+                    <div class="alert-title">System Status</div>
+                    <div class="alert-time">Just now</div>
+                    <div>AI Performance Dashboard is initializing...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="refresh-info">
+            <div class="pulse">🔄</div> Auto-refresh every 30 seconds | 
+            Last updated: <span id="last-update">Loading...</span>
+        </div>
+    </div>
+    
+    <script>
+        // Performance monitoring data
+        let performanceData = {
+            responseTime: [],
+            accuracy: [],
+            requestVolume: [],
+            alerts: []
+        };
+        
+        // Initialize charts
+        let responseTimeChart, accuracyChart, requestVolumeChart;
+        
+        function initCharts() {
+            const ctx1 = document.getElementById('response-time-chart').getContext('2d');
+            const ctx2 = document.getElementById('accuracy-chart').getContext('2d');
+            const ctx3 = document.getElementById('request-volume-chart').getContext('2d');
+            
+            responseTimeChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Response Time (ms)',
+                        data: [],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: 'Response Time (ms)'
+                        }
+                    }
+                }
+            });
+            
+            accuracyChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Accuracy (%)',
+                        data: [],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 0,
+                            max: 100,
+                            title: 'Accuracy (%)'
+                        }
+                    }
+                }
+            });
+            
+            requestVolumeChart = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Requests per Minute',
+                        data: [],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: 'Requests per Minute'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateMetrics() {
+            fetch('/api/v1/ai-performance/metrics')
+                .then(response => response.json())
+                .then(data => {
+                    // Update metric displays
+                    document.getElementById('avg-response-time').textContent = data.avg_response_time.toFixed(0);
+                    document.getElementById('accuracy-score').textContent = (data.avg_accuracy * 100).toFixed(1);
+                    document.getElementById('total-requests').textContent = data.total_requests.toLocaleString();
+                    document.getElementById('success-rate').textContent = ((data.total_requests - data.failed_requests) / data.total_requests * 100).toFixed(1);
+                    document.getElementById('error-rate').textContent = (data.error_rate * 100).toFixed(1);
+                    document.getElementById('gpu-usage').textContent = data.gpu_usage.toFixed(1);
+                    document.getElementById('memory-usage').textContent = data.memory_usage.toFixed(1);
+                    
+                    // Update status indicators
+                    updateStatusIndicator('accuracy-status', data.avg_accuracy);
+                    updateStatusIndicator('gpu-status', data.gpu_usage);
+                    updateStatusIndicator('memory-status', data.memory_usage);
+                    
+                    // Update trend indicators
+                    updateTrendIndicator('response-time-change', data.response_time_trend);
+                    
+                    // Update last update time
+                    document.getElementById('last-update').textContent = new Date().toLocaleString();
+                    
+                    // Update charts
+                    updateCharts(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching metrics:', error);
+                    showAlert('error', 'Failed to fetch performance metrics');
+                });
+        }
+        
+        function updateStatusIndicator(elementId, value) {
+            const indicator = document.getElementById(elementId);
+            const threshold = 0.8; // 80% threshold
+            
+            indicator.className = 'status-indicator';
+            if (value >= threshold) {
+                indicator.classList.add('status-healthy');
+            } else if (value >= 0.6) {
+                indicator.classList.add('status-degraded');
+            } else {
+                indicator.classList.add('status-unhealthy');
+            }
+        }
+        
+        function updateTrendIndicator(elementId, trend) {
+            const element = document.getElementById(elementId);
+            const changeElement = element.querySelector('.metric-change');
+            
+            if (trend > 0) {
+                changeElement.textContent = '↑';
+                changeElement.className = 'metric-change positive';
+            } else if (trend < 0) {
+                changeElement.textContent = '↓';
+                changeElement.className = 'metric-change negative';
+            } else {
+                changeElement.textContent = '→';
+                changeElement.className = 'metric-change';
+            }
+        }
+        
+        function updateCharts(data) {
+            // Update response time chart
+            const now = new Date();
+            const labels = [];
+            const responseData = [];
+            
+            for (let i = 59; i >= 0; i--) {
+                const time = new Date(now.getTime() - (i * 60000));
+                labels.push(time.toLocaleTimeString());
+                responseData.push(Math.random() * 100 + 50); // Mock data
+            }
+            
+            responseTimeChart.data.labels = labels;
+            responseTimeChart.data.datasets[0].data = responseData;
+            responseTimeChart.update();
+            
+            // Update accuracy chart
+            const accuracyData = [];
+            for (let i = 59; i >= 0; i--) {
+                accuracyData.push(Math.random() * 20 + 70); // Mock data
+            }
+            
+            accuracyChart.data.labels = labels;
+            accuracyChart.data.datasets[0].data = accuracyData;
+            accuracyChart.update();
+            
+            // Update request volume chart
+            const volumeData = [];
+            for (let i = 59; i >= 0; i--) {
+                volumeData.push(Math.floor(Math.random() * 50) + 10); // Mock data
+            }
+            
+            requestVolumeChart.data.labels = labels;
+            requestVolumeChart.data.datasets[0].data = volumeData;
+            requestVolumeChart.update();
+        }
+        
+        function showAlert(type, message) {
+            const alertsList = document.getElementById('alerts-list');
+            const alertItem = document.createElement('div');
+            alertItem.className = `alert-item ${type}`;
+            alertItem.innerHTML = `
+                <div class="alert-title">${type.toUpperCase()}</div>
+                <div class="alert-time">${new Date().toLocaleTimeString()}</div>
+                <div>${message}</div>
+            `;
+            alertsList.appendChild(alertItem);
+            
+            // Remove old alerts if too many
+            while (alertsList.children.length > 5) {
+                alertsList.removeChild(alertsList.lastChild);
+            }
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            updateMetrics();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(updateMetrics, 30000);
+        });
+    </script>
+</body>
+</html>

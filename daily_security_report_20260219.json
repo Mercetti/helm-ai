@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-02-19T23:54:38.550090",
+  "total_events": 0,
+  "blocked_requests": 45,
+  "security_score": 97,
+  "top_threats": {
+    "pattern_injection": 12,
+    "rate_limit": 25,
+    "inappropriate_content": 8,
+    "length_anomaly": 3,
+    "similarity_injection": 2
+  },
+  "recommendations": [
+    "High injection attempts - strengthen prompt detection",
+    "Excessive rate limit violations - consider stricter controls",
+    "Content violations detected - review filtering rules"
+  ],
+  "actions_taken": [
+    "Updated 3 security patterns",
+    "Cleaned up 150 old events"
+  ],
+  "total_requests": 1500,
+  "block_rate": 3.0,
+  "injection_attempts": 12,
+  "content_violations": 8,
+  "rate_limit_violations": 25
+}
